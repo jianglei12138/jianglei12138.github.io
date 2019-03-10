@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html>
+  
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta name="author" content="姜雷12138">
+  
+  
+  <title>Android Framebuffer相关学习 | 姜雷12138</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="Android学习,framebuffer原理,Screen Tearing,多缓冲区,">
+  
+
+  
+  <meta name="description" content="本文主要内容：TFT-LCD显示过程分析framebuffer的基本原理画面延迟、撕裂分析">
+
+  
+
+  <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.11.1/dist/av-min.js" async></script>
+
+  
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+  
+
+  
+    <script src="//unpkg.com/valine/dist/Valine.min.js" async></script>
+  
+
+  <script>
+  // theme-ad's config script
+  // it can be used in every script
+  
+  window.AD_CONFIG = {
+    leancloud: {"appid":"tcEDjzrxzSgDW3Af7yOj70fo-gzGzoHsz","appkey":"5RTjvb2WgYjGySdyaojYwPip","comment":true,"count":true},
+    welcome: {"enable":true,"interval":30},
+    start_time: "2019-03-10",
+    passwords: ["null", ],
+    is_post: true,
+    lock: false,
+    author: "姜雷12138",
+    share: {"twitter":true,"facebook":true,"weibo":true,"qq":true,"wechat":true},
+    mathjax: true,
+    page_type: ""
+  };
+</script>
+
+  <script src="/vendor/sha256.min.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/index.js"></script>
+<script src="/vendor/qrcode.min.js"></script>
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/touch-icon.png">
+  
+
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/index.css">
+<link rel="stylesheet" href="/styles/components/highlight/highlight.css">
+
+  
+</head>
+  <body>
+    <header class="site-header">
+  <div class="site-header-brand">
+    
+      <span class="site-header-brand-title">
+        <a href="/">姜雷12138</a>
+      </span>
+    
+    
+      <span class="site-header-brand-motto"> | Learn And Improve</span>
+    
+  </div>
+  <div class="site-header-right">
+    <nav class="site-header-navigation">
+      
+        <a href="/" target="_self">首页</a>
+      
+        <a href="/archives/" target="_self">归档</a>
+      
+        <a href="/tags/" target="_self">标签</a>
+      
+        <a href="/categories/" target="_self">分类</a>
+      
+        <a href="/about/" target="_self">关于</a>
+      
+    </nav>
+    <div class="site-header-btn">
+      
+        <a href="https://github.com/jianglei12138/" target="_blank" id="site-github">
+          <i class="fa fa-github-alt"></i>
+        </a>
+      
+      <a href="javascript:void(0);" id="site-search">
+        <i class="fa fa-search"></i>
+      </a>
+      <a href="javascript:void(0);" id="site-nav-btn">
+        <i class="fa fa-ellipsis-v"></i>
+      </a>
+    </div>
+  </div>
+</header>
+<nav class="table-content" id="site-nav">
+  <div class="table-content-title">
+    <span>导航</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc">
+      
+        <li class="toc-item">
+          <a href="/" target="_self">
+            首页
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/archives/" target="_self">
+            归档
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/tags/" target="_self">
+            标签
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/categories/" target="_self">
+            分类
+          </a>
+        </li>
+      
+        <li class="toc-item">
+          <a href="/about/" target="_self">
+            关于
+          </a>
+        </li>
+      
+    </ol>
+  </div>
+</nav>
+<div id="site-process"></div>
+    <main>
+      
+  <div class="passage">
+  <div class="passage-meta">
+    <span>
+      <i class="fa fa-calendar"></i>2018-06-01
+    </span>
+    
+      <span>
+        | <a href="/categories/Android学习/"><i class="fa fa-bookmark"></i>Android学习</a>
+      </span>
+    
+    
+      <span>
+        | <i class="fa fa-unlock-alt"></i>UNLOCK
+      </span>
+    
+  </div>
+  <h1 class="passage-title">
+    Android Framebuffer相关学习
+  </h1>
+  
+  <article class="passage-article">
+    <p>本文主要内容：</p>
+<ul>
+<li>TFT-LCD显示过程分析</li>
+<li>framebuffer的基本原理</li>
+<li>画面延迟、撕裂分析</li>
+</ul>
+<h2 id="1、TFT-LCD显示过程简要分析-硬件层面"><a href="#1、TFT-LCD显示过程简要分析-硬件层面" class="headerlink" title="1、TFT-LCD显示过程简要分析(硬件层面)"></a>1、TFT-LCD显示过程简要分析(硬件层面)</h2><p>从硬件层面来说, TFT显示器参数vsync,hsync,hspw,hbpd,hfpd,vspw,vbp,vfp等参数很多都是从CRT带来的。描述方式多数显示器选择从左上角开始, 从左至右, 到了右边界, 再偏转到左边界的下一行, 这是所谓的”Z”型扫描。类似地扫描完最后一帧时, 要偏转回左上角起始处, 准备扫描下一帧。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">hsync #一行有效数据扫描完成后, 转到下一行起始处</span><br><span class="line">vsync #一帧数据扫描完成后，转到左上角起始处</span><br><span class="line"></span><br><span class="line">vbp #表示在一帧图像开始时，垂直同步信号以后的无效的行数，对应驱动中的upper_margin</span><br><span class="line">vfp #表示在一帧图像结束后，垂直同步信号以前的无效的行数，对应驱动中的lower_margin</span><br><span class="line">vspw #表示垂直同步脉冲的宽度，用行数计算，对应驱动中的vsync_len</span><br><span class="line"></span><br><span class="line">hbp #表示从水平同步信号开始到一行的有效数据开始之间的VCLK的个数，left_margin</span><br><span class="line">hfp #表示一行的有效数据结束到下一个水平同步信号开始之间的VCLK的个数，right_margin</span><br><span class="line">hspw #表示水平同步脉冲的宽度，用VCLK(像素时钟信号)计算，对应驱动中的hsync_len</span><br></pre></td></tr></table></figure>
+<p>扫描一行的时序</p>
+<blockquote>
+<p>hspw -&gt; hbp -&gt; 扫描数据 -&gt; hfp -&gt; hspw</p>
+</blockquote>
+<p>扫描一帧的时序</p>
+<blockquote>
+<p>vspw -&gt; vbp -&gt; 扫描有效行 -&gt; vfp -&gt; vspw</p>
+</blockquote>
+<p><img src="/2018/06/01/Android橡皮擦闪烁分析以及解决方案/example.png" alt="example"></p>
+<p>所有这些操作都是通过外部总线接口(EBI)实现在内存与其他外部操作实现数据的传输与控制。</p>
+<h2 id="2、framebuffer的基本原理-软件方面"><a href="#2、framebuffer的基本原理-软件方面" class="headerlink" title="2、framebuffer的基本原理(软件方面)"></a>2、framebuffer的基本原理(软件方面)</h2><p>framebuffer，也叫帧缓冲，其内容对应于屏幕上的界面显示，可以将其简单理解为屏幕上显示内容对应的缓存，修改Framebuffer中的内容，即表示修改屏幕上的内容(具体如上硬件分析)，所以，直接操作Framebuffer可以直接从显示器上观察到效果。</p>
+<p>framebuffer是逻辑上的概念，对应物理上是一段存储空间，其可以位于显存，也可以位于内存。</p>
+<h4 id="framebuffer基本使用"><a href="#framebuffer基本使用" class="headerlink" title="framebuffer基本使用"></a>framebuffer基本使用</h4><p>查看显示参数</p>
+<ul>
+<li>分辨率<br> <code>cat /sys/class/graphics/fb0/modes</code></li>
+<li>虚拟大小<br> <code>cat /sys/class/graphics/fb0/virtual_size</code></li>
+</ul>
+<p>更多如图</p>
+<p><img src="/2018/06/01/Android橡皮擦闪烁分析以及解决方案/sys-class.png" alt="syc"></p>
+<p>基本编程使用<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> fb;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span>* fb_mem;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Open the file for reading and writing</span></span><br><span class="line">    fd = open(<span class="string">"/dev/graphics/fb0"</span>, O_RDWR);</span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">// Get fixed screen information</span></span><br><span class="line">    <span class="keyword">if</span> (ioctl(fd, FBIOGET_FSCREENINFO, &amp;finfo)) &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Get variable screen information</span></span><br><span class="line">    <span class="keyword">if</span> (ioctl(fd, FBIOGET_VSCREENINFO, &amp;vinfo)) &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Map the device to memory</span></span><br><span class="line">    fb_mem = (<span class="keyword">char</span> *)mmap(<span class="number">0</span>, screensize, PROT_READ | PROT_WRITE, MAP_SHARED, fd, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//draw</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="framebuffer实现"><a href="#framebuffer实现" class="headerlink" title="framebuffer实现"></a>framebuffer实现</h4><p>Linux是工作在保护模式下，所以用户态进程是无法直接使用显卡提供的中断调用来实现直接写屏，Linux抽象出FrameBuffer这个设备来供用户态进程实现直接写屏。</p>
+<p>framebuffer机制模仿显卡的功能，将显卡硬件结构抽象掉，可以通过framebuffer的读写直接对显存进行操作。framebuffer机制模仿显卡的功能，将显卡硬件结构抽象掉，可以通过framebuffer的读写直接对显存进行操作。</p>
+<p>这种操看成是显示内存的一个映像，将其映射到进程地址空间之后，就可以直接进行读写操作，而写操作可以立即反应在屏幕上。这种操作是抽象的，统一的。用户不必关心物理显存的位置、换页机制等等具体细节。这些都是由framebuffer设备驱动来完成的。</p>
+<p>framebuffer属性分为可变(variable)与不可变(fixed), 可直接通过ioctl获取与修改。</p>
+<p>获取fixed属性<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ioctl(fd, FBIOGET_FSCREENINFO, &amp;finfo)</span><br></pre></td></tr></table></figure></p>
+<p>获取variable属性<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ioctl(fd, FBIOGET_VSCREENINFO, &amp;vinfo)</span><br></pre></td></tr></table></figure></p>
+<p>设置variable属性<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ioctl(fd, FBIOPUT_VSCREENINFO, &amp;vinfo)</span><br></pre></td></tr></table></figure></p>
+<p>可修改属性 fb_var_screeninfo<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">fb_var_screeninfo</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="comment">//可见分辨率</span></span><br><span class="line">    __u32 xres;</span><br><span class="line">    __u32 yres;</span><br><span class="line">    <span class="comment">//虚拟分辨率</span></span><br><span class="line">    __u32 xres_virtual;</span><br><span class="line">    __u32 yres_virtual;</span><br><span class="line">    <span class="comment">//虚拟分辨率的偏移</span></span><br><span class="line">    __u32 xoffset;</span><br><span class="line">    __u32 yoffset;</span><br><span class="line">    <span class="comment">//bpp 像素深度-&gt;每个像素所占的bit数</span></span><br><span class="line">    __u32 bits_per_pixel;</span><br><span class="line">    <span class="comment">//灰度值</span></span><br><span class="line">    __u32 grayscale;</span><br><span class="line">    <span class="comment">//RGB位域</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">fb_bitfield</span> <span class="title">red</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">fb_bitfield</span> <span class="title">green</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">fb_bitfield</span> <span class="title">blue</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">fb_bitfield</span> <span class="title">transp</span>;</span></span><br><span class="line">    <span class="comment">//是否标准像素格式</span></span><br><span class="line">    __u32 nonstd;</span><br><span class="line">    <span class="comment">//设置生效时机</span></span><br><span class="line">    __u32 activate;</span><br><span class="line">    <span class="comment">//图像实际(毫米)</span></span><br><span class="line">    __u32 height;</span><br><span class="line">    __u32 width;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//硬件相关</span></span><br><span class="line">    __u32 pixclock;</span><br><span class="line">    __u32 left_margin;</span><br><span class="line">    __u32 right_margin;</span><br><span class="line">    <span class="comment">//vbp</span></span><br><span class="line">    __u32 upper_margin;</span><br><span class="line">    __u32 lower_margin;</span><br><span class="line">    __u32 hsync_len;</span><br><span class="line">    __u32 vsync_len;</span><br><span class="line"></span><br><span class="line">    __u32 sync;</span><br><span class="line">    __u32 vmode;</span><br><span class="line">    <span class="comment">//保留</span></span><br><span class="line">    __u32 reserved[<span class="number">6</span>];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p><img src="/2018/06/01/Android橡皮擦闪烁分析以及解决方案/var-info.png" alt="varInfo"></p>
+<p>以上的参数对应在EBI与显示器的参数如图：</p>
+<p><img src="/2018/06/01/Android橡皮擦闪烁分析以及解决方案/sync.png" alt="sync"></p>
+<p>不可变属性 fb_fix_screeninfo<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">fb_fix_screeninfo</span> &#123;</span></span><br><span class="line">    <span class="comment">//name</span></span><br><span class="line">    <span class="keyword">char</span> id[<span class="number">16</span>];</span><br><span class="line">    <span class="comment">//framebuffer物理起始地址</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> smem_start;</span><br><span class="line">    <span class="comment">//长度,字节为单位</span></span><br><span class="line">    __u32 smem_len;</span><br><span class="line">    __u32 type;</span><br><span class="line">    __u32 type_aux;</span><br><span class="line">    __u32 visual;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//pan切换图像的不同可见区域</span></span><br><span class="line">    __u16 xpanstep;</span><br><span class="line">    __u16 ypanstep;</span><br><span class="line">    __u16 ywrapstep;</span><br><span class="line">    <span class="comment">//一行字节数</span></span><br><span class="line">    __u32 line_length;</span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">//保留</span></span><br><span class="line">    __u16 reserved[<span class="number">3</span>];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>显示、虚拟区域的切换<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">vinfo.yoffset = <span class="number">0</span>;  <span class="comment">// vinfo.yoffset = vinfo.yres</span></span><br><span class="line">ioctl(fd, FBIOPAN_DISPLAY, &amp;vinfo)</span><br><span class="line"></span><br><span class="line"><span class="comment">//或者</span></span><br><span class="line"></span><br><span class="line">varInfo.yoffset = varInfo.yres * n;</span><br><span class="line">varInfo.activate = FB_ACTIVATE_VBL;</span><br><span class="line">ioctl(frameBufferFd, FBIOPUT_VSCREENINFO, &amp;varInfo);</span><br></pre></td></tr></table></figure></p>
+<h2 id="3、画面延迟、撕裂分析"><a href="#3、画面延迟、撕裂分析" class="headerlink" title="3、画面延迟、撕裂分析"></a>3、画面延迟、撕裂分析</h2><p>画面撕裂 Screen Tearing 是指显示器把两个或更多的帧（frame）显示在同一画面上。是显示器的刷新率(屏幕刷新率)与设备的显示输入(帧率)不同步发生的一种现象，首先介绍两个几个相关概念。<br><img src="/2018/06/01/Android橡皮擦闪烁分析以及解决方案/tearing.png" alt="tearing"></p>
+<h4 id="屏幕刷新率"><a href="#屏幕刷新率" class="headerlink" title="屏幕刷新率"></a>屏幕刷新率</h4><p>即 Refresh Rate 或 Scanning Frequency，单位赫兹Hz，是指设备刷新屏幕的频率，该值对于特定的设备来说是个常量，其数值是显示器每秒钟更新画面的次数。不同的显示器支持再不同分辨率下的不同刷新率。它的范围可以从低到60高到100。如果你设置了一个特定的刷新率，显示器将一直按照这个速率刷新画面。甚至画面没有任何的改变。</p>
+<h4 id="帧率"><a href="#帧率" class="headerlink" title="帧率"></a>帧率</h4><p>即 Frame Per Rate，单位 fps，是指 gpu 生成帧的速率，越高越好。它显示显卡在每秒钟可以描画多少画面。但是对于快速变化的游戏而言，你的FPS很难一直保持同样的数值，他会随着你所看到的显示卡所要描画的画面的复杂程度而变化。</p>
+<p>维基百科中关于帧率数值的描述<a href="https://zh.wikipedia.org/wiki/帧率" target="_blank" rel="noopener">^1</a>：</p>
+<ul>
+<li>12 fps：由于人类眼睛的特殊生理结构，如果所看画面之帧率高于每秒约10-12帧的时候，就会认为是连贯的</li>
+<li>24 fps：有声电影的拍摄及播放帧率均为每秒24帧，对一般人而言已算可接受</li>
+<li>30 fps：早期的高动态电子游戏，帧率少于每秒30帧的话就会显得不连贯，这是因为没有动态模糊使流畅度降低</li>
+<li>60 fps：在实际体验中，60帧相对于30帧有着更好的体验</li>
+<li>85 fps：一般而言，大脑处理视频的极限</li>
+</ul>
+<h4 id="原因分析"><a href="#原因分析" class="headerlink" title="原因分析"></a>原因分析</h4><p>Screen Tearing出现的原因无非两个:</p>
+<ol>
+<li>在display的时候draw(也就是所谓的On Display Draw),  这种情况有可能会出现tearing(也不是必然).</li>
+<li>是在display的时候swap buffer(Flip).</li>
+</ol>
+<h6 id="1-单缓冲方案-无等待"><a href="#1-单缓冲方案-无等待" class="headerlink" title="1. 单缓冲方案 - 无等待"></a>1. 单缓冲方案 - 无等待</h6><p>Display是显示屏幕，GPU和CPU负责渲染帧数据，每个帧以方框表示。</p>
+<p><img src="/2018/06/01/Android橡皮擦闪烁分析以及解决方案/no-vsync.png" alt="no-vsync"></p>
+<blockquote>
+<p>Step1. Display显示第0帧数据，此时CPU和GPU渲染第1帧画面，而且赶在Display显示下一帧前完成</p>
+<p>Step2. 因为渲染及时，Display在第0帧显示完成后，也就是第1个VSync后，正常显示第1帧</p>
+<p>Step3. 由于某些原因，比如CPU资源被占用，系统没有及时地开始处理第2帧，直到第2个VSync快来前才开始处理</p>
+<p>Step4. 第2个VSync来时，由于第2帧数据还没有准备就绪，显示的还是第1帧。“Jank”。</p>
+<p>Step5. 当第2帧数据准备完成后，它并不会马上被显示，而是要等待下一个VSync。</p>
+</blockquote>
+<p>单缓冲方案存在的问题:</p>
+<ol>
+<li>画面延迟</li>
+<li>画面撕裂</li>
+</ol>
+<h6 id="2-单缓冲方案-等待"><a href="#2-单缓冲方案-等待" class="headerlink" title="2. 单缓冲方案 - 等待"></a>2. 单缓冲方案 - 等待</h6><p><img src="/2018/06/01/Android橡皮擦闪烁分析以及解决方案/with-vsync.png" alt="with-vsync"></p>
+<p>VSync信号出现后，CPU不再犹豫，紧接着就开始执行buffer的准备工作。</p>
+<p>由于大部分的Android显示设备刷新率是60Hz, 这也就意味着每一帧最多只能有1/60=16ms左右的准备时间。</p>
+<ol>
+<li>假如CPU/GPU的FPS高于这个值，那么这个方案是完美的，显示效果将很好。</li>
+<li>CPU/GPU的性能无法满足上图的条件，会产生严重的画面延迟</li>
+</ol>
+<h6 id="3-双-多-缓冲方案-不等待"><a href="#3-双-多-缓冲方案-不等待" class="headerlink" title="3. 双(多)缓冲方案 - 不等待"></a>3. 双(多)缓冲方案 - 不等待</h6><p>完全把多缓冲当做单缓冲用</p>
+<h6 id="3-双缓冲方案-等待"><a href="#3-双缓冲方案-等待" class="headerlink" title="3. 双缓冲方案 - 等待"></a>3. 双缓冲方案 - 等待</h6><p><img src="/2018/06/01/Android橡皮擦闪烁分析以及解决方案/double-buffer.png" alt="double-buffer"></p>
+<p>如图采用了A/B双缓冲，以及前面介绍的VSync</p>
+<ol>
+<li>CPU/GPU处理所用的时间时短，但总的来说都在16ms以内，因而不影响显示效果。A和B分别代表两个缓冲区，它们不断地交换来正确显示画面。</li>
+<li>当CPU/GPU的处理时间超过16ms时，第一个VSync到来时，缓冲区B中的数据还没有准备好，于是只能继续显示之前A缓冲区中的内容。而B完成后，又因为缺乏VSync pulse信号，它只能等待下一个signal的来临。于是在这一过程中，有一大段时间是被浪费的。当下一个VSync出现时，CPU/GPU马上执行操作，此时它可操作的buffer是A，相应的显示屏对应的就是B。这时看起来就是正常的。只不过由于执行时间仍然超过16ms，导致下一次应该执行的缓冲区交换又被推迟了——如此循环反复，便出现了越来越多的“Jank”。</li>
+</ol>
+<p><img src="/2018/06/01/Android橡皮擦闪烁分析以及解决方案/double-buffer-2.png" alt="double-buffer-2"></p>
+<h6 id="4-三缓冲方案-等待"><a href="#4-三缓冲方案-等待" class="headerlink" title="4. 三缓冲方案 - 等待"></a>4. 三缓冲方案 - 等待</h6><p>第一次的Jank看起来是没有办法的，除非升级硬件配置来加快FPS。我们关注的重点是被CPU/GPU浪费的时间段，怎么才能充分利用起来呢？分析上述的过程，造成CPU/GPU无事可做的假象是因为当前已经没有可用的buffer了.  Triple Buffering是MultipleBuffering的一种，指的是系统使用3个缓冲区用于显示工作。</p>
+<p><img src="/2018/06/01/Android橡皮擦闪烁分析以及解决方案/triple-buffer.png" alt="triple-buffer"></p>
+<p>我们来逐步分析下这个新机制是否有效。首先和预料中的一致，第一次“Jank”无可厚非。不过让人欣慰的是，当第一次VSync发生后，CPU不用再等待了，它会使用第三个buffer C来进行下一帧数据的准备工作。虽然对缓冲区C的处理所需时间同样超过了16ms，但这并不影响显示屏——第2次VSync到来后，它选择buffer B进行显示;而第3次VSync时，它会接着采用C，而不是像double buffering中所看到的情况一样只能再显示一遍了。这样子就有效地降低了系统显示错误的机率。</p>
+<h6 id="5-更多缓冲？"><a href="#5-更多缓冲？" class="headerlink" title="5. 更多缓冲？"></a>5. 更多缓冲？</h6>
+  </article>
+  <aside class="table-content" id="site-toc">
+  <div class="table-content-title">
+    <i class="fa fa-arrow-right fa-lg" id="site-toc-hide-btn"></i>
+    <span>目录</span>
+  </div>
+  <div class="table-content-main">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1、TFT-LCD显示过程简要分析-硬件层面"><span class="toc-text">1、TFT-LCD显示过程简要分析(硬件层面)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2、framebuffer的基本原理-软件方面"><span class="toc-text">2、framebuffer的基本原理(软件方面)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#framebuffer基本使用"><span class="toc-text">framebuffer基本使用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#framebuffer实现"><span class="toc-text">framebuffer实现</span></a></li></ol></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#3、画面延迟、撕裂分析"><span class="toc-text">3、画面延迟、撕裂分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#屏幕刷新率"><span class="toc-text">屏幕刷新率</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#帧率"><span class="toc-text">帧率</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#原因分析"><span class="toc-text">原因分析</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#1-单缓冲方案-无等待"><span class="toc-text">1. 单缓冲方案 - 无等待</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2-单缓冲方案-等待"><span class="toc-text">2. 单缓冲方案 - 等待</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#3-双-多-缓冲方案-不等待"><span class="toc-text">3. 双(多)缓冲方案 - 不等待</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#3-双缓冲方案-等待"><span class="toc-text">3. 双缓冲方案 - 等待</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#4-三缓冲方案-等待"><span class="toc-text">4. 三缓冲方案 - 等待</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#5-更多缓冲？"><span class="toc-text">5. 更多缓冲？</span></a></li></ol></li></ol></li>
+  </div>
+</aside>
+  
+    <aside class="passage-copyright">
+      <div>本文作者: 姜雷12138</div>
+      
+        <div>
+          原文链接: 
+          <a href target="_blank">http://yoursite.com/2018/06/01/Android橡皮擦闪烁分析以及解决方案/</a>
+        </div>
+      
+      <div>
+        版权声明: 本博客所有文章除特别声明外, 均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议. 转载请注明出处!
+      </div>
+    </aside>
+  
+  
+    <div class="passage-tags">
+     
+      <a href="/tags/framebuffer原理/"><i class="fa fa-tags"></i>framebuffer原理</a>
+     
+      <a href="/tags/Screen-Tearing/"><i class="fa fa-tags"></i>Screen Tearing</a>
+     
+      <a href="/tags/多缓冲区/"><i class="fa fa-tags"></i>多缓冲区</a>
+    
+    </div>
+  
+</div>
+
+    </main>
+    
+      <div class="site-comment-contanier">
+  <p id="site-comment-info">
+    <i class="fa fa-spinner fa-spin"></i> 评论加载中
+  </p>
+  <div id="site-comment">
+  </div>
+</div>
+    
+    <div class="site-footer-wrapper">
+  <footer class="site-footer">
+    
+      <div class="site-footer-col">
+        <h5 class="site-footer-title">博客推荐</h5>
+        
+          <span class="site-footer-item">
+            <a href="https://godbmw.com/" target="_blank">GodBMW</a>
+          </span>
+        
+          <span class="site-footer-item">
+            <a href="http://ruanyifeng.com/" target="_blank">阮一峰的个人网站</a>
+          </span>
+        
+      </div>
+    
+      <div class="site-footer-col">
+        <h5 class="site-footer-title">抓到我</h5>
+        
+          <span class="site-footer-item">
+            <a href="https://github.com/jianglei12138" target="_blank">Github</a>
+          </span>
+        
+          <span class="site-footer-item">
+            <a href="https://segmentfault.com/" target="_blank">思否</a>
+          </span>
+        
+      </div>
+    
+    <div class="site-footer-info">
+      <i class="fa fa-clock-o"></i> 本站已稳定运行<span id="site-time"></span>
+    </div>
+    
+      <div class="site-footer-info">
+        <i class="fa fa-paw"></i> 您是本站第 <span id="site-count"></span> 位访客
+      </div>
+    
+    
+      <div class="site-footer-info">
+        <i class="fa fa-at"></i> Email: jianglei12138@gmail.com
+      </div>
+    
+    <div class="site-footer-info">
+      <i class="fa fa-copyright"></i> 
+      2019 <a href="https://github.com/dongyuanxin/theme-ad/" target="_blank">Theme-AD</a>.
+      Created by <a href="https://godbmw.com/" target="_blank">GodBMW</a>.
+      All rights reserved.
+    </div>
+  </footer>
+</div>
+    <div id="site-layer" style="display:none;">
+  <div class="site-layer-content">
+    <div class="site-layer-header">
+      <span class="site-layer-header-title" id="site-layer-title"></span>
+      <i class="fa fa-close" id="site-layer-close"></i>
+    </div>
+    <div class="site-layer-body" id="site-layer-container">
+      <div class="site-layer-input" id="site-layer-search" style="display: none;">
+        <input type="text">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="site-layer-reward" id="site-layer-reward" style="display: none;">
+        
+          <div>
+            <img src="/images/wechat.png" alt="WeChat">
+            
+              <p>WeChat</p>
+            
+          </div>
+        
+          <div>
+            <img src="/images/alipay.png" alt="AliPay">
+            
+              <p>AliPay</p>
+            
+          </div>
+        
+      </div>
+      <div id="site-layer-welcome" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+    
+
+<div class="bottom-bar">
+  <div class="bottom-bar-left">
+    <a href="/2018/06/13/ActivityThread 阅读之旅/" data-enable="true">
+      <i class="fa fa-arrow-left"></i>
+    </a>
+    <a href="/2018/04/01/Android图形框架的研究之路/" data-enable="true">
+      <i class="fa fa-arrow-right"></i>
+    </a>
+  </div>
+  <div class="bottom-bar-right">
+    <a href="javascript:void(0);" data-enable="true" id="site-toc-show-btn">
+      <i class="fa fa-bars"></i>
+    </a>
+    
+      <a href="#site-comment" data-enable="true">
+        <i class="fa fa-commenting"></i>
+      </a>
+    
+    <a href="javascript:void(0);" id="site-toggle-share-btn">
+      <i class="fa fa-share-alt"></i>
+    </a>
+    <a href="javascript:void(0);" id="site-reward">
+      <i class="fa fa-thumbs-up"></i>
+    </a>
+    <a href="javascript:void(0);" id="back-top-btn">
+      <i class="fa fa-chevron-up"></i>
+    </a>
+  </div>
+</div>
+    <div id="share-btn">
+  
+    <a id="share-btn-twitter" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-twitter"></i>
+    </a>
+  
+  
+    <a id="share-btn-facebook" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-facebook"></i>
+    </a>
+  
+  
+    <a id="share-btn-weibo" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-weibo"></i>
+    </a>
+  
+  
+    <a id="share-btn-qq" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-qq"></i>
+    </a>
+  
+  
+    <a id="share-btn-wechat" href="javascript:void(0);" target="_blank">
+      <i class="fa fa-wechat"></i>
+    </a>
+  
+</div>
+    
+
+
+
+
+
+    
+  </body>
+</html>
