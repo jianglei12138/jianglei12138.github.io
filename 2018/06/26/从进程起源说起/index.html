@@ -114,19 +114,19 @@
 							</li>
       			
   						<li>
-								<a class="nav flat-box" href="/blog/categories/" rel="nofollow" id="blogcategories">
+								<a class="nav flat-box" href="/categories/" rel="nofollow" id="categories">
 									<i class="fas fa-folder-open fa-fw"></i>&nbsp;分类
 								</a>
 							</li>
       			
   						<li>
-								<a class="nav flat-box" href="/blog/tags/" rel="nofollow" id="blogtags">
+								<a class="nav flat-box" href="/tags/" rel="nofollow" id="tags">
 									<i class="fas fa-hashtag fa-fw"></i>&nbsp;标签
 								</a>
 							</li>
       			
   						<li>
-								<a class="nav flat-box" href="/blog/archives/" rel="nofollow" id="blogarchives">
+								<a class="nav flat-box" href="/archives/" rel="nofollow" id="archives">
 									<i class="fas fa-archive fa-fw"></i>&nbsp;归档
 								</a>
 							</li>
@@ -138,7 +138,7 @@
 			
 				<div class="m_search">
 					<form name="searchform" class="form u-search-form">
-						<input type="text" class="input u-search-input" placeholder="Search">
+						<input type="text" class="input u-search-input" placeholder="搜索">
 						<i class="icon fas fa-search fa-fw"></i>
 					</form>
 				</div>
@@ -369,7 +369,7 @@
           <div class="new-meta-item date" itemprop="dateUpdated" datetime="2019-03-10T23:36:51+08:00">
   <a class="notlink">
     <i class="fas fa-clock" aria-hidden="true"></i>
-    <p>last updated at Mar 10, 2019</p>
+    <p>最后更新于 Mar 10, 2019</p>
   </a>
 </div>
 
@@ -397,18 +397,10 @@
       
     
       
-        <a class="-mob-share-qzone" title="QQ空间" rel="external nofollow noopener noreferrer" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=https://jianglei12138.github.io/2018/06/26/从进程起源说起/&title=从进程起源说起 | 姜雷12138&summary=一直想研究一下 Android 源码中关于图形渲染相关的内容，但是一直感觉无从入手，所以干脆直接从进程启动开始说起吧。后续会按照我看的内容尽量的写一些相关的博客。充实一下自己，打磨一下时光。废话少说，今天我们来分析一下 Android 应用进程的Zygote说起。">
-          
-            <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/qzone.png">
-          
-        </a>
-      
-    
-      
-        <a class="-mob-share-weibo" title="微博" rel="external nofollow noopener noreferrer" href="http://service.weibo.com/share/share.php?url=https://jianglei12138.github.io/2018/06/26/从进程起源说起/&title=从进程起源说起 | 姜雷12138&summary=一直想研究一下 Android 源码中关于图形渲染相关的内容，但是一直感觉无从入手，所以干脆直接从进程启动开始说起吧。后续会按照我看的内容尽量的写一些相关的博客。充实一下自己，打磨一下时光。废话少说，今天我们来分析一下 Android 应用进程的Zygote说起。">
-          
-            <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/weibo.png">
-          
+        <a class="qrcode" rel="external nofollow noopener noreferrer" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACs0lEQVR42u3a22rDMBAE0Pz/T6fQp0KJPaOV0hSOn0Lri44CXmW0j0d8PL+Pn59//uXVOcndft/z1bOu7zk68PDw8JaG/uq4HlB+5+spSKbjmv1yCvDw8PCO8ZJisFYYJgWjLTx4eHh4n8ZLFrjtIPLyg4eHh/cfeXmUkCzK8xgCDw8P7zN5yeDWykPyrOQpx7MWPDw8vG489QbY334+vr+Hh4eHt7SrPj/W2gKS+Dh6Oh4eHt4B3vWGVl4q2jOvF8EJuCgYeHh4eG/kJS0Ck2B33qQVRcZ4eHh4x3gnAoh2avJtsCKwwMPDwzvAazfj17bB2maCtnhEC2s8PDy8TbwW1kYG7ZZ//tJP/oKHh4e3l5dcvIZfKwx5vJs8Cw8PD++dvHaxO782X6Dn5+Dh4eGd4CU/+NvQIW8mmCzKi18MeHh4eMd4o8amcbSR3K0NMvDw8PDO8Z7B0RaMfJE9b8y6WXDj4eHhbeUlpyZlY9IcsCvqvfne8PDw8DbxkiB1rekq/+9aqFHEInh4eHhbeW3zUzug+dSMomE8PDy8A7w8Kp1Eve3rPg9Boq8BDw8PbysvuVG7kG1D2LYwFK0GeHh4eMd4+QZ//uJuG6Taa6Ppw8PDwzvMm7ys12LWNvio27Dw8PDwDvDWLm4HMWmxylu1oq8BDw8P7xhv0lA1WUCvRbePtbnBw8PDG/DWIoZ2O2rSqtW2INy0XuHh4eFt5bVBw+TBa0vqtgjh4eHh7eU9y6MNZHPGWmiLh4eH937e/OWb3Kht7dq7YYaHh4d3gpcUg8nW11q+Osljb7IWPDw8vE28tdBhHviuFYyiROHh4eF9GO9EWNBuld0g8fDw8P6Ul0e3a+FCMhH1SPDw8PCO8fLlbxsW5Oe0ZWBzjIuHh4d3bAMsX862w9rLxsPDwzvA+wLygeQp6RDaAAAAAABJRU5ErkJggg==">
+        
+          <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/wechat.png">
+        
         </a>
       
     
@@ -429,7 +421,7 @@
                 
                     <section class="prev">
                         <span class="art-item-left">
-                            <h6><i class="fas fa-chevron-left" aria-hidden="true"></i>&nbsp;Previous</h6>
+                            <h6><i class="fas fa-chevron-left" aria-hidden="true"></i>&nbsp;上一页</h6>
                             <h4>
                                 <a href="/2018/10/01/Android渲染机制/" rel="prev" title="Android渲染机制">
                                   
@@ -449,7 +441,7 @@
                 
                     <section class="next">
                         <span class="art-item-right" aria-hidden="true">
-                            <h6>Next&nbsp;<i class="fas fa-chevron-right" aria-hidden="true"></i></h6>
+                            <h6>下一页&nbsp;<i class="fas fa-chevron-right" aria-hidden="true"></i></h6>
                             <h4>
                                 <a href="/2018/06/15/Rxjava2源码阅读/" rel="prev" title="Rxjava2 使用以及源码阅读">
                                     
@@ -477,7 +469,21 @@
 
 
 
-  
+  <article class="post white-box comments">
+    <section class="article typo">
+      <h4><i class="fas fa-comments fa-fw" aria-hidden="true"></i>&nbsp;评论</h4>
+      
+      
+      
+      
+        <section id="comments">
+          <div id="valine_container" class="valine_thread">
+            <i class="fas fa-spinner fa-spin fa-fw"></i>
+          </div>
+        </section>
+      
+    </section>
+  </article>
 
 
   
@@ -552,7 +558,7 @@
   <section class="widget toc-wrapper">
     
 <header class="material">
-  <div><i class="fas fa-list fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;TOC</div>
+  <div><i class="fas fa-list fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;本文目录</div>
   
     <div class="wrapper"><a class="s-toc rightBtn" rel="external nofollow noopener noreferrer" href="javascript:void(0)"><i class="fas fa-thumbtack fa-fw"></i></a></div>
   
@@ -587,7 +593,7 @@
           近期文章
         </a></li>
       
-        <li><a class="flat-box" title="/blog/archives/" href="/blog/archives/" rel="nofollow" id="blogarchives">
+        <li><a class="flat-box" title="/archives/" href="/archives/" rel="nofollow" id="archives">
           
             <i class="fas fa-archive fa-fw" aria-hidden="true"></i>
           
@@ -636,7 +642,7 @@
   <section class="widget category">
     
 <header class="material">
-  <div><i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;Categories</div>
+  <div><i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;文章分类</div>
   
     <a class="rightBtn" rel="nofollow" href="/blog/categories/" title="blog/categories/">
     <i class="fas fa-expand-arrows-alt fa-fw"></i></a>
@@ -665,9 +671,9 @@
   <section class="widget tagcloud">
     
 <header class="material">
-  <div><i class="fas fa-fire fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;Hot Tags</div>
+  <div><i class="fas fa-fire fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;热门标签</div>
   
-    <a class="rightBtn" rel="nofollow" href="/blog/tags/" title="blog/tags/">
+    <a class="rightBtn" rel="nofollow" href="/tags/" title="tags/">
     <i class="fas fa-expand-arrows-alt fa-fw"></i></a>
   
 </header>
@@ -724,19 +730,19 @@
     </div>
   
   <br>
-  <div><p>Blog content follows the <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en">Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0) License</a></p>
+  <div><p>博客内容遵循 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</a></p>
 </div>
   <div>
-    Use
+    本站使用
     <a href="https://xaoxuu.com/wiki/material-x/" target="_blank" class="codename">material-x</a>
-    as theme
+    作为主题
     
-      , 
-      total visits
+      ，
+      总访问量为
       <span id="busuanzi_value_site_pv"><i class="fas fa-spinner fa-spin fa-fw" aria-hidden="true"></i></span>
-      times
+      次
     
-    . 
+    。
   </div>
 </footer>
 <script>setLoadingBarProgress(80);</script>
@@ -828,6 +834,36 @@
 
 
 
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  
+    
+      <script src="https://cdn.jsdelivr.net/gh/xaoxuu/volantis@1/js/volantis.min.js"></script>
+    
+  
+  <script>
+  var GUEST_INFO = ['nick','mail','link'];
+  var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+    return GUEST_INFO.indexOf(item) > -1
+  });
+  var notify = 'true' == true;
+  var verify = 'true' == true;
+  var valine = new Valine();
+  valine.init({
+    el: '#valine_container',
+    notify: notify,
+    verify: verify,
+    guest_info: guest_info,
+    
+    appId: "",
+    appKey: "",
+    placeholder: "快来评论吧~",
+    pageSize:'10',
+    avatar:'mp',
+    lang:'zh-cn',
+    highlight:'true'
+  })
+  </script>
+
 
 
   <script src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-material-x@19.4.19/js/app.js"></script>
@@ -841,15 +877,15 @@
 <!-- 复制 -->
 <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
 <script>
-  let COPY_SUCCESS = "Copied";
-  let COPY_FAILURE = "Copy failed";
+  let COPY_SUCCESS = "复制成功";
+  let COPY_FAILURE = "复制失败";
   /*页面载入完成后，创建复制按钮*/
   !function (e, t, a) {
     /* code */
     var initCopyCode = function(){
       var copyHtml = '';
       copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
-      copyHtml += '  <i class="fa fa-copy"></i><span>Copy</span>';
+      copyHtml += '  <i class="fa fa-copy"></i><span>复制</span>';
       copyHtml += '</button>';
       $(".highlight .code pre").before(copyHtml);
       var clipboard = new ClipboardJS('.btn-copy', {
