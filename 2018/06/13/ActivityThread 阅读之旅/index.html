@@ -1,324 +1,85 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  
-  <title>ActivityThread 阅读之旅 | 姜雷12138</title>
   
   
-
   
-
-  <meta name="HandheldFriendly" content="True">
-  <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <!-- meta -->
+  <title>
+    ActivityThread 阅读之旅 |
+    
+    姜雷12138</title>
   
-
-  <!-- link -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+    <link rel="shortcut icon" href="/favicon.ico">
   
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css">
+  <link rel="stylesheet" href="/css/style.css">
   
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.6.3/css/all.min.css">
+    <link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
   
-
-  
-
-  
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-material-x@19.4.19/css/style.css">
-  
-
-  <script>
-    function setLoadingBarProgress(num) {
-      document.getElementById('loading-bar').style.width=num+"%";
-    }
-  </script>
-
-  
-  
+  <script src="/js/pace.min.js"></script>
 </head>
-
+</html>
 <body>
+<main class="content">
+  <section class="outer">
   
+
+<article id="post-ActivityThread 阅读之旅" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
   
-  <div class="cover-wrapper">
-    <cover class="cover post half">
-      
-        
-  <h1 class="title">姜雷12138不定期更新的日常</h1>
-
-
-  <div class="m_search">
-    <form name="searchform" class="form u-search-form">
-      <input type="text" class="input u-search-input" placeholder>
-      <i class="icon fas fa-search fa-fw"></i>
-    </form>
-  </div>
-
-<div class="menu navgation">
-  <ul class="h-list">
+  <div class="article-inner">
     
-      
-        <li>
-          <a class="nav home" href="/" id="home">
-            <i class="fas fa-rss fa-fw"></i>&nbsp;博文
-          </a>
-        </li>
-      
-        <li>
-          <a class="nav home" href="/projects/" id="projects">
-            <i class="fas fa-code-branch fa-fw"></i>&nbsp;项目
-          </a>
-        </li>
-      
-        <li>
-          <a class="nav home" href="/friends/" rel="nofollow" id="friends">
-            <i class="fas fa-link fa-fw"></i>&nbsp;友链
-          </a>
-        </li>
-      
-        <li>
-          <a class="nav home" href="/about/" rel="nofollow" id="about">
-            <i class="fas fa-info-circle fa-fw"></i>&nbsp;关于
-          </a>
-        </li>
-      
-    
-  </ul>
-</div>
-
-      
-    </cover>
-    <header class="l_header material">
-  <div id="loading-bar-wrapper">
-    <div id="loading-bar" class="material"></div>
-  </div>
-
-	<div class="wrapper">
-		<div class="nav-main container container--flex">
-      <a class="logo flat-box" href="/">
-        
-          姜雷12138
-        
-      </a>
-			<div class="menu navgation">
-				<ul class="h-list">
-          
-  					
-  						<li>
-								<a class="nav flat-box" href="/" id="home">
-									<i class="fas fa-grin fa-fw"></i>&nbsp;示例
-								</a>
-							</li>
-      			
-  						<li>
-								<a class="nav flat-box" href="/categories/" rel="nofollow" id="categories">
-									<i class="fas fa-folder-open fa-fw"></i>&nbsp;分类
-								</a>
-							</li>
-      			
-  						<li>
-								<a class="nav flat-box" href="/tags/" rel="nofollow" id="tags">
-									<i class="fas fa-hashtag fa-fw"></i>&nbsp;标签
-								</a>
-							</li>
-      			
-  						<li>
-								<a class="nav flat-box" href="/archives/" rel="nofollow" id="archives">
-									<i class="fas fa-archive fa-fw"></i>&nbsp;归档
-								</a>
-							</li>
-      			
-      		
-				</ul>
-			</div>
-
-			
-				<div class="m_search">
-					<form name="searchform" class="form u-search-form">
-						<input type="text" class="input u-search-input" placeholder="Search">
-						<i class="icon fas fa-search fa-fw"></i>
-					</form>
-				</div>
-			
-			<ul class="switcher h-list">
-				
-					<li class="s-search"><a class="fas fa-search fa-fw" href="javascript:void(0)"></a></li>
-				
-				<li class="s-menu"><a class="fas fa-bars fa-fw" href="javascript:void(0)"></a></li>
-			</ul>
-		</div>
-
-		<div class="nav-sub container container--flex">
-			<a class="logo flat-box"></a>
-			<ul class="switcher h-list">
-				<li class="s-comment"><a class="flat-btn fas fa-comments fa-fw" href="javascript:void(0)"></a></li>
-        
-          <li class="s-toc"><a class="flat-btn fas fa-list fa-fw" href="javascript:void(0)"></a></li>
-        
-			</ul>
-		</div>
-	</div>
-</header>
-	<aside class="menu-phone">
-    <header>
-		<nav class="menu navgation">
-      <ul>
-        
-          
-            <li>
-							<a class="nav flat-box" href="/" id="home">
-								<i class="fas fa-clock fa-fw"></i>&nbsp;近期文章
-							</a>
-            </li>
-          
-            <li>
-							<a class="nav flat-box" href="/blog/archives/" rel="nofollow" id="blogarchives">
-								<i class="fas fa-archive fa-fw"></i>&nbsp;文章归档
-							</a>
-            </li>
-          
-            <li>
-							<a class="nav flat-box" href="/projects/" id="projects">
-								<i class="fas fa-code-branch fa-fw"></i>&nbsp;开源项目
-							</a>
-            </li>
-          
-            <li>
-							<a class="nav flat-box" href="/friends/" rel="nofollow" id="friends">
-								<i class="fas fa-link fa-fw"></i>&nbsp;我的友链
-							</a>
-            </li>
-          
-            <li>
-							<a class="nav flat-box" href="https://xaoxuu.com/wiki/material-x/" rel="nofollow" id="https:xaoxuu.comwikimaterial-x">
-								<i class="fas fa-book fa-fw"></i>&nbsp;主题文档
-							</a>
-            </li>
-          
-            <li>
-							<a class="nav flat-box" href="/about/" rel="nofollow" id="about">
-								<i class="fas fa-info-circle fa-fw"></i>&nbsp;关于小站
-							</a>
-            </li>
-          
-       
-      </ul>
-		</nav>
-    </header>
-	</aside>
-<script>setLoadingBarProgress(40);</script>
-
-  </div>
-
-
-  <div class="l_body">
-    <div class='body-wrapper'>
-      <div class="l_main">
-  
-
-  
-    <article id="post" class="post white-box article-type-post" itemscope itemprop="blogPost">
-      
-
-
-  <section class="meta">
-    
-    
-    <div class="meta" id="header-meta">
-      
+      <header class="article-header">
         
   
-    <h1 class="title">
-      <a href="/2018/06/13/ActivityThread 阅读之旅/">
-        ActivityThread 阅读之旅
-      </a>
+    <h1 class="article-title" itemprop="name">
+      ActivityThread 阅读之旅
     </h1>
   
+  
 
 
-      
-      <div class="new-meta-box">
+
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2018/06/13/ActivityThread 阅读之旅/" class="article-date">
+  <time datetime="2018-06-13T15:28:30.000Z" itemprop="datePublished">2018-06-13</time>
+</a>
         
-          
-        
-          
-            
-  <div class="new-meta-item author">
-    <a href="https://jianglei12138.github.io" rel="nofollow">
-      
-        <i class="fas fa-user" aria-hidden="true"></i>
-      
-      <p>姜雷12138</p>
-    </a>
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Android学习/">Android学习</a>
   </div>
 
-
-          
-        
-          
-            <div class="new-meta-item date">
-  <a class="notlink">
-    <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-    <p>2018-06-13</p>
-  </a>
-</div>
-
-          
-        
-          
-            
-  
-  <div class="new-meta-item category">
-    <a href="/categories/Android学习/" rel="nofollow">
-      <i class="fas fa-folder-open" aria-hidden="true"></i>
-      <p>Android学习</p>
-    </a>
-  </div>
-
-
-          
-        
-          
-            
-  
-    <div class="new-meta-item browse busuanzi">
-      <a class="notlink">
-        <i class="fas fa-eye" aria-hidden="true"></i>
-        <p>
-          <span id="busuanzi_value_page_pv">
-            <i class="fas fa-spinner fa-spin fa-fw" aria-hidden="true"></i>
-          </span>
-        </p>
-      </a>
-    </div>
-  
-
-
-          
-        
-          
-            
-
-          
-        
       </div>
+    
+
+    
       
-        <hr>
-      
-    </div>
-  </section>
+    <div class="tocbot"></div>
 
 
-      <section class="article typo">
-        <div class="article-entry" itemprop="articleBody">
-          <p>研究一下App是如何启动的记录。我们知道<code>Main</code>函数是所有java程序的入口，Android也不例外，同样，启动一个应用程序，Android也会首先调用<code>Main</code>函数。<code>Main</code>函数位于<code>AcitivityThread</code>类中。<br> <a id="more"></a></p>
+
+
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+      
+
+      
+        <p>研究一下App是如何启动的记录。我们知道<code>Main</code>函数是所有java程序的入口，Android也不例外，同样，启动一个应用程序，Android也会首先调用<code>Main</code>函数。<code>Main</code>函数位于<code>AcitivityThread</code>类中。<br> <a id="more"></a></p>
 <h1 id="ActivityThread-阅读之旅"><a href="#ActivityThread-阅读之旅" class="headerlink" title="ActivityThread 阅读之旅"></a>ActivityThread 阅读之旅</h1><p>研究一下App是如何启动的记录。</p>
 <p>我们知道<code>Main</code>函数是所有java程序的入口，Android也不例外，同样，启动一个应用程序，Android也会首先调用<code>Main</code>函数。<code>Main</code>函数位于<code>AcitivityThread</code>类中。</p>
 <p>我们首先看<code>Main</code>函数的实现。</p>
 <h6 id="framework-base-core-java-android-app-ActivityThread-java"><a href="#framework-base-core-java-android-app-ActivityThread-java" class="headerlink" title="framework/base/core/java/android/app/ActivityThread.java"></a>framework/base/core/java/android/app/ActivityThread.java</h6><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    Trace.traceBegin(Trace.TRACE_TAG_ACTIVITY_MANAGER, <span class="string">"ActivityThreadMain"</span>);</span><br><span class="line">    CloseGuard.setEnabled(<span class="keyword">false</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//初始化Environment环境变量</span></span><br><span class="line">    Environment.initForCurrentUser();</span><br><span class="line"></span><br><span class="line">    EventLogger.setReporter(<span class="keyword">new</span> EventLoggingReporter());</span><br><span class="line"></span><br><span class="line">    <span class="keyword">final</span> File configDir = Environment.getUserConfigDirectory(UserHandle.myUserId());</span><br><span class="line">    TrustedCertificateStore.setDefaultUserDirectory(configDir);</span><br><span class="line"></span><br><span class="line">    Process.setArgV0(<span class="string">"&lt;pre-initialized&gt;"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//创建MainLooper</span></span><br><span class="line">    Looper.prepareMainLooper();</span><br><span class="line"></span><br><span class="line">    ActivityThread thread = <span class="keyword">new</span> ActivityThread();</span><br><span class="line">    thread.attach(<span class="keyword">false</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (sMainThreadHandler == <span class="keyword">null</span>) &#123;</span><br><span class="line">        sMainThreadHandler = thread.getHandler();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// End of event ActivityThreadMain.</span></span><br><span class="line">    Trace.traceEnd(Trace.TRACE_TAG_ACTIVITY_MANAGER);</span><br><span class="line">    Looper.loop();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Main thread loop unexpectedly exited"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>大致的流程如下：</p>
 <h6 id="1-Environment的初始化"><a href="#1-Environment的初始化" class="headerlink" title="1. Environment的初始化"></a>1. Environment的初始化</h6><p>其中我们可以看到<code>main</code>函数先初始化了<code>Environment</code>类，<code>Environment</code>中会初始化一系列与环境路径相关的操作，在App中可以直接使用类似Environment.getDataDirectory等接口进行访问.</p>
 <h6 id="2-Looper相关初始化"><a href="#2-Looper相关初始化" class="headerlink" title="2. Looper相关初始化"></a>2. Looper相关初始化</h6><p><code>ActivityThread</code>通过调用<code>Looper.prepareMainLooper()</code>方法创建MainLopper，具体操作如下，先通过prepare方法创建一个不可退出的Looper作为MainLooper, 关于ThreadLocal相关的使用可以参见具体的博客等，此处不再赘述。值得一提的是，由于<code>prepare(boolean quitAllowed)</code>是私有方法，应用无法调用。但此处存在两个疑问：</p>
@@ -329,643 +90,175 @@
 </ol>
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> ThreadLocal&lt;Looper&gt; sThreadLocal = <span class="keyword">new</span> ThreadLocal&lt;Looper&gt;();</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">prepare</span><span class="params">(<span class="keyword">boolean</span> quitAllowed)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (sThreadLocal.get() != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Only one Looper may be created per thread"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    sThreadLocal.set(<span class="keyword">new</span> Looper(quitAllowed));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">prepareMainLooper</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    prepare(<span class="keyword">false</span>);</span><br><span class="line">    <span class="keyword">synchronized</span> (Looper.class) &#123;</span><br><span class="line">        <span class="keyword">if</span> (sMainLooper != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"The main Looper has already been prepared."</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        sMainLooper = myLooper();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h6 id="3-ActivityThread的创建"><a href="#3-ActivityThread的创建" class="headerlink" title="3. ActivityThread的创建"></a>3. ActivityThread的创建</h6><p><code>ActivityThread</code>构造函数中创建了一个叫做mResourcesManager的实例，ResourcesManager是一个单例类，一些关于资源的配置，引用与实现都在此处实现。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ActivityThread() &#123;</span><br><span class="line">    mResourcesManager = ResourcesManager.getInstance();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>紧接着会去调用<code>attach(false)</code>方法，此方法如下<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">attach</span><span class="params">(<span class="keyword">boolean</span> system)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//给成员变量赋值，可以通过ActivityThread.currentActivityThread()或者ActivityThread.isSystem()获取</span></span><br><span class="line">    sCurrentActivityThread = <span class="keyword">this</span>;</span><br><span class="line">    mSystemThread = system;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!system) &#123;</span><br><span class="line">        ViewRootImpl.addFirstDrawHandler(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                <span class="comment">//保证VM JIT实时编译打开</span></span><br><span class="line">                ensureJitEnabled();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        android.ddm.DdmHandleAppName.setAppName(<span class="string">"&lt;pre-initialized&gt;"</span>,</span><br><span class="line">                                                UserHandle.myUserId());</span><br><span class="line"></span><br><span class="line">        <span class="comment">//mAppThread是沟通AMS与ActivityThread的桥梁</span></span><br><span class="line">        RuntimeInit.setApplicationObject(mAppThread.asBinder());</span><br><span class="line">        <span class="keyword">final</span> IActivityManager mgr = ActivityManager.getService();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//mgr会通过调用mAppThread中的一系列方法实现对Activity的控制</span></span><br><span class="line">            mgr.attachApplication(mAppThread);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (RemoteException ex) &#123;</span><br><span class="line">            <span class="keyword">throw</span> ex.rethrowFromSystemServer();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// Watch for getting close to heap limit.</span></span><br><span class="line">        BinderInternal.addGcWatcher(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                <span class="keyword">if</span> (!mSomeActivitiesChanged) &#123;</span><br><span class="line">                    <span class="keyword">return</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                Runtime runtime = Runtime.getRuntime();</span><br><span class="line">                <span class="keyword">long</span> dalvikMax = runtime.maxMemory();</span><br><span class="line">                <span class="keyword">long</span> dalvikUsed = runtime.totalMemory() - runtime.freeMemory();</span><br><span class="line">                <span class="keyword">if</span> (dalvikUsed &gt; ((<span class="number">3</span>*dalvikMax)/<span class="number">4</span>)) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (DEBUG_MEMORY_TRIM) Slog.d(TAG, <span class="string">"Dalvik max="</span> + (dalvikMax/<span class="number">1024</span>)</span><br><span class="line">                            + <span class="string">" total="</span> + (runtime.totalMemory()/<span class="number">1024</span>)</span><br><span class="line">                            + <span class="string">" used="</span> + (dalvikUsed/<span class="number">1024</span>));</span><br><span class="line">                    mSomeActivitiesChanged = <span class="keyword">false</span>;</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        mgr.releaseSomeActivities(mAppThread);</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (RemoteException e) &#123;</span><br><span class="line">                        <span class="keyword">throw</span> e.rethrowFromSystemServer();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//省略system进程判断</span></span><br><span class="line">    <span class="comment">// add dropbox logging to libcore</span></span><br><span class="line">    DropBox.setReporter(<span class="keyword">new</span> DropBoxReporter());</span><br><span class="line">    ViewRootImpl.addConfigCallback(globalConfig -&gt; &#123;</span><br><span class="line">      <span class="keyword">synchronized</span> (mResourcesManager) &#123;</span><br><span class="line">          <span class="comment">// We need to apply this change to the resources immediately, because upon returning</span></span><br><span class="line">          <span class="comment">// the view hierarchy will be informed about it.</span></span><br><span class="line">          <span class="keyword">if</span> (mResourcesManager.applyConfigurationToResourcesLocked(globalConfig,</span><br><span class="line">                  <span class="keyword">null</span> <span class="comment">/* compat */</span>)) &#123;</span><br><span class="line">              updateLocaleListFromAppContext(mInitialApplication.getApplicationContext(),</span><br><span class="line">                      mResourcesManager.getConfiguration().getLocales());</span><br><span class="line"></span><br><span class="line">              <span class="comment">// This actually changed the resources! Tell everyone about it.</span></span><br><span class="line">              <span class="keyword">if</span> (mPendingConfiguration == <span class="keyword">null</span></span><br><span class="line">                      || mPendingConfiguration.isOtherSeqNewer(globalConfig)) &#123;</span><br><span class="line">                  mPendingConfiguration = globalConfig;</span><br><span class="line">                  sendMessage(H.CONFIGURATION_CHANGED, globalConfig);</span><br><span class="line">              &#125;</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+<p>紧接着会去调用<code>attach(false)</code>方法，此方法如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">attach</span><span class="params">(<span class="keyword">boolean</span> system)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//给成员变量赋值，可以通过ActivityThread.currentActivityThread()或者ActivityThread.isSystem()获取</span></span><br><span class="line">    sCurrentActivityThread = <span class="keyword">this</span>;</span><br><span class="line">    mSystemThread = system;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!system) &#123;</span><br><span class="line">        ViewRootImpl.addFirstDrawHandler(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                <span class="comment">//保证VM JIT实时编译打开</span></span><br><span class="line">                ensureJitEnabled();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        android.ddm.DdmHandleAppName.setAppName(<span class="string">"&lt;pre-initialized&gt;"</span>,</span><br><span class="line">                                                UserHandle.myUserId());</span><br><span class="line"></span><br><span class="line">        <span class="comment">//mAppThread是沟通AMS与ActivityThread的桥梁</span></span><br><span class="line">        RuntimeInit.setApplicationObject(mAppThread.asBinder());</span><br><span class="line">        <span class="keyword">final</span> IActivityManager mgr = ActivityManager.getService();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//mgr会通过调用mAppThread中的一系列方法实现对Activity的控制</span></span><br><span class="line">            mgr.attachApplication(mAppThread);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (RemoteException ex) &#123;</span><br><span class="line">            <span class="keyword">throw</span> ex.rethrowFromSystemServer();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// Watch for getting close to heap limit.</span></span><br><span class="line">        BinderInternal.addGcWatcher(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                <span class="keyword">if</span> (!mSomeActivitiesChanged) &#123;</span><br><span class="line">                    <span class="keyword">return</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                Runtime runtime = Runtime.getRuntime();</span><br><span class="line">                <span class="keyword">long</span> dalvikMax = runtime.maxMemory();</span><br><span class="line">                <span class="keyword">long</span> dalvikUsed = runtime.totalMemory() - runtime.freeMemory();</span><br><span class="line">                <span class="keyword">if</span> (dalvikUsed &gt; ((<span class="number">3</span>*dalvikMax)/<span class="number">4</span>)) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (DEBUG_MEMORY_TRIM) Slog.d(TAG, <span class="string">"Dalvik max="</span> + (dalvikMax/<span class="number">1024</span>)</span><br><span class="line">                            + <span class="string">" total="</span> + (runtime.totalMemory()/<span class="number">1024</span>)</span><br><span class="line">                            + <span class="string">" used="</span> + (dalvikUsed/<span class="number">1024</span>));</span><br><span class="line">                    mSomeActivitiesChanged = <span class="keyword">false</span>;</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        mgr.releaseSomeActivities(mAppThread);</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (RemoteException e) &#123;</span><br><span class="line">                        <span class="keyword">throw</span> e.rethrowFromSystemServer();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//省略system进程判断</span></span><br><span class="line">    <span class="comment">// add dropbox logging to libcore</span></span><br><span class="line">    DropBox.setReporter(<span class="keyword">new</span> DropBoxReporter());</span><br><span class="line">    ViewRootImpl.addConfigCallback(globalConfig -&gt; &#123;</span><br><span class="line">      <span class="keyword">synchronized</span> (mResourcesManager) &#123;</span><br><span class="line">          <span class="comment">// We need to apply this change to the resources immediately, because upon returning</span></span><br><span class="line">          <span class="comment">// the view hierarchy will be informed about it.</span></span><br><span class="line">          <span class="keyword">if</span> (mResourcesManager.applyConfigurationToResourcesLocked(globalConfig,</span><br><span class="line">                  <span class="keyword">null</span> <span class="comment">/* compat */</span>)) &#123;</span><br><span class="line">              updateLocaleListFromAppContext(mInitialApplication.getApplicationContext(),</span><br><span class="line">                      mResourcesManager.getConfiguration().getLocales());</span><br><span class="line"></span><br><span class="line">              <span class="comment">// This actually changed the resources! Tell everyone about it.</span></span><br><span class="line">              <span class="keyword">if</span> (mPendingConfiguration == <span class="keyword">null</span></span><br><span class="line">                      || mPendingConfiguration.isOtherSeqNewer(globalConfig)) &#123;</span><br><span class="line">                  mPendingConfiguration = globalConfig;</span><br><span class="line">                  sendMessage(H.CONFIGURATION_CHANGED, globalConfig);</span><br><span class="line">              &#125;</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>其中需要额外解释的是<code>ApplicationThread</code>中包含了一系列的<code>schedule</code>方法, 例如<code>schedulePauseActivity</code>, <code>scheduleStopActivity</code>等，这些方法都是直接通过<code>sendMessage</code>把对应的实现交给<code>ActivityThread</code>的<code>H extends Handler</code>类负责处理, <code>H</code>收到这些消息后，交给对应的<code>handle</code>方法，<code>handle</code>经过一系列的判断条件，最终调用<code>perform</code>接口实现功能，而<code>perform</code>就直接使用<code>Activity</code>中的方法，完成对<code>Activity</code>整个生命周期的控制。</p>
-<h6 id="4-sMainThreadHandler的初始化"><a href="#4-sMainThreadHandler的初始化" class="headerlink" title="4. sMainThreadHandler的初始化"></a>4. sMainThreadHandler的初始化</h6><p>首先解决一下这个sMainThreadHandler的具体实现问题， 可以看到<code>ActivityThread</code>中关于<code>getHandler</code>只是直接返回了成员变量<code>mH</code>,即我们上文说道的处理<code>ApplicationThread</code>的具体实现的地方。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> H mH = <span class="keyword">new</span> H();</span><br><span class="line"><span class="function"><span class="keyword">final</span> Handler <span class="title">getHandler</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> mH;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>另外这个<code>sMainThreadHandler</code>的具体作用是什么呢，目前整个framework中只有一处使用了这个成员变量, 在<code>SharedPreferencesImpl</code>中的内部类<code>EditorImpl</code>的<code>notifyListeners</code>中，目的是把的对应的回调放到主线程中。私认为这不是一个很好的处理方式。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">notifyListeners</span><span class="params">(<span class="keyword">final</span> MemoryCommitResult mcr)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (mcr.listeners == <span class="keyword">null</span> || mcr.keysModified == <span class="keyword">null</span> ||</span><br><span class="line">        mcr.keysModified.size() == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (Looper.myLooper() == Looper.getMainLooper()) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = mcr.keysModified.size() - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">            <span class="keyword">final</span> String key = mcr.keysModified.get(i);</span><br><span class="line">            <span class="keyword">for</span> (OnSharedPreferenceChangeListener listener : mcr.listeners) &#123;</span><br><span class="line">                <span class="keyword">if</span> (listener != <span class="keyword">null</span>) &#123;</span><br><span class="line">                    listener.onSharedPreferenceChanged(SharedPreferencesImpl.<span class="keyword">this</span>, key);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// Run this function on the main thread.</span></span><br><span class="line">        ActivityThread.sMainThreadHandler.post(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                    notifyListeners(mcr);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h6 id="5-Loop循环"><a href="#5-Loop循环" class="headerlink" title="5. Loop循环"></a>5. Loop循环</h6><p>正式的启动主线程循环，主体代码如下。主要就是从当前Looper，即<code>MainLooper</code>中拿到所有的<code>message</code>, 然后调用其中的<code>dispatchMessage</code>方法。<code>dispatchMessage</code>会分发给对应的callback,然后根据判断决定最终的调用，比如说<code>handleMessage</code>方法，这也是我们经常使用的<code>Handler</code>收到<code>msg</code>后处理的地方。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">//去除一些打印等</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">loop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> Looper me = myLooper();</span><br><span class="line">    <span class="keyword">if</span> (me == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"No Looper; Looper.prepare() wasn't called on this thread."</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">final</span> MessageQueue queue = me.mQueue;</span><br><span class="line">    Binder.clearCallingIdentity();</span><br><span class="line">    <span class="keyword">for</span> (;;) &#123;</span><br><span class="line">        Message msg = queue.next(); <span class="comment">// might block</span></span><br><span class="line">        <span class="keyword">if</span> (msg == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="comment">// No message indicates that the message queue is quitting.</span></span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        msg.target.dispatchMessage(msg);</span><br><span class="line">        msg.recycleUnchecked();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p><code>Handler</code>中关于<code>dispatchMessage</code>的处理<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">dispatchMessage</span><span class="params">(Message msg)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (msg.callback != <span class="keyword">null</span>) &#123;</span><br><span class="line">        handleCallback(msg);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (mCallback != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (mCallback.handleMessage(msg)) &#123;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        handleMessage(msg);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h6 id="4-sMainThreadHandler的初始化"><a href="#4-sMainThreadHandler的初始化" class="headerlink" title="4. sMainThreadHandler的初始化"></a>4. sMainThreadHandler的初始化</h6><p>首先解决一下这个sMainThreadHandler的具体实现问题， 可以看到<code>ActivityThread</code>中关于<code>getHandler</code>只是直接返回了成员变量<code>mH</code>,即我们上文说道的处理<code>ApplicationThread</code>的具体实现的地方。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> H mH = <span class="keyword">new</span> H();</span><br><span class="line"><span class="function"><span class="keyword">final</span> Handler <span class="title">getHandler</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> mH;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>另外这个<code>sMainThreadHandler</code>的具体作用是什么呢，目前整个framework中只有一处使用了这个成员变量, 在<code>SharedPreferencesImpl</code>中的内部类<code>EditorImpl</code>的<code>notifyListeners</code>中，目的是把的对应的回调放到主线程中。私认为这不是一个很好的处理方式。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">notifyListeners</span><span class="params">(<span class="keyword">final</span> MemoryCommitResult mcr)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (mcr.listeners == <span class="keyword">null</span> || mcr.keysModified == <span class="keyword">null</span> ||</span><br><span class="line">        mcr.keysModified.size() == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (Looper.myLooper() == Looper.getMainLooper()) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = mcr.keysModified.size() - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">            <span class="keyword">final</span> String key = mcr.keysModified.get(i);</span><br><span class="line">            <span class="keyword">for</span> (OnSharedPreferenceChangeListener listener : mcr.listeners) &#123;</span><br><span class="line">                <span class="keyword">if</span> (listener != <span class="keyword">null</span>) &#123;</span><br><span class="line">                    listener.onSharedPreferenceChanged(SharedPreferencesImpl.<span class="keyword">this</span>, key);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// Run this function on the main thread.</span></span><br><span class="line">        ActivityThread.sMainThreadHandler.post(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                    notifyListeners(mcr);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h6 id="5-Loop循环"><a href="#5-Loop循环" class="headerlink" title="5. Loop循环"></a>5. Loop循环</h6><p>正式的启动主线程循环，主体代码如下。主要就是从当前Looper，即<code>MainLooper</code>中拿到所有的<code>message</code>, 然后调用其中的<code>dispatchMessage</code>方法。<code>dispatchMessage</code>会分发给对应的callback,然后根据判断决定最终的调用，比如说<code>handleMessage</code>方法，这也是我们经常使用的<code>Handler</code>收到<code>msg</code>后处理的地方。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">//去除一些打印等</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">loop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> Looper me = myLooper();</span><br><span class="line">    <span class="keyword">if</span> (me == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"No Looper; Looper.prepare() wasn't called on this thread."</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">final</span> MessageQueue queue = me.mQueue;</span><br><span class="line">    Binder.clearCallingIdentity();</span><br><span class="line">    <span class="keyword">for</span> (;;) &#123;</span><br><span class="line">        Message msg = queue.next(); <span class="comment">// might block</span></span><br><span class="line">        <span class="keyword">if</span> (msg == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="comment">// No message indicates that the message queue is quitting.</span></span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        msg.target.dispatchMessage(msg);</span><br><span class="line">        msg.recycleUnchecked();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>Handler</code>中关于<code>dispatchMessage</code>的处理</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">dispatchMessage</span><span class="params">(Message msg)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (msg.callback != <span class="keyword">null</span>) &#123;</span><br><span class="line">        handleCallback(msg);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (mCallback != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (mCallback.handleMessage(msg)) &#123;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        handleMessage(msg);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>以上我们可以看到<code>ActivityThread</code>中完整了初始化的操作，绑定<code>ApplicationThread</code>与<code>AMS</code>, 启动主线程循环等。</p>
 
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://jianglei12138.github.io/2018/06/13/ActivityThread 阅读之旅/" data-id="ck22146gv000ddofydefx2nig" class="article-share-link">Share</a>
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/App启动流程/">App启动流程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Main-Handler/">Main Handler</a></li></ul>
+
+    </footer>
+
+  </div>
+
+  
+    
+  <nav class="article-nav">
+    
+      <a href="/2018/06/15/Rxjava2源码阅读/" class="article-nav-link">
+        <strong class="article-nav-caption">Newer posts</strong>
+        <div class="article-nav-title">
+          
+            Rxjava2 使用以及源码阅读
+          
         </div>
-        
-          
-
-
-  <section class="meta" id="footer-meta">
-    <hr>
-    <div class="new-meta-box">
-      
-        
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2019-03-11T22:07:14+08:00">
-  <a class="notlink">
-    <i class="fas fa-clock" aria-hidden="true"></i>
-    <p>last updated at Mar 11, 2019</p>
-  </a>
-</div>
-
-        
-      
-        
-          
-  
-  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/App启动流程/" rel="nofollow"><i class="fas fa-hashtag" aria-hidden="true"></i>&nbsp;<p>App启动流程</p></a></div> <div class="new-meta-item meta-tags"><a class="tag" href="/tags/Main-Handler/" rel="nofollow"><i class="fas fa-hashtag" aria-hidden="true"></i>&nbsp;<p>Main Handler</p></a></div>
-
-
-        
-      
-        
-          
-  <div class="new-meta-item share -mob-share-list">
-  <div class="-mob-share-list share-body">
+      </a>
     
-      
-        <a class="-mob-share-qq" title="QQ好友" rel="external nofollow noopener noreferrer" href="http://connect.qq.com/widget/shareqq/index.html?url=https://jianglei12138.github.io/2018/06/13/ActivityThread 阅读之旅/&title=ActivityThread 阅读之旅 | 姜雷12138&summary=研究一下App是如何启动的记录。我们知道Main函数是所有java程序的入口，Android也不例外，同样，启动一个应用程序，Android也会首先调用Main函数。Main函数位于AcitivityThread类中。">
-          
-            <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/qq.png">
-          
-        </a>
-      
     
-      
-        <a class="qrcode" rel="external nofollow noopener noreferrer" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACuUlEQVR42u3awW7rMAwEwPz/T7fXd6jdXdJK84DxyWgSS6MCEk3y9Yqvr3+u9u9Xnyb3V58+fOHh4eEtpn41rfvBrgZOnpPP5Oo590uJh4eHd453Ndj9lp0PnG/3yfGTzBkPDw/v03gJO4l12wXFw8PD+99597DNfftNPDw8vPfzklA4SeDeT24WiOdPw8PDw3sPL68ifc79kfoeHh4e3rqqnh8Sbcp1tqHXs8XDw8M7wMs33FkLVNI0kJe7ZvPEw8PDe5aXv94naYIcMCuq1U/Aw8PDO8Br256SNO4sHZwU0oYHBh4eHt4BXhF9lwmC/NjI2wLa5+Ph4eGd4BUNTIsDoC1ozZqxXjkDDw8P71HeJrRNwPmC3gfQwwIYHh4e3oK3GX6/xScTnRXbhtPFw8PDG/Hy4DVJqublqzaMjpImeHh4eId5bTIi2dDbZcqbFaJFwcPDw3sLry1c5aWs9nhoD55fesrw8PDwHuLlgXWbSG0D9xk7Sljg4eHhPcqbbe75AJuGqv2v8PDw8N7DS1K6SZibJy8OpnTx8PDwjlWL2ge17H1RLT88iv4IPDw8vAVvVtSfpTDa8ljUIhCX6/Dw8PCe4rWv+vnG3a5rG1hHYT0eHh7eMV6y0c9Sq21TQnum/RL04+Hh4R3g7QPlYeRephvy1AkeHh7ead6mKSq52gA9X7jogMHDw8M7xsvTCvuyVh0Qb/4leHh4eMd4LWxTyG9LYi0VDw8P7xzvq7z2IXXeCtAuyg+f4uHh4R3gtcnWfIDkV5sWhOQeDw8P7xyv3dbbwlhb1mpTJKvAGg8PD2/Bq3MYZYo2WaDZCVbkWvDw8PA+jNemG2a/WhXA8PDw8P6ItymDJYndTWiOh4eH905ePtE8oZBP+qkAfZXGxcPDw4t57Qt/nmxN9uq8/esBBh4eHt6W9w29urtgkjPvewAAAABJRU5ErkJggg==">
-        
-          <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/wechat.png">
-        
-        </a>
-      
+      <a href="/2018/06/01/Android橡皮擦闪烁分析以及解决方案/" class="article-nav-link">
+        <strong class="article-nav-caption">Olde posts</strong>
+        <div class="article-nav-title">Android Framebuffer相关学习</div>
+      </a>
     
-  </div>
-</div>
-
-
-
-        
-      
-    </div>
-  </section>
-
-
-        
-        
-            <div class="prev-next">
-                
-                    <section class="prev">
-                        <span class="art-item-left">
-                            <h6><i class="fas fa-chevron-left" aria-hidden="true"></i>&nbsp;Previous</h6>
-                            <h4>
-                                <a href="/2018/06/15/Rxjava2源码阅读/" rel="prev" title="Rxjava2 使用以及源码阅读">
-                                  
-                                      Rxjava2 使用以及源码阅读
-                                  
-                                </a>
-                            </h4>
-                            
-                                
-                                <h6 class="tags">
-                                    <a class="tag" href="/tags/RxJava2/"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i>RxJava2</a>
-                                </h6>
-                            
-                        </span>
-                    </section>
-                
-                
-                    <section class="next">
-                        <span class="art-item-right" aria-hidden="true">
-                            <h6>Next&nbsp;<i class="fas fa-chevron-right" aria-hidden="true"></i></h6>
-                            <h4>
-                                <a href="/2018/06/01/Android橡皮擦闪烁分析以及解决方案/" rel="prev" title="Android Framebuffer相关学习">
-                                    
-                                        Android Framebuffer相关学习
-                                    
-                                </a>
-                            </h4>
-                            
-                                
-                                <h6 class="tags">
-                                    <a class="tag" href="/tags/framebuffer原理/"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i>framebuffer原理</a> <a class="tag" href="/tags/Screen-Tearing/"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i>Screen Tearing</a> <a class="tag" href="/tags/多缓冲区/"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i>多缓冲区</a>
-                                </h6>
-                            
-                        </span>
-                    </section>
-                
-            </div>
-        
-      </section>
-    </article>
-  
-
-  
-    <!-- 显示推荐文章和评论 -->
-
-
-
-  <article class="post white-box comments">
-    <section class="article typo">
-      <h4><i class="fas fa-comments fa-fw" aria-hidden="true"></i>&nbsp;Comments</h4>
-      
-      
-      
-      
-        <section id="comments">
-          <div id="valine_container" class="valine_thread">
-            <i class="fas fa-spinner fa-spin fa-fw"></i>
-          </div>
-        </section>
-      
-    </section>
-  </article>
+  </nav>
 
 
   
 
-
-
-
-<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
-
-
-
-  <script>
-    window.subData = {
-      title: 'ActivityThread 阅读之旅',
-      tools: true
-    }
-  </script>
-
-
-</div>
-<aside class="l_side">
   
     
-    
-      
-        
-          
-          
-            <section class="widget author">
-  <div class="content material">
-    
-      <div class="avatar">
-        <img class="avatar" src="https://avatars3.githubusercontent.com/u/17866650?s=460&v=4">
-      </div>
-    
-    
-    
-      <div class="social-wrapper">
-        
-          
-            <a href="/atom.xml" class="social fas fa-rss flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
-            </a>
-          
-        
-          
-            <a href="mailto:jianglei12138@gmail.com" class="social fas fa-envelope flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
-            </a>
-          
-        
-          
-            <a href="https://github.com/jianglei12138" class="social fab fa-github flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
-            </a>
-          
-        
-          
-            <a href="https://music.163.com/#/user/home?id=95279873" class="social fas fa-headphones-alt flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
-            </a>
-          
-        
-      </div>
-    
-  </div>
+  
+
+</article>
+
+
+
 </section>
-
-          
-        
-      
-        
-          
-          
-            
-  <section class="widget toc-wrapper">
-    
-<header class="material">
-  <div><i class="fas fa-list fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;TOC</div>
+  <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
   
-    <div class="wrapper"><a class="s-toc rightBtn" rel="external nofollow noopener noreferrer" href="javascript:void(0)"><i class="fas fa-thumbtack fa-fw"></i></a></div>
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
   
-</header>
-
-    <div class="content material">
-      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ActivityThread-阅读之旅"><span class="toc-text">ActivityThread 阅读之旅</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#framework-base-core-java-android-app-ActivityThread-java"><span class="toc-text">framework/base/core/java/android/app/ActivityThread.java</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#1-Environment的初始化"><span class="toc-text">1. Environment的初始化</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2-Looper相关初始化"><span class="toc-text">2. Looper相关初始化</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#3-ActivityThread的创建"><span class="toc-text">3. ActivityThread的创建</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#4-sMainThreadHandler的初始化"><span class="toc-text">4. sMainThreadHandler的初始化</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#5-Loop循环"><span class="toc-text">5. Loop循环</span></a></li></ol></li></ol>
+</ul>
     </div>
-  </section>
-
-
-          
-        
-      
-        
-          
-          
-            <section class="widget grid">
-  
-<header class="material">
-  <div><i class="fas fa-map-signs fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;站内导航</div>
-  
-</header>
-
-  <div class="content material">
-    <ul class="grid navgation">
-      
-        <li><a class="flat-box" title="/" href="/" id="home">
-          
-            <i class="fas fa-clock fa-fw" aria-hidden="true"></i>
-          
-          近期文章
-        </a></li>
-      
-        <li><a class="flat-box" title="/archives/" href="/archives/" rel="nofollow" id="archives">
-          
-            <i class="fas fa-archive fa-fw" aria-hidden="true"></i>
-          
-          文章归档
-        </a></li>
-      
-        <li><a class="flat-box" title="/projects/" href="/projects/" id="projects">
-          
-            <i class="fas fa-code-branch fa-fw" aria-hidden="true"></i>
-          
-          开源项目
-        </a></li>
-      
-        <li><a class="flat-box" title="/friends/" href="/friends/" rel="nofollow" id="friends">
-          
-            <i class="fas fa-link fa-fw" aria-hidden="true"></i>
-          
-          我的友链
-        </a></li>
-      
-        <li><a class="flat-box" title="https://xaoxuu.com/wiki/material-x/" href="https://xaoxuu.com/wiki/material-x/" rel="nofollow" id="https:xaoxuu.comwikimaterial-x">
-          
-            <i class="fas fa-book fa-fw" aria-hidden="true"></i>
-          
-          主题文档
-        </a></li>
-      
-        <li><a class="flat-box" title="/about/" href="/about/" rel="nofollow" id="about">
-          
-            <i class="fas fa-info-circle fa-fw" aria-hidden="true"></i>
-          
-          关于小站
-        </a></li>
-      
+    <ul class="list-inline">
+      <li>&copy; 2019 姜雷12138</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
     </ul>
   </div>
-</section>
-
-          
-        
-      
-        
-          
-          
-            
-  <section class="widget category">
-    
-<header class="material">
-  <div><i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;Categories</div>
-  
-    <a class="rightBtn" rel="nofollow" href="/blog/categories/" title="blog/categories/">
-    <i class="fas fa-expand-arrows-alt fa-fw"></i></a>
-  
-</header>
-
-    <div class="content material">
-      <ul class="entry">
-        
-          <li><a class="flat-box" title="/categories/Android学习/" href="/categories/Android学习/"><div class="name">Android学习</div><div class="badge">(5)</div></a></li>
-        
-          <li><a class="flat-box" title="/categories/源码分析/" href="/categories/源码分析/"><div class="name">源码分析</div><div class="badge">(2)</div></a></li>
-        
-      </ul>
-    </div>
-  </section>
-
-
-          
-        
-      
-        
-          
-          
-            
-  <section class="widget tagcloud">
-    
-<header class="material">
-  <div><i class="fas fa-fire fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;Hot Tags</div>
-  
-    <a class="rightBtn" rel="nofollow" href="/tags/" title="tags/">
-    <i class="fas fa-expand-arrows-alt fa-fw"></i></a>
-  
-</header>
-
-    <div class="content material">
-      <a href="/tags/Activity启动流程/" style="font-size: 14px; color: #999">Activity启动流程</a> <a href="/tags/Android图形架构/" style="font-size: 14px; color: #999">Android图形架构</a> <a href="/tags/Android图形组件/" style="font-size: 14px; color: #999">Android图形组件</a> <a href="/tags/App启动流程/" style="font-size: 14px; color: #999">App启动流程</a> <a href="/tags/Glide/" style="font-size: 14px; color: #999">Glide</a> <a href="/tags/Main-Handler/" style="font-size: 14px; color: #999">Main Handler</a> <a href="/tags/RxJava2/" style="font-size: 14px; color: #999">RxJava2</a> <a href="/tags/Screen-Tearing/" style="font-size: 14px; color: #999">Screen Tearing</a> <a href="/tags/View的现实流程/" style="font-size: 14px; color: #999">View的现实流程</a> <a href="/tags/Zygote进程/" style="font-size: 14px; color: #999">Zygote进程</a> <a href="/tags/app-process/" style="font-size: 14px; color: #999">app_process</a> <a href="/tags/framebuffer原理/" style="font-size: 14px; color: #999">framebuffer原理</a> <a href="/tags/图像加载/" style="font-size: 14px; color: #999">图像加载</a> <a href="/tags/多缓冲区/" style="font-size: 14px; color: #999">多缓冲区</a> <a href="/tags/数据流/" style="font-size: 14px; color: #999">数据流</a> <a href="/tags/硬件加速/" style="font-size: 14px; color: #999">硬件加速</a> <a href="/tags/软件绘制/" style="font-size: 14px; color: #999">软件绘制</a>
-    </div>
-  </section>
-
-
-          
-        
-      
-        
-          
-          
-            
-
-
-
-          
-        
-      
-    
-
-  
-</aside>
-
-<footer id="footer" class="clearfix">
-  
-  
-    <div class="social-wrapper">
-      
-        
-          <a href="/atom.xml" class="social fas fa-rss flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
-          </a>
-        
-      
-        
-          <a href="mailto:jianglei12138@gmail.com" class="social fas fa-envelope flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
-          </a>
-        
-      
-        
-          <a href="https://github.com/jianglei12138" class="social fab fa-github flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
-          </a>
-        
-      
-        
-          <a href="https://music.163.com/#/user/home?id=95279873" class="social fas fa-headphones-alt flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
-          </a>
-        
-      
-    </div>
-  
-  <br>
-  <div><p>Blog content follows the <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en">Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0) License</a></p>
-</div>
-  <div>
-    Use
-    <a href="https://xaoxuu.com/wiki/material-x/" target="_blank" class="codename">material-x</a>
-    as theme
-    
-      , 
-      total visits
-      <span id="busuanzi_value_site_pv"><i class="fas fa-spinner fa-spin fa-fw" aria-hidden="true"></i></span>
-      times
-    
-    . 
-  </div>
 </footer>
-<script>setLoadingBarProgress(80);</script>
 
+</main>
 
-      <script>setLoadingBarProgress(60);</script>
+<aside class="sidebar sidebar-specter">
+  
+    <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="姜雷12138"></a>
     </div>
-    <a class="s-top fas fa-arrow-up fa-fw" href='javascript:void(0)'></a>
-  </div>
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">Home</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">Archives</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">Gallery</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">About</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="Search">
+        <i class="fe fe-search"></i>
+        Search
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+  </aside>
+  <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/lazyload.min.js"></script>
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
 
+  <script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+  <script src="/js/tocbot.min.js"></script>
   <script>
-    var GOOGLE_CUSTOM_SEARCH_API_KEY = "";
-    var GOOGLE_CUSTOM_SEARCH_ENGINE_ID = "";
-    var ALGOLIA_API_KEY = "";
-    var ALGOLIA_APP_ID = "";
-    var ALGOLIA_INDEX_NAME = "";
-    var AZURE_SERVICE_NAME = "";
-    var AZURE_INDEX_NAME = "";
-    var AZURE_QUERY_KEY = "";
-    var BAIDU_API_ID = "";
-    var SEARCH_SERVICE = "hexo" || "hexo";
-    var ROOT = "/"||"/";
-    if(!ROOT.endsWith('/'))ROOT += '/';
-  </script>
-
-
-
-  <script async src="https://cdn.jsdelivr.net/npm/scrollreveal@4.0.5/dist/scrollreveal.min.js"></script>
-  <script type="text/javascript">
-    $(function() {
-      const $reveal = $('.reveal');
-      if ($reveal.length === 0) return;
-      const sr = ScrollReveal({ distance: 0 });
-      sr.reveal('.reveal');
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
     });
   </script>
 
 
-  <script src="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.js"></script>
-  <script type="text/javascript">
-    $(function() {
-      Waves.attach('.flat-btn', ['waves-button']);
-      Waves.attach('.float-btn', ['waves-button', 'waves-float']);
-      Waves.attach('.float-btn-light', ['waves-button', 'waves-float', 'waves-light']);
-      Waves.attach('.flat-box', ['waves-block']);
-      Waves.attach('.float-box', ['waves-block', 'waves-float']);
-      Waves.attach('.waves-image');
-      Waves.init();
-    });
-  </script>
+<script src="/js/ocean.js"></script>
 
-
-  <script async src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-busuanzi@2.3/js/busuanzi.pure.mini.js"></script>
-
-
-
-
-  
-  
-  
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-backstretch/2.0.4/jquery.backstretch.min.js"></script>
-    <script type="text/javascript">
-      $(function(){
-        if ('.cover') {
-          $('.cover').backstretch(
-          ["https://img.vim-cn.com/d5/b004c81a13aea401375d03b1258ecadbfcbaa7.jpg", "https://img.vim-cn.com/4c/8e7294998989454b2dcd2624373d5a699c4414.jpg"],
-          {
-            duration: "6000",
-            fade: "1500"
-          });
-        } else {
-          $.backstretch(
-          ["https://img.vim-cn.com/d5/b004c81a13aea401375d03b1258ecadbfcbaa7.jpg", "https://img.vim-cn.com/4c/8e7294998989454b2dcd2624373d5a699c4414.jpg"],
-          {
-            duration: "6000",
-            fade: "1500"
-          });
-        }
-      });
-    </script>
-  
-
-
-
-
-
-
-
-
-
-  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
-  
-    
-      <script src="https://cdn.jsdelivr.net/gh/xaoxuu/volantis@1/js/volantis.min.js"></script>
-    
-  
-  <script>
-  var GUEST_INFO = ['nick','mail','link'];
-  var guest_info = 'nick,mail,link'.split(',').filter(function(item){
-    return GUEST_INFO.indexOf(item) > -1
-  });
-  var notify = 'true' == true;
-  var verify = 'true' == true;
-  var valine = new Valine();
-  valine.init({
-    el: '#valine_container',
-    notify: notify,
-    verify: verify,
-    guest_info: guest_info,
-    
-    appId: "",
-    appKey: "",
-    placeholder: "快来评论吧~",
-    pageSize:'10',
-    avatar:'mp',
-    lang:'zh-cn',
-    highlight:'true'
-  })
-  </script>
-
-
-
-  <script src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-material-x@19.4.19/js/app.js"></script>
-
-
-  <script src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-material-x@19.4.19/js/search.js"></script>
-
-
-
-
-<!-- 复制 -->
-<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
-<script>
-  let COPY_SUCCESS = "Copied";
-  let COPY_FAILURE = "Copy failed";
-  /*页面载入完成后，创建复制按钮*/
-  !function (e, t, a) {
-    /* code */
-    var initCopyCode = function(){
-      var copyHtml = '';
-      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
-      copyHtml += '  <i class="fa fa-copy"></i><span>Copy</span>';
-      copyHtml += '</button>';
-      $(".highlight .code pre").before(copyHtml);
-      var clipboard = new ClipboardJS('.btn-copy', {
-        target: function(trigger) {
-          return trigger.nextElementSibling;
-        }
-      });
-
-      clipboard.on('success', function(e) {
-        //您可以加入成功提示
-        console.info('Action:', e.action);
-        console.info('Text:', e.text);
-        console.info('Trigger:', e.trigger);
-        success_prompt(COPY_SUCCESS);
-        e.clearSelection();
-      });
-      clipboard.on('error', function(e) {
-        //您可以加入失败提示
-        console.error('Action:', e.action);
-        console.error('Trigger:', e.trigger);
-        fail_prompt(COPY_FAILURE);
-      });
-    }
-    initCopyCode();
-
-  }(window, document);
-
-  /**
-   * 弹出式提示框，默认1.5秒自动消失
-   * @param message 提示信息
-   * @param style 提示样式，有alert-success、alert-danger、alert-warning、alert-info
-   * @param time 消失时间
-   */
-  var prompt = function (message, style, time)
-  {
-      style = (style === undefined) ? 'alert-success' : style;
-      time = (time === undefined) ? 1500 : time*1000;
-      $('<div>')
-          .appendTo('body')
-          .addClass('alert ' + style)
-          .html(message)
-          .show()
-          .delay(time)
-          .fadeOut();
-  };
-
-  // 成功提示
-  var success_prompt = function(message, time)
-  {
-      prompt(message, 'alert-success', time);
-  };
-
-  // 失败提示
-  var fail_prompt = function(message, time)
-  {
-      prompt(message, 'alert-danger', time);
-  };
-
-  // 提醒
-  var warning_prompt = function(message, time)
-  {
-      prompt(message, 'alert-warning', time);
-  };
-
-  // 信息提示
-  var info_prompt = function(message, time)
-  {
-      prompt(message, 'alert-info', time);
-  };
-
-</script>
-
-
-<!-- fancybox -->
-<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
-<script>
-  let LAZY_LOAD_IMAGE = "";
-  $(".article-entry").find("fancybox").find("img").each(function () {
-      var element = document.createElement("a");
-      $(element).attr("data-fancybox", "gallery");
-      $(element).attr("href", $(this).attr("src"));
-      /* 图片采用懒加载处理时,
-       * 一般图片标签内会有个属性名来存放图片的真实地址，比如 data-original,
-       * 那么此处将原本的属性名src替换为对应属性名data-original,
-       * 修改如下
-       */
-       if (LAZY_LOAD_IMAGE) {
-         $(element).attr("href", $(this).attr("data-original"));
-       }
-      $(this).wrap(element);
-  });
-</script>
-
-
-
-
-
-  <script>setLoadingBarProgress(100);</script>
 </body>
 </html>
