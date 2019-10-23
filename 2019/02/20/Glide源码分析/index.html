@@ -1,80 +1,134 @@
 <!DOCTYPE html>
-<html lang="en">
-<head><meta name="generator" content="Hexo 3.8.0">
-  <meta charset="utf-8">
+<html>
+  <head><meta name="generator" content="Hexo 3.8.0">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   
   
+  <title>  Glide 源码分析 |   Lemon </title>
+
+ 
   
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <title>
-    Glide 源码分析 |
-    
-    姜雷12138</title>
-  
-    <link rel="shortcut icon" href="/favicon.ico">
-  
-  <link rel="stylesheet" href="/css/style.css">
-  
-    <link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
-  
-  <script src="/js/pace.min.js"></script>
-</head>
-</html>
-<body>
-<main class="content">
-  <section class="outer">
+    <link rel="icon" href="/images/favicon.png">
   
 
-<article id="post-Glide源码分析" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
-  
-  <div class="article-inner">
+
+  <link rel="stylesheet" href="/nayo.min.css"> 
+</head>  
+  <body>   
     
-      <header class="article-header">
+      <header class="header-wrapper">
+
+  <nav class="inner">
+    <div class="title">
+    </div>
+
+    <ul class="menu">
+      
+      
+      <li class="item">
+        <a class="link" id="menu-home" href="/">
+          <i class="iconfont icon-home">
+        </i></a>
+      </li>
+      
+      
+      
+      <li class="item">
+        <a class="link" id="menu-archives" href="/archives">
+          <i class="iconfont icon-archives">
+        </i></a>
+      </li>
+      
+      
+      
+      <li class="item">
+        <a class="link" id="menu-tags" href="/tags">
+          <i class="iconfont icon-tags">
+        </i></a>
+      </li>
+      
+      
+      
+      <li class="item">
+        <a class="link" id="menu-about" href="/about">
+          <i class="iconfont icon-about">
+        </i></a>
+      </li>
+      
+      
+      
+      <li class="item">
+        <a class="link" id="menu-search">
+          <i class="iconfont icon-search">
+        </i></a>
         
-  
-    <h1 class="article-title" itemprop="name">
-      Glide 源码分析
-    </h1>
-  
-  
 
-
-
-
-      </header>
-    
-
-    
-      <div class="article-meta">
-        <a href="/2019/02/20/Glide源码分析/" class="article-date">
-  <time datetime="2019-02-20T15:47:52.000Z" itemprop="datePublished">2019-02-20</time>
-</a>
         
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/源码分析/">源码分析</a>
-  </div>
-
-      </div>
-    
-
-    
       
-    <div class="tocbot"></div>
+    </li></ul>
+  </nav>
+</header>
 
+<header class="mobile-header-wrapper">
+  <i id="mobile-toggle" class="iconfont icon-menu mobile-toggle"></i>
+</header>   
 
+      <div class="container">       
+          
+          
+            <div class="container-inner">  
+          
 
+          <article class="post slideDownMin">
+  
+	
+<div class="header">
+		<p class="title">	
+			Glide 源码分析
+		</p>
+		<div class="info">	
+			<time>
+				Feb 20, 2019
+			</time>
 
+			
+			
+				<i class="iconfont icon-words"></i>
+				<span class="words">19684
+				</span>
+			
+		</div>
+</div> 
+	
 
-    
+    <script type="text/x-mathjax-config">
+        var post = document.getElementsByClassName("post")[0];  
+        MathJax.Hub.Config({
+            showProcessingMessages: false,
+            messageStyle: "none",    
+            tex2jax: {
+                inlineMath:  [ ["$", "$"] , ["\\(","\\)"]],
+                displayMath: [ ["$$","$$"] , ["\\[","\\]"]],
+                skipTags: ['script', 'noscript', 'style', 'textarea', 'pre','code','a'],
+            },
+            "HTML-CSS": {            
+                showMathMenu: false
+            }
+        });
+        MathJax.Hub.Queue(["Typeset",MathJax.Hub,post]);
+    </script>
+    <style>.MathJax{outline:0;}</style>
 
-    <div class="article-entry" itemprop="articleBody">
-      
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.2/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+ 
 
+	  <div class="typo post-content ">
 
-      
+		
 
-      
-        <p>Android图片加载框架的发展，经历了从最初的ImageLoder到Piasso，Glide，Fresco三足鼎立的过程，其中无论是Picasso还是Glide，他们的共同点都是用起来特别方便，通过链式调用，几乎可以一行代码解决大部分的需求。本文基于Glide最新的版本4.8，对Glide源码做一些简要的分析。<br> <a id="more"></a></p>
+			
+					<p>Android图片加载框架的发展，经历了从最初的ImageLoder到Piasso，Glide，Fresco三足鼎立的过程，其中无论是Picasso还是Glide，他们的共同点都是用起来特别方便，通过链式调用，几乎可以一行代码解决大部分的需求。本文基于Glide最新的版本4.8，对Glide源码做一些简要的分析。<br> <a id="more"></a></p>
 <p>Android图片加载框架的发展，经历了从最初的ImageLoder到Piasso，Glide，Fresco三足鼎立的过程。以下是关于这三个常用框架的一些数据上的对比。</p>
 <table>
 <thead>
@@ -204,145 +258,177 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> &lt;R&gt; <span class="function">LoadStatus <span class="title">load</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    GlideContext glideContext,</span></span></span><br><span class="line"><span class="function"><span class="params">    Object model,</span></span></span><br><span class="line"><span class="function"><span class="params">    Key signature,</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">int</span> width,</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">int</span> height,</span></span></span><br><span class="line"><span class="function"><span class="params">    Class&lt;?&gt; resourceClass,</span></span></span><br><span class="line"><span class="function"><span class="params">    Class&lt;R&gt; transcodeClass,</span></span></span><br><span class="line"><span class="function"><span class="params">    Priority priority,</span></span></span><br><span class="line"><span class="function"><span class="params">    DiskCacheStrategy diskCacheStrategy,</span></span></span><br><span class="line"><span class="function"><span class="params">    Map&lt;Class&lt;?&gt;, Transformation&lt;?&gt;&gt; transformations,</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">boolean</span> isTransformationRequired,</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">boolean</span> isScaleOnlyOrNoTransform,</span></span></span><br><span class="line"><span class="function"><span class="params">    Options options,</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">boolean</span> isMemoryCacheable,</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">boolean</span> useUnlimitedSourceExecutorPool,</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">boolean</span> useAnimationPool,</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">boolean</span> onlyRetrieveFromCache,</span></span></span><br><span class="line"><span class="function"><span class="params">    ResourceCallback cb)</span> </span>&#123;</span><br><span class="line">    Util.assertMainThread();</span><br><span class="line">    <span class="keyword">long</span> startTime = LogTime.getLogTime();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//1:创建资源索引key</span></span><br><span class="line">    EngineKey key = keyFactory.buildKey(model, signature, width, height, transformations,</span><br><span class="line">                                        resourceClass, transcodeClass, options);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//2:从内存中当前正在显示的资源缓存加载图片</span></span><br><span class="line">    EngineResource&lt;?&gt; active = loadFromActiveResources(key, isMemoryCacheable);</span><br><span class="line">    <span class="keyword">if</span> (active != <span class="keyword">null</span>) &#123;</span><br><span class="line">        cb.onResourceReady(active, DataSource.MEMORY_CACHE);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//3:从内存缓存资源中加载图片</span></span><br><span class="line">    EngineResource&lt;?&gt; cached = loadFromCache(key, isMemoryCacheable);</span><br><span class="line">    <span class="keyword">if</span> (cached != <span class="keyword">null</span>) &#123;</span><br><span class="line">        cb.onResourceReady(cached, DataSource.MEMORY_CACHE);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//4:获取已经存在的加载任务</span></span><br><span class="line">    EngineJob&lt;?&gt; current = jobs.get(key, onlyRetrieveFromCache);</span><br><span class="line">    <span class="keyword">if</span> (current != <span class="keyword">null</span>) &#123;</span><br><span class="line">        current.addCallback(cb);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> LoadStatus(cb, current);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//5:新建加载任务，用于启动解码任务</span></span><br><span class="line">    EngineJob&lt;R&gt; engineJob =</span><br><span class="line">        engineJobFactory.build(</span><br><span class="line">        key,</span><br><span class="line">        isMemoryCacheable,</span><br><span class="line">        useUnlimitedSourceExecutorPool,</span><br><span class="line">        useAnimationPool,</span><br><span class="line">        onlyRetrieveFromCache);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//6:新建解码任务，真正执行数据加载和解码的类</span></span><br><span class="line">    DecodeJob&lt;R&gt; decodeJob =</span><br><span class="line">        decodeJobFactory.build(</span><br><span class="line">        glideContext,</span><br><span class="line">        model,</span><br><span class="line">        key,</span><br><span class="line">        signature,</span><br><span class="line">        width,</span><br><span class="line">        height,</span><br><span class="line">        resourceClass,</span><br><span class="line">        transcodeClass,</span><br><span class="line">        priority,</span><br><span class="line">        diskCacheStrategy,</span><br><span class="line">        transformations,</span><br><span class="line">        isTransformationRequired,</span><br><span class="line">        isScaleOnlyOrNoTransform,</span><br><span class="line">        onlyRetrieveFromCache,</span><br><span class="line">        options,</span><br><span class="line">        engineJob);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//7:缓存加载任务</span></span><br><span class="line">    jobs.put(key, engineJob);</span><br><span class="line"></span><br><span class="line">    engineJob.addCallback(cb);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//8:开启解码任务</span></span><br><span class="line">    engineJob.start(decodeJob);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> LoadStatus(cb, engineJob);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>到此为止，我们真正开启了资源的加载过程，引擎中的load会根据当前内存是否存在此资源进行相应的加载，否则再去请求本地磁盘或者网络等，此请求任务则交给Registry中已经注册的ModelLoader来完成，见第二节Registry。</p>
+  	
+					
+	  </div>     
+	  
 
+	<div class="bottom">
+  <div class="other">
+    <div class="meta">
+      
+      <i class="iconfont icon-category"></i>
+      <a class="category-link" href="/categories/源码分析/">源码分析</a>
+
+      
+
+      
+      <i class="iconfont icon-tag"></i>
+      <a class="tag-link" href="/tags/Glide/">Glide</a> <a class="tag-link" href="/tags/图像加载/">图像加载</a>
       
     </div>
-    <footer class="article-footer">
-      <a data-url="https://jianglei12138.github.io/2019/02/20/Glide源码分析/" data-id="ck22146hr000ydofyi3bxlxuw" class="article-share-link">Share</a>
+
+    <div class="operate">
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Glide/">Glide</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/图像加载/">图像加载</a></li></ul>
+      <span class="text">Share</span>
+      <ul class="share">
+	   			             
+        <li class="iconfont 
+		icon-share-qq 
+		-mob-share-qq 
+		item"></li>		
+   	   			             
+        <li class="iconfont 
+		icon-share-weixin 
+		-mob-share-weixin 
+		item"></li>		
+   	   			             
+        <li class="iconfont 
+		icon-share-weibo 
+		-mob-share-weibo 
+		item"></li>		
+   	   
+</ul>	
 
-    </footer>
-
+<script id="-mob-share" src="https://f1.webshare.mob.com/code/mob-share.js?appkey=21d601593a1de"></script>
+      
+    </div>
   </div>
 
+
   
-    
-  <nav class="article-nav">
-    
-    
-      <a href="/2018/10/01/Android渲染机制/" class="article-nav-link">
-        <strong class="article-nav-caption">Olde posts</strong>
-        <div class="article-nav-title">Android渲染机制</div>
+  <nav class="nav">
+    <div class="link">
+      
+      <a href="/2018/10/01/Android渲染机制/" class="link-wrap">
+        <strong class="caption">older</strong>
+        
+        <span class="title">
+          Android渲染机制
+        </span>
       </a>
-    
+      
+    </div>
+    <div class="link">
+      
+    </div>
   </nav>
-
-
   
+</div> 
+	
+<div class="comment">
 
-  
     
-  
 
+    <div id="comment">
+    </div>
+
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+
+    <script src="//unpkg.com/valine@v1.1.8-beta/dist/Valine.min.js"></script>
+
+    <script>
+        new Valine({
+            el: '#comment',
+            notify: false,
+            verify: false,
+            app_id: 'cFM0eCo0CQ9xmBXmHi1eltol-gzGzoHsz',
+            app_key: 'oh9tizsnvV2vNvWgqEvoNtQO',
+            path: window.location.pathname,
+            avatar: 'mm',
+            guest_info: ['nick', 'mail']
+        });
+    </script>
+    
+</div>	
 </article>
 
+          </div> 
+      </div>            
+    
+        <i id="toTop" class="iconfont icon-backtotop"></i>
 
-
-</section>
-  <footer class="footer">
-  <div class="outer">
-    <div class="float-right">
-      <ul class="list-inline">
   
-    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
-  
-</ul>
+    <div class="none" id="search">
+    <div class="header">
+        <input type="text" placeholder="输入你想搜索的" id="search-input" class="input">
+        
+        <i id="search-cancel" class="iconfont icon-cancel"></i>
     </div>
-    <ul class="list-inline">
-      <li>&copy; 2019 姜雷12138</li>
-      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
-      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
-    </ul>
-  </div>
-</footer>
 
-</main>
-
-<aside class="sidebar sidebar-specter">
-  
-    <button class="navbar-toggle"></button>
-<nav class="navbar">
-  
-    <div class="logo">
-      <a href="/"><img src="/images/hexo.svg" alt="姜雷12138"></a>
-    </div>
-  
-  <ul class="nav nav-main">
-    
-      <li class="nav-item">
-        <a class="nav-item-link" href="/">Home</a>
-      </li>
-    
-      <li class="nav-item">
-        <a class="nav-item-link" href="/archives">Archives</a>
-      </li>
-    
-      <li class="nav-item">
-        <a class="nav-item-link" href="/gallery">Gallery</a>
-      </li>
-    
-      <li class="nav-item">
-        <a class="nav-item-link" href="/about">About</a>
-      </li>
-    
-    <li class="nav-item">
-      <a class="nav-item-link nav-item-search" title="Search">
-        <i class="fe fe-search"></i>
-        Search
-      </a>
-    </li>
-  </ul>
-</nav>
-<nav class="navbar navbar-bottom">
-  <ul class="nav">
-    <li class="nav-item">
-      <div class="totop" id="totop">
-  <i class="fe fe-rocket"></i>
+    <div id="search-result" class="result"></div>
 </div>
-    </li>
-    <li class="nav-item">
+     <div class="mobile-menu">      
+
       
-        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
-          <i class="fe fe-feed"></i>
-        </a>
+      <img class="mobile-menu-icon" src="/images/favicon.png">  
       
-    </li>
-  </ul>
-</nav>
-<div class="search-form-wrap">
-  <div class="local-search local-search-plugin">
-  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
-  <div id="local-search-result" class="local-search-result"></div>
+
+         
+            
+
+            <a class="mobile-menu-link" href="/">首頁
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/archives">歸檔
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/tags">標籤
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/about">關於
+            </a>
+            
+         
+                          
+
+            <a class="mobile-menu-link mobile-menu-search" href="#">搜索 </a>                 
+            
+         
+      
 </div>
-</div>
-  </aside>
-  <script src="/js/jquery-2.0.3.min.js"></script>
-<script src="/js/jquery.justifiedGallery.min.js"></script>
-<script src="/js/lazyload.min.js"></script>
-<script src="/js/busuanzi-2.3.pure.min.js"></script>
-
-  <script src="/fancybox/jquery.fancybox.min.js"></script>
+        
+    
 
 
 
-  <script src="/js/tocbot.min.js"></script>
-  <script>
-    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
-    tocbot.init({
-      tocSelector: '.tocbot',
-      contentSelector: '.article-entry',
-      headingSelector: 'h1, h2, h3, h4, h5, h6',
-      hasInnerContainers: true,
-      scrollSmooth: true,
-      positionFixedSelector: '.tocbot',
-      positionFixedClass: 'is-position-fixed',
-      fixedSidebarOffset: 'auto',
-    });
-  </script>
+     
+    
 
 
-<script src="/js/ocean.js"></script>
+<footer class="footer">
+	<div class="inner">
+		<div class="copyright">
+			&copy;
+			
+			2019
+			Lemon
 
-</body>
+			<br>
+			By <a href="https://hexo.io" target="_blank">Hexo</a> Theme <a href="https://github.com/Lemonreds/hexo-theme-Nayo" target="_blank">Nayo</a>
+		</div>
+	</div>
+</footer>   
+
+    <script src="/nayo.bundle.js"></script>           
+  </body>        
 </html>

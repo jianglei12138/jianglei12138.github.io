@@ -1,80 +1,134 @@
 <!DOCTYPE html>
-<html lang="en">
-<head><meta name="generator" content="Hexo 3.8.0">
-  <meta charset="utf-8">
+<html>
+  <head><meta name="generator" content="Hexo 3.8.0">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   
   
+  <title>  从进程起源说起 |   Lemon </title>
+
+ 
   
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <title>
-    从进程起源说起 |
-    
-    姜雷12138</title>
-  
-    <link rel="shortcut icon" href="/favicon.ico">
-  
-  <link rel="stylesheet" href="/css/style.css">
-  
-    <link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
-  
-  <script src="/js/pace.min.js"></script>
-</head>
-</html>
-<body>
-<main class="content">
-  <section class="outer">
+    <link rel="icon" href="/images/favicon.png">
   
 
-<article id="post-从进程起源说起" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
-  
-  <div class="article-inner">
+
+  <link rel="stylesheet" href="/nayo.min.css"> 
+</head>  
+  <body>   
     
-      <header class="article-header">
+      <header class="header-wrapper">
+
+  <nav class="inner">
+    <div class="title">
+    </div>
+
+    <ul class="menu">
+      
+      
+      <li class="item">
+        <a class="link" id="menu-home" href="/">
+          <i class="iconfont icon-home">
+        </i></a>
+      </li>
+      
+      
+      
+      <li class="item">
+        <a class="link" id="menu-archives" href="/archives">
+          <i class="iconfont icon-archives">
+        </i></a>
+      </li>
+      
+      
+      
+      <li class="item">
+        <a class="link" id="menu-tags" href="/tags">
+          <i class="iconfont icon-tags">
+        </i></a>
+      </li>
+      
+      
+      
+      <li class="item">
+        <a class="link" id="menu-about" href="/about">
+          <i class="iconfont icon-about">
+        </i></a>
+      </li>
+      
+      
+      
+      <li class="item">
+        <a class="link" id="menu-search">
+          <i class="iconfont icon-search">
+        </i></a>
         
-  
-    <h1 class="article-title" itemprop="name">
-      从进程起源说起
-    </h1>
-  
-  
 
-
-
-
-      </header>
-    
-
-    
-      <div class="article-meta">
-        <a href="/2018/06/26/从进程起源说起/" class="article-date">
-  <time datetime="2018-06-26T14:33:02.000Z" itemprop="datePublished">2018-06-26</time>
-</a>
         
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Android学习/">Android学习</a>
-  </div>
-
-      </div>
-    
-
-    
       
-    <div class="tocbot"></div>
+    </li></ul>
+  </nav>
+</header>
 
+<header class="mobile-header-wrapper">
+  <i id="mobile-toggle" class="iconfont icon-menu mobile-toggle"></i>
+</header>   
 
+      <div class="container">       
+          
+          
+            <div class="container-inner">  
+          
 
+          <article class="post slideDownMin">
+  
+	
+<div class="header">
+		<p class="title">	
+			从进程起源说起
+		</p>
+		<div class="info">	
+			<time>
+				Jun 26, 2018
+			</time>
 
+			
+			
+				<i class="iconfont icon-words"></i>
+				<span class="words">16256
+				</span>
+			
+		</div>
+</div> 
+	
 
-    
+    <script type="text/x-mathjax-config">
+        var post = document.getElementsByClassName("post")[0];  
+        MathJax.Hub.Config({
+            showProcessingMessages: false,
+            messageStyle: "none",    
+            tex2jax: {
+                inlineMath:  [ ["$", "$"] , ["\\(","\\)"]],
+                displayMath: [ ["$$","$$"] , ["\\[","\\]"]],
+                skipTags: ['script', 'noscript', 'style', 'textarea', 'pre','code','a'],
+            },
+            "HTML-CSS": {            
+                showMathMenu: false
+            }
+        });
+        MathJax.Hub.Queue(["Typeset",MathJax.Hub,post]);
+    </script>
+    <style>.MathJax{outline:0;}</style>
 
-    <div class="article-entry" itemprop="articleBody">
-      
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.2/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+ 
 
+	  <div class="typo post-content ">
 
-      
+		
 
-      
-        <p>一直想研究一下 Android 源码中关于图形渲染相关的内容，但是一直感觉无从入手，所以干脆直接从进程启动开始说起吧。后续会按照我看的内容尽量的写一些相关的博客。充实一下自己，打磨一下时光。废话少说，今天我们来分析一下 Android 应用进程的Zygote说起。</p>
+			
+					<p>一直想研究一下 Android 源码中关于图形渲染相关的内容，但是一直感觉无从入手，所以干脆直接从进程启动开始说起吧。后续会按照我看的内容尽量的写一些相关的博客。充实一下自己，打磨一下时光。废话少说，今天我们来分析一下 Android 应用进程的Zygote说起。</p>
  <a id="more"></a>
 
 <h1 id="从进程起源分析—Zygote"><a href="#从进程起源分析—Zygote" class="headerlink" title="从进程起源分析—Zygote"></a>从进程起源分析—Zygote</h1><p>一直想研究一下 <code>Android</code> 源码中关于图形渲染相关的内容，但是一直感觉无从入手，所以干脆直接从进程启动开始说起吧。后续会按照我看的内容尽量的写一些相关的博客。充实一下自己，打磨一下时光。废话少说，今天我们来分析一下 <code>Android</code> 应用进程的<code>Zygote</code>说起。</p>
@@ -126,154 +180,185 @@
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Registers a server socket for zygote command connections</span></span><br><span class="line"><span class="comment"> * 从之前的init.rc中可以看到，zygote传入的socketName即默认的socketName: -socket-name=zygote</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">registerServerSocket</span><span class="params">(String socketName)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (mServerSocket == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">int</span> fileDesc;</span><br><span class="line">        <span class="keyword">final</span> String fullSocketName = ANDROID_SOCKET_PREFIX + socketName; <span class="comment">//"ANDROID_SOCKET_"</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            String env = System.getenv(fullSocketName);</span><br><span class="line">            fileDesc = Integer.parseInt(env);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (RuntimeException ex) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(fullSocketName + <span class="string">" unset or invalid"</span>, ex);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//创建LocalServerSocket监听</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            FileDescriptor fd = <span class="keyword">new</span> FileDescriptor();</span><br><span class="line">            fd.setInt$(fileDesc);</span><br><span class="line">            mServerSocket = <span class="keyword">new</span> LocalServerSocket(fd);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException ex) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(</span><br><span class="line">                    <span class="string">"Error binding to local socket '"</span> + fileDesc + <span class="string">"'"</span>, ex);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">Runnable <span class="title">runSelectLoop</span><span class="params">(String abiList)</span> </span>&#123;</span><br><span class="line">    ArrayList&lt;FileDescriptor&gt; fds = <span class="keyword">new</span> ArrayList&lt;FileDescriptor&gt;();</span><br><span class="line">    ArrayList&lt;ZygoteConnection&gt; peers = <span class="keyword">new</span> ArrayList&lt;ZygoteConnection&gt;();</span><br><span class="line">    </span><br><span class="line">    fds.add(mServerSocket.getFileDescriptor());</span><br><span class="line">    peers.add(<span class="keyword">null</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">        StructPollfd[] pollFds = <span class="keyword">new</span> StructPollfd[fds.size()];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; pollFds.length; ++i) &#123;</span><br><span class="line">            pollFds[i] = <span class="keyword">new</span> StructPollfd();</span><br><span class="line">            pollFds[i].fd = fds.get(i);</span><br><span class="line">            pollFds[i].events = (<span class="keyword">short</span>) POLLIN;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//等待pollFds对应的fd发生改变，意味着有命令来到需要处理</span></span><br><span class="line">            Os.poll(pollFds, -<span class="number">1</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (ErrnoException ex) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"poll failed"</span>, ex);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = pollFds.length - <span class="number">1</span>; i &gt;= <span class="number">0</span>; --i) &#123;</span><br><span class="line">            <span class="comment">//未发生改变，不做操作</span></span><br><span class="line">            <span class="keyword">if</span> ((pollFds[i].revents &amp; POLLIN) == <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (i == <span class="number">0</span>) &#123;</span><br><span class="line">                ZygoteConnection newPeer = acceptCommandPeer(abiList);</span><br><span class="line">                peers.add(newPeer);</span><br><span class="line">                fds.add(newPeer.getFileDesciptor());</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    ZygoteConnection connection = peers.get(i);</span><br><span class="line">                    <span class="keyword">final</span> Runnable command = connection.processOneCommand(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">if</span> (mIsForkChild) &#123;</span><br><span class="line">                        <span class="comment">// We're in the child. We should always have a command to run at this</span></span><br><span class="line">                        <span class="comment">// stage if processOneCommand hasn't called "exec".</span></span><br><span class="line">                        <span class="keyword">if</span> (command == <span class="keyword">null</span>) &#123;</span><br><span class="line">                            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"command == null"</span>);</span><br><span class="line">                        &#125;</span><br><span class="line"></span><br><span class="line">                        <span class="keyword">return</span> command;</span><br><span class="line">                    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                        <span class="comment">// We're in the server - we should never have any commands to run.</span></span><br><span class="line">                        <span class="keyword">if</span> (command != <span class="keyword">null</span>) &#123;</span><br><span class="line">                            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"command != null"</span>);</span><br><span class="line">                        &#125;</span><br><span class="line"></span><br><span class="line">                        <span class="comment">// We don't know whether the remote side of the socket was closed or</span></span><br><span class="line">                        <span class="comment">// not until we attempt to read from it from processOneCommand. This shows up as</span></span><br><span class="line">                        <span class="comment">// a regular POLLIN event in our regular processing loop.</span></span><br><span class="line">                        <span class="keyword">if</span> (connection.isClosedByPeer()) &#123;</span><br><span class="line">                            connection.closeSocket();</span><br><span class="line">                            peers.remove(i);</span><br><span class="line">                            fds.remove(i);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (!mIsForkChild) &#123;</span><br><span class="line">                        <span class="comment">// We're in the server so any exception here is one that has taken place</span></span><br><span class="line">                        <span class="comment">// pre-fork while processing commands or reading / writing from the</span></span><br><span class="line">                        <span class="comment">// control socket. Make a loud noise about any such exceptions so that</span></span><br><span class="line">                        <span class="comment">// we know exactly what failed and why.</span></span><br><span class="line"></span><br><span class="line">                        Slog.e(TAG, <span class="string">"Exception executing zygote command: "</span>, e);</span><br><span class="line"></span><br><span class="line">                        <span class="comment">// Make sure the socket is closed so that the other end knows immediately</span></span><br><span class="line">                        <span class="comment">// that something has gone wrong and doesn't time out waiting for a</span></span><br><span class="line">                        <span class="comment">// response.</span></span><br><span class="line">                        ZygoteConnection conn = peers.remove(i);</span><br><span class="line">                        conn.closeSocket();</span><br><span class="line"></span><br><span class="line">                        fds.remove(i);</span><br><span class="line">                    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                        <span class="comment">// We're in the child so any exception caught here has happened post</span></span><br><span class="line">                        <span class="comment">// fork and before we execute ActivityThread.main (or any other main()</span></span><br><span class="line">                        <span class="comment">// method). Log the details of the exception and bring down the process.</span></span><br><span class="line">                        Log.e(TAG, <span class="string">"Caught post-fork exception in child process."</span>, e);</span><br><span class="line">                        <span class="keyword">throw</span> e;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+  	
+					
+	  </div>     
+	  
 
+	<div class="bottom">
+  <div class="other">
+    <div class="meta">
+      
+      <i class="iconfont icon-category"></i>
+      <a class="category-link" href="/categories/Android学习/">Android学习</a>
+
+      
+
+      
+      <i class="iconfont icon-tag"></i>
+      <a class="tag-link" href="/tags/Zygote进程/">Zygote进程</a> <a class="tag-link" href="/tags/app-process/">app_process</a>
       
     </div>
-    <footer class="article-footer">
-      <a data-url="https://jianglei12138.github.io/2018/06/26/从进程起源说起/" data-id="ck22146hg000sdofyq3951k6p" class="article-share-link">Share</a>
+
+    <div class="operate">
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Zygote进程/">Zygote进程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/app-process/">app_process</a></li></ul>
+      <span class="text">Share</span>
+      <ul class="share">
+	   			             
+        <li class="iconfont 
+		icon-share-qq 
+		-mob-share-qq 
+		item"></li>		
+   	   			             
+        <li class="iconfont 
+		icon-share-weixin 
+		-mob-share-weixin 
+		item"></li>		
+   	   			             
+        <li class="iconfont 
+		icon-share-weibo 
+		-mob-share-weibo 
+		item"></li>		
+   	   
+</ul>	
 
-    </footer>
-
+<script id="-mob-share" src="https://f1.webshare.mob.com/code/mob-share.js?appkey=21d601593a1de"></script>
+      
+    </div>
   </div>
 
+
   
-    
-  <nav class="article-nav">
-    
-      <a href="/2018/10/01/Android渲染机制/" class="article-nav-link">
-        <strong class="article-nav-caption">Newer posts</strong>
-        <div class="article-nav-title">
-          
-            Android渲染机制
-          
-        </div>
+  <nav class="nav">
+    <div class="link">
+      
+      <a href="/2018/06/15/Rxjava2源码阅读/" class="link-wrap">
+        <strong class="caption">older</strong>
+        
+        <span class="title">
+          Rxjava2 使用以及源码阅读
+        </span>
       </a>
-    
-    
-      <a href="/2018/06/15/Rxjava2源码阅读/" class="article-nav-link">
-        <strong class="article-nav-caption">Olde posts</strong>
-        <div class="article-nav-title">Rxjava2 使用以及源码阅读</div>
+      
+    </div>
+    <div class="link">
+      
+      <a href="/2018/10/01/Android渲染机制/" class="link-wrap">
+        <strong class="caption">newer</strong>
+        
+        <span class="title">
+          Android渲染机制
+        </span>
       </a>
-    
+      
+    </div>
   </nav>
-
-
   
+</div> 
+	
+<div class="comment">
 
-  
     
-  
 
+    <div id="comment">
+    </div>
+
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+
+    <script src="//unpkg.com/valine@v1.1.8-beta/dist/Valine.min.js"></script>
+
+    <script>
+        new Valine({
+            el: '#comment',
+            notify: false,
+            verify: false,
+            app_id: 'cFM0eCo0CQ9xmBXmHi1eltol-gzGzoHsz',
+            app_key: 'oh9tizsnvV2vNvWgqEvoNtQO',
+            path: window.location.pathname,
+            avatar: 'mm',
+            guest_info: ['nick', 'mail']
+        });
+    </script>
+    
+</div>	
 </article>
 
+          </div> 
+      </div>            
+    
+        <i id="toTop" class="iconfont icon-backtotop"></i>
 
-
-</section>
-  <footer class="footer">
-  <div class="outer">
-    <div class="float-right">
-      <ul class="list-inline">
   
-    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
-  
-</ul>
+    <div class="none" id="search">
+    <div class="header">
+        <input type="text" placeholder="输入你想搜索的" id="search-input" class="input">
+        
+        <i id="search-cancel" class="iconfont icon-cancel"></i>
     </div>
-    <ul class="list-inline">
-      <li>&copy; 2019 姜雷12138</li>
-      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
-      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
-    </ul>
-  </div>
-</footer>
 
-</main>
-
-<aside class="sidebar sidebar-specter">
-  
-    <button class="navbar-toggle"></button>
-<nav class="navbar">
-  
-    <div class="logo">
-      <a href="/"><img src="/images/hexo.svg" alt="姜雷12138"></a>
-    </div>
-  
-  <ul class="nav nav-main">
-    
-      <li class="nav-item">
-        <a class="nav-item-link" href="/">Home</a>
-      </li>
-    
-      <li class="nav-item">
-        <a class="nav-item-link" href="/archives">Archives</a>
-      </li>
-    
-      <li class="nav-item">
-        <a class="nav-item-link" href="/gallery">Gallery</a>
-      </li>
-    
-      <li class="nav-item">
-        <a class="nav-item-link" href="/about">About</a>
-      </li>
-    
-    <li class="nav-item">
-      <a class="nav-item-link nav-item-search" title="Search">
-        <i class="fe fe-search"></i>
-        Search
-      </a>
-    </li>
-  </ul>
-</nav>
-<nav class="navbar navbar-bottom">
-  <ul class="nav">
-    <li class="nav-item">
-      <div class="totop" id="totop">
-  <i class="fe fe-rocket"></i>
+    <div id="search-result" class="result"></div>
 </div>
-    </li>
-    <li class="nav-item">
+     <div class="mobile-menu">      
+
       
-        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
-          <i class="fe fe-feed"></i>
-        </a>
+      <img class="mobile-menu-icon" src="/images/favicon.png">  
       
-    </li>
-  </ul>
-</nav>
-<div class="search-form-wrap">
-  <div class="local-search local-search-plugin">
-  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
-  <div id="local-search-result" class="local-search-result"></div>
+
+         
+            
+
+            <a class="mobile-menu-link" href="/">首頁
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/archives">歸檔
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/tags">標籤
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/about">關於
+            </a>
+            
+         
+                          
+
+            <a class="mobile-menu-link mobile-menu-search" href="#">搜索 </a>                 
+            
+         
+      
 </div>
-</div>
-  </aside>
-  <script src="/js/jquery-2.0.3.min.js"></script>
-<script src="/js/jquery.justifiedGallery.min.js"></script>
-<script src="/js/lazyload.min.js"></script>
-<script src="/js/busuanzi-2.3.pure.min.js"></script>
-
-  <script src="/fancybox/jquery.fancybox.min.js"></script>
+        
+    
 
 
 
-  <script src="/js/tocbot.min.js"></script>
-  <script>
-    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
-    tocbot.init({
-      tocSelector: '.tocbot',
-      contentSelector: '.article-entry',
-      headingSelector: 'h1, h2, h3, h4, h5, h6',
-      hasInnerContainers: true,
-      scrollSmooth: true,
-      positionFixedSelector: '.tocbot',
-      positionFixedClass: 'is-position-fixed',
-      fixedSidebarOffset: 'auto',
-    });
-  </script>
+     
+    
 
 
-<script src="/js/ocean.js"></script>
+<footer class="footer">
+	<div class="inner">
+		<div class="copyright">
+			&copy;
+			
+			2019
+			Lemon
 
-</body>
+			<br>
+			By <a href="https://hexo.io" target="_blank">Hexo</a> Theme <a href="https://github.com/Lemonreds/hexo-theme-Nayo" target="_blank">Nayo</a>
+		</div>
+	</div>
+</footer>   
+
+    <script src="/nayo.bundle.js"></script>           
+  </body>        
 </html>

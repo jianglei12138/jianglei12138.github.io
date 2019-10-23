@@ -1,80 +1,134 @@
 <!DOCTYPE html>
-<html lang="en">
-<head><meta name="generator" content="Hexo 3.8.0">
-  <meta charset="utf-8">
+<html>
+  <head><meta name="generator" content="Hexo 3.8.0">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   
   
+  <title>  ActivityThread 阅读之旅 |   Lemon </title>
+
+ 
   
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <title>
-    ActivityThread 阅读之旅 |
-    
-    姜雷12138</title>
-  
-    <link rel="shortcut icon" href="/favicon.ico">
-  
-  <link rel="stylesheet" href="/css/style.css">
-  
-    <link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
-  
-  <script src="/js/pace.min.js"></script>
-</head>
-</html>
-<body>
-<main class="content">
-  <section class="outer">
+    <link rel="icon" href="/images/favicon.png">
   
 
-<article id="post-ActivityThread 阅读之旅" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
-  
-  <div class="article-inner">
+
+  <link rel="stylesheet" href="/nayo.min.css"> 
+</head>  
+  <body>   
     
-      <header class="article-header">
+      <header class="header-wrapper">
+
+  <nav class="inner">
+    <div class="title">
+    </div>
+
+    <ul class="menu">
+      
+      
+      <li class="item">
+        <a class="link" id="menu-home" href="/">
+          <i class="iconfont icon-home">
+        </i></a>
+      </li>
+      
+      
+      
+      <li class="item">
+        <a class="link" id="menu-archives" href="/archives">
+          <i class="iconfont icon-archives">
+        </i></a>
+      </li>
+      
+      
+      
+      <li class="item">
+        <a class="link" id="menu-tags" href="/tags">
+          <i class="iconfont icon-tags">
+        </i></a>
+      </li>
+      
+      
+      
+      <li class="item">
+        <a class="link" id="menu-about" href="/about">
+          <i class="iconfont icon-about">
+        </i></a>
+      </li>
+      
+      
+      
+      <li class="item">
+        <a class="link" id="menu-search">
+          <i class="iconfont icon-search">
+        </i></a>
         
-  
-    <h1 class="article-title" itemprop="name">
-      ActivityThread 阅读之旅
-    </h1>
-  
-  
 
-
-
-
-      </header>
-    
-
-    
-      <div class="article-meta">
-        <a href="/2018/06/13/ActivityThread 阅读之旅/" class="article-date">
-  <time datetime="2018-06-13T15:28:30.000Z" itemprop="datePublished">2018-06-13</time>
-</a>
         
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Android学习/">Android学习</a>
-  </div>
-
-      </div>
-    
-
-    
       
-    <div class="tocbot"></div>
+    </li></ul>
+  </nav>
+</header>
 
+<header class="mobile-header-wrapper">
+  <i id="mobile-toggle" class="iconfont icon-menu mobile-toggle"></i>
+</header>   
 
+      <div class="container">       
+          
+          
+            <div class="container-inner">  
+          
 
+          <article class="post slideDownMin">
+  
+	
+<div class="header">
+		<p class="title">	
+			ActivityThread 阅读之旅
+		</p>
+		<div class="info">	
+			<time>
+				Jun 13, 2018
+			</time>
 
+			
+			
+				<i class="iconfont icon-words"></i>
+				<span class="words">6853
+				</span>
+			
+		</div>
+</div> 
+	
 
-    
+    <script type="text/x-mathjax-config">
+        var post = document.getElementsByClassName("post")[0];  
+        MathJax.Hub.Config({
+            showProcessingMessages: false,
+            messageStyle: "none",    
+            tex2jax: {
+                inlineMath:  [ ["$", "$"] , ["\\(","\\)"]],
+                displayMath: [ ["$$","$$"] , ["\\[","\\]"]],
+                skipTags: ['script', 'noscript', 'style', 'textarea', 'pre','code','a'],
+            },
+            "HTML-CSS": {            
+                showMathMenu: false
+            }
+        });
+        MathJax.Hub.Queue(["Typeset",MathJax.Hub,post]);
+    </script>
+    <style>.MathJax{outline:0;}</style>
 
-    <div class="article-entry" itemprop="articleBody">
-      
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.2/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+ 
 
+	  <div class="typo post-content ">
 
-      
+		
 
-      
-        <p>研究一下App是如何启动的记录。我们知道<code>Main</code>函数是所有java程序的入口，Android也不例外，同样，启动一个应用程序，Android也会首先调用<code>Main</code>函数。<code>Main</code>函数位于<code>AcitivityThread</code>类中。<br> <a id="more"></a></p>
+			
+					<p>研究一下App是如何启动的记录。我们知道<code>Main</code>函数是所有java程序的入口，Android也不例外，同样，启动一个应用程序，Android也会首先调用<code>Main</code>函数。<code>Main</code>函数位于<code>AcitivityThread</code>类中。<br> <a id="more"></a></p>
 <h1 id="ActivityThread-阅读之旅"><a href="#ActivityThread-阅读之旅" class="headerlink" title="ActivityThread 阅读之旅"></a>ActivityThread 阅读之旅</h1><p>研究一下App是如何启动的记录。</p>
 <p>我们知道<code>Main</code>函数是所有java程序的入口，Android也不例外，同样，启动一个应用程序，Android也会首先调用<code>Main</code>函数。<code>Main</code>函数位于<code>AcitivityThread</code>类中。</p>
 <p>我们首先看<code>Main</code>函数的实现。</p>
@@ -111,154 +165,185 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">dispatchMessage</span><span class="params">(Message msg)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (msg.callback != <span class="keyword">null</span>) &#123;</span><br><span class="line">        handleCallback(msg);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (mCallback != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (mCallback.handleMessage(msg)) &#123;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        handleMessage(msg);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>以上我们可以看到<code>ActivityThread</code>中完整了初始化的操作，绑定<code>ApplicationThread</code>与<code>AMS</code>, 启动主线程循环等。</p>
+  	
+					
+	  </div>     
+	  
 
+	<div class="bottom">
+  <div class="other">
+    <div class="meta">
+      
+      <i class="iconfont icon-category"></i>
+      <a class="category-link" href="/categories/Android学习/">Android学习</a>
+
+      
+
+      
+      <i class="iconfont icon-tag"></i>
+      <a class="tag-link" href="/tags/App启动流程/">App启动流程</a> <a class="tag-link" href="/tags/Main-Handler/">Main Handler</a>
       
     </div>
-    <footer class="article-footer">
-      <a data-url="https://jianglei12138.github.io/2018/06/13/ActivityThread 阅读之旅/" data-id="ck22146gv000ddofydefx2nig" class="article-share-link">Share</a>
+
+    <div class="operate">
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/App启动流程/">App启动流程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Main-Handler/">Main Handler</a></li></ul>
+      <span class="text">Share</span>
+      <ul class="share">
+	   			             
+        <li class="iconfont 
+		icon-share-qq 
+		-mob-share-qq 
+		item"></li>		
+   	   			             
+        <li class="iconfont 
+		icon-share-weixin 
+		-mob-share-weixin 
+		item"></li>		
+   	   			             
+        <li class="iconfont 
+		icon-share-weibo 
+		-mob-share-weibo 
+		item"></li>		
+   	   
+</ul>	
 
-    </footer>
-
+<script id="-mob-share" src="https://f1.webshare.mob.com/code/mob-share.js?appkey=21d601593a1de"></script>
+      
+    </div>
   </div>
 
+
   
-    
-  <nav class="article-nav">
-    
-      <a href="/2018/06/15/Rxjava2源码阅读/" class="article-nav-link">
-        <strong class="article-nav-caption">Newer posts</strong>
-        <div class="article-nav-title">
-          
-            Rxjava2 使用以及源码阅读
-          
-        </div>
+  <nav class="nav">
+    <div class="link">
+      
+      <a href="/2018/06/01/Android橡皮擦闪烁分析以及解决方案/" class="link-wrap">
+        <strong class="caption">older</strong>
+        
+        <span class="title">
+          Android Framebuffer相关学习
+        </span>
       </a>
-    
-    
-      <a href="/2018/06/01/Android橡皮擦闪烁分析以及解决方案/" class="article-nav-link">
-        <strong class="article-nav-caption">Olde posts</strong>
-        <div class="article-nav-title">Android Framebuffer相关学习</div>
+      
+    </div>
+    <div class="link">
+      
+      <a href="/2018/06/15/Rxjava2源码阅读/" class="link-wrap">
+        <strong class="caption">newer</strong>
+        
+        <span class="title">
+          Rxjava2 使用以及源码阅读
+        </span>
       </a>
-    
+      
+    </div>
   </nav>
-
-
   
+</div> 
+	
+<div class="comment">
 
-  
     
-  
 
+    <div id="comment">
+    </div>
+
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+
+    <script src="//unpkg.com/valine@v1.1.8-beta/dist/Valine.min.js"></script>
+
+    <script>
+        new Valine({
+            el: '#comment',
+            notify: false,
+            verify: false,
+            app_id: 'cFM0eCo0CQ9xmBXmHi1eltol-gzGzoHsz',
+            app_key: 'oh9tizsnvV2vNvWgqEvoNtQO',
+            path: window.location.pathname,
+            avatar: 'mm',
+            guest_info: ['nick', 'mail']
+        });
+    </script>
+    
+</div>	
 </article>
 
+          </div> 
+      </div>            
+    
+        <i id="toTop" class="iconfont icon-backtotop"></i>
 
-
-</section>
-  <footer class="footer">
-  <div class="outer">
-    <div class="float-right">
-      <ul class="list-inline">
   
-    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
-  
-</ul>
+    <div class="none" id="search">
+    <div class="header">
+        <input type="text" placeholder="输入你想搜索的" id="search-input" class="input">
+        
+        <i id="search-cancel" class="iconfont icon-cancel"></i>
     </div>
-    <ul class="list-inline">
-      <li>&copy; 2019 姜雷12138</li>
-      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
-      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
-    </ul>
-  </div>
-</footer>
 
-</main>
-
-<aside class="sidebar sidebar-specter">
-  
-    <button class="navbar-toggle"></button>
-<nav class="navbar">
-  
-    <div class="logo">
-      <a href="/"><img src="/images/hexo.svg" alt="姜雷12138"></a>
-    </div>
-  
-  <ul class="nav nav-main">
-    
-      <li class="nav-item">
-        <a class="nav-item-link" href="/">Home</a>
-      </li>
-    
-      <li class="nav-item">
-        <a class="nav-item-link" href="/archives">Archives</a>
-      </li>
-    
-      <li class="nav-item">
-        <a class="nav-item-link" href="/gallery">Gallery</a>
-      </li>
-    
-      <li class="nav-item">
-        <a class="nav-item-link" href="/about">About</a>
-      </li>
-    
-    <li class="nav-item">
-      <a class="nav-item-link nav-item-search" title="Search">
-        <i class="fe fe-search"></i>
-        Search
-      </a>
-    </li>
-  </ul>
-</nav>
-<nav class="navbar navbar-bottom">
-  <ul class="nav">
-    <li class="nav-item">
-      <div class="totop" id="totop">
-  <i class="fe fe-rocket"></i>
+    <div id="search-result" class="result"></div>
 </div>
-    </li>
-    <li class="nav-item">
+     <div class="mobile-menu">      
+
       
-        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
-          <i class="fe fe-feed"></i>
-        </a>
+      <img class="mobile-menu-icon" src="/images/favicon.png">  
       
-    </li>
-  </ul>
-</nav>
-<div class="search-form-wrap">
-  <div class="local-search local-search-plugin">
-  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
-  <div id="local-search-result" class="local-search-result"></div>
+
+         
+            
+
+            <a class="mobile-menu-link" href="/">首頁
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/archives">歸檔
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/tags">標籤
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/about">關於
+            </a>
+            
+         
+                          
+
+            <a class="mobile-menu-link mobile-menu-search" href="#">搜索 </a>                 
+            
+         
+      
 </div>
-</div>
-  </aside>
-  <script src="/js/jquery-2.0.3.min.js"></script>
-<script src="/js/jquery.justifiedGallery.min.js"></script>
-<script src="/js/lazyload.min.js"></script>
-<script src="/js/busuanzi-2.3.pure.min.js"></script>
-
-  <script src="/fancybox/jquery.fancybox.min.js"></script>
+        
+    
 
 
 
-  <script src="/js/tocbot.min.js"></script>
-  <script>
-    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
-    tocbot.init({
-      tocSelector: '.tocbot',
-      contentSelector: '.article-entry',
-      headingSelector: 'h1, h2, h3, h4, h5, h6',
-      hasInnerContainers: true,
-      scrollSmooth: true,
-      positionFixedSelector: '.tocbot',
-      positionFixedClass: 'is-position-fixed',
-      fixedSidebarOffset: 'auto',
-    });
-  </script>
+     
+    
 
 
-<script src="/js/ocean.js"></script>
+<footer class="footer">
+	<div class="inner">
+		<div class="copyright">
+			&copy;
+			
+			2019
+			Lemon
 
-</body>
+			<br>
+			By <a href="https://hexo.io" target="_blank">Hexo</a> Theme <a href="https://github.com/Lemonreds/hexo-theme-Nayo" target="_blank">Nayo</a>
+		</div>
+	</div>
+</footer>   
+
+    <script src="/nayo.bundle.js"></script>           
+  </body>        
 </html>
