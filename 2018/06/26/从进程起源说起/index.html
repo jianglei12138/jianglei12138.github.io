@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  
+  
+  <title>  从进程起源说起 |   Lemon </title>
+
+ 
+  
+    <link rel="icon" href="/images/favicon.png">
+  
+
+
+  <link rel="stylesheet" href="/nayo.min.css"> 
+</head>  
+  <body>   
+    
+      <header class="header-wrapper">
+
+  <nav class="inner">
+    <div class="title">
+    </div>
+
+    <ul class="menu">
+      
+      
+      <li class="item">
+        <a class="link" id="menu-home" href="/">
+          <i class="iconfont icon-home">
+        </i></a>
+      </li>
+      
+      
+      
+      <li class="item">
+        <a class="link" id="menu-archives" href="/archives">
+          <i class="iconfont icon-archives">
+        </i></a>
+      </li>
+      
+      
+      
+      <li class="item">
+        <a class="link" id="menu-tags" href="/tags">
+          <i class="iconfont icon-tags">
+        </i></a>
+      </li>
+      
+      
+      
+      <li class="item">
+        <a class="link" id="menu-about" href="/about">
+          <i class="iconfont icon-about">
+        </i></a>
+      </li>
+      
+      
+      
+      <li class="item">
+        <a class="link" id="menu-search">
+          <i class="iconfont icon-search">
+        </i></a>
+        
+
+        
+      
+    </li></ul>
+  </nav>
+</header>
+
+<header class="mobile-header-wrapper">
+  <i id="mobile-toggle" class="iconfont icon-menu mobile-toggle"></i>
+</header>   
+
+      <div class="container">       
+          
+          
+            <div class="container-inner">  
+          
+
+          <article class="post slideDownMin">
+  
+	
+<div class="header">
+		<p class="title">	
+			从进程起源说起
+		</p>
+		<div class="info">	
+			<time>
+				Jun 26, 2018
+			</time>
+
+			
+			
+				<i class="iconfont icon-words"></i>
+				<span class="words">16257
+				</span>
+			
+		</div>
+</div> 
+	
+
+    <script type="text/x-mathjax-config">
+        var post = document.getElementsByClassName("post")[0];  
+        MathJax.Hub.Config({
+            showProcessingMessages: false,
+            messageStyle: "none",    
+            tex2jax: {
+                inlineMath:  [ ["$", "$"] , ["\\(","\\)"]],
+                displayMath: [ ["$$","$$"] , ["\\[","\\]"]],
+                skipTags: ['script', 'noscript', 'style', 'textarea', 'pre','code','a'],
+            },
+            "HTML-CSS": {            
+                showMathMenu: false
+            }
+        });
+        MathJax.Hub.Queue(["Typeset",MathJax.Hub,post]);
+    </script>
+    <style>.MathJax{outline:0;}</style>
+
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.2/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+ 
+
+	  <div class="typo post-content ">
+
+		
+
+			
+					<p>一直想研究一下 Android 源码中关于图形渲染相关的内容，但是一直感觉无从入手，所以干脆直接从进程启动开始说起吧。后续会按照我看的内容尽量的写一些相关的博客。充实一下自己，打磨一下时光。废话少说，今天我们来分析一下 Android 应用进程的Zygote说起。</p>
+ <a id="more"></a>
+
+<h1 id="从进程起源分析—Zygote"><a href="#从进程起源分析—Zygote" class="headerlink" title="从进程起源分析—Zygote"></a>从进程起源分析—Zygote</h1><p>一直想研究一下 <code>Android</code> 源码中关于图形渲染相关的内容，但是一直感觉无从入手，所以干脆直接从进程启动开始说起吧。后续会按照我看的内容尽量的写一些相关的博客。充实一下自己，打磨一下时光。废话少说，今天我们来分析一下 <code>Android</code> 应用进程的<code>Zygote</code>说起。</p>
+<h2 id="Zygote是什么？"><a href="#Zygote是什么？" class="headerlink" title="Zygote是什么？"></a>Zygote是什么？</h2><p>首先我们要知道我们要分析的这个东西到底是用来做什么的。我们知道在android的世界中存在两种不同的可执行程序，其一是native可执行程序，另一类则是我们常接触的java应用程序。其中native程序由标准init程序fork出来，zygote也不例外，也是由init通过解析init.zygote.rc文件，启动而来。</p>
+<p><strong>“所有的Java应用程序进程及系统服务SystemServer进程都由Zygote进程通过fork孵化而来”</strong></p>
+<p>具体的关于 <code>.rc</code> 文件的解析，有缘我们在分析 <code>init</code> 程序的时候我们再分析。其中，我们暂时只需要知道 <code>service</code> 是 <code>.rc</code> 文件中的一个指令，具体的规则</p>
+<p><strong>“service + 进程名 + 可执行程序 + 启动参数”</strong></p>
+<p><code>init</code> 进程通过分析如下 <code>init.zygote.rc</code> 文件, 执行 <code>app_process</code> 可执行文件，创建 <code>zygote</code> 进程。也即 <code>zygote</code> 对应的可执行程序是 <code>/system/bin/app_process</code> ，启动后会改名为 <code>zygote</code> ， 启动的时候会带一些其他的参数。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">### init.zygote64_32.rc</span></span><br><span class="line">service zygote /system/bin/app_process64 -Xzygote /system/bin --zygote --start-system-server --socket-name=zygote</span><br><span class="line">    class main</span><br><span class="line">    priority -20</span><br><span class="line">    user root</span><br><span class="line">    group root readproc</span><br><span class="line">    socket zygote stream 660 root system</span><br><span class="line">    onrestart write /sys/android_power/request_state wake</span><br><span class="line">    onrestart write /sys/power/state on</span><br><span class="line">    onrestart restart audioserver</span><br><span class="line">    onrestart restart cameraserver</span><br><span class="line">    onrestart restart media</span><br><span class="line">    onrestart restart netd</span><br><span class="line">    onrestart restart wificond</span><br><span class="line">    writepid /dev/cpuset/foreground/tasks</span><br></pre></td></tr></table></figure>
+
+<h2 id="app-process启动分析"><a href="#app-process启动分析" class="headerlink" title="app_process启动分析"></a>app_process启动分析</h2><p>接着我们来分析 <code>Zygote(app_process)</code> 的启动过程，作为一个可执行程序，必须有标准的入口, 即 <code>main</code> 函数。如果我们了解的更多的话，我们会知道 <code>app_process</code> 不仅仅会启动 <code>Zygote</code> 进程，还可以直接有个用法是在 <code>android</code> 中执行 <code>jar</code> 包，比如这是 <code>monkey</code> 命令对应的脚本，可以看到其实只是使用 <code>app_process</code> 执行对应的 <code>jar</code> 包中 <code>main</code> 函数。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">### /system/bin/monkey</span></span><br><span class="line">base=/system</span><br><span class="line"><span class="built_in">export</span> CLASSPATH=<span class="variable">$base</span>/framework/monkey.jar</span><br><span class="line"><span class="built_in">trap</span> <span class="string">""</span> HUP</span><br><span class="line"><span class="keyword">for</span> a <span class="keyword">in</span> <span class="string">"<span class="variable">$@</span>"</span>; <span class="keyword">do</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"  bash arg:"</span> <span class="variable">$a</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"><span class="built_in">exec</span> app_process <span class="variable">$base</span>/bin com.android.commands.monkey.Monkey <span class="string">"<span class="variable">$@</span>"</span></span><br></pre></td></tr></table></figure>
+
+<p>了解这个之后，我们就可以真正的分析 <code>app_process</code> 的启动流程了。如下是 <code>main</code> 函数的实现，忽略不必要的 <code>log</code> 打印</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// frameworks/base/cmds/app_process/app_main.cpp</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>* <span class="keyword">const</span> argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//计算argv的长度，作为创建AppRuntime的参数，见 注①</span></span><br><span class="line">    <span class="function">AppRuntime <span class="title">runtime</span><span class="params">(argv[<span class="number">0</span>], computeArgBlockSize(argc, argv))</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; argc; i++) &#123;</span><br><span class="line">        <span class="comment">//此处省略部分代码，解析参数-cp与-classpath，添加到runtime中，常见于我们直接在Android中执行jar包</span></span><br><span class="line">        runtime.addOption(strdup(argv[i]));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//①如果创建的Zygote进程，此处为true，niceName为zygote</span></span><br><span class="line">    <span class="comment">//②如果通过app_process执行jar包，此处zygote为false，niceName为空，className为对应的传递的类名</span></span><br><span class="line">    <span class="keyword">bool</span> zygote = <span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">bool</span> startSystemServer = <span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">bool</span> application = <span class="literal">false</span>;</span><br><span class="line">    String8 niceName;</span><br><span class="line">    String8 className;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//此处从argv中解析对应的参数</span></span><br><span class="line">    ++i;  <span class="comment">// Skip unused "parent dir" argument.</span></span><br><span class="line">    <span class="keyword">while</span> (i &lt; argc) &#123;</span><br><span class="line">        <span class="keyword">const</span> <span class="keyword">char</span>* arg = argv[i++];</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">strcmp</span>(arg, <span class="string">"--zygote"</span>) == <span class="number">0</span>) &#123;</span><br><span class="line">            zygote = <span class="literal">true</span>;</span><br><span class="line">            niceName = ZYGOTE_NICE_NAME;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="built_in">strcmp</span>(arg, <span class="string">"--start-system-server"</span>) == <span class="number">0</span>) &#123;</span><br><span class="line">            startSystemServer = <span class="literal">true</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="built_in">strcmp</span>(arg, <span class="string">"--application"</span>) == <span class="number">0</span>) &#123;</span><br><span class="line">            application = <span class="literal">true</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="built_in">strncmp</span>(arg, <span class="string">"--nice-name="</span>, <span class="number">12</span>) == <span class="number">0</span>) &#123;</span><br><span class="line">            niceName.setTo(arg + <span class="number">12</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="built_in">strncmp</span>(arg, <span class="string">"--"</span>, <span class="number">2</span>) != <span class="number">0</span>) &#123;</span><br><span class="line">            className.setTo(arg);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            --i;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Vector&lt;String8&gt; args;</span><br><span class="line">    <span class="comment">//className不空，说明是通过app_process启动jar包，向runtime传递对应的参数，比如说monkey中的“$@”</span></span><br><span class="line">    <span class="keyword">if</span> (!className.isEmpty()) &#123;</span><br><span class="line">        args.add(application ? String8(<span class="string">"application"</span>) : String8(<span class="string">"tool"</span>));</span><br><span class="line">        runtime.setClassNameAndArgs(className, argc - i, argv + i);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">//启动zygote进程</span></span><br><span class="line">        <span class="comment">//此处创建DalvikCache文件夹, 设置权限，群组等</span></span><br><span class="line">        maybeCreateDalvikCache();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (startSystemServer) &#123;</span><br><span class="line">            args.add(String8(<span class="string">"start-system-server"</span>));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//拿到设备支持的abi架构，可以直接通过adb shell getprop ro.product.cpu.abilist64(或者32，根据不同的CPU架构)</span></span><br><span class="line">        <span class="keyword">char</span> prop[PROP_VALUE_MAX];</span><br><span class="line">        <span class="keyword">if</span> (property_get(ABI_LIST_PROPERTY, prop, <span class="literal">NULL</span>) == <span class="number">0</span>) &#123;</span><br><span class="line">            LOG_ALWAYS_FATAL(<span class="string">"app_process: Unable to determine ABI list from property %s."</span>,</span><br><span class="line">                ABI_LIST_PROPERTY);</span><br><span class="line">            <span class="keyword">return</span> <span class="number">11</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function">String8 <span class="title">abiFlag</span><span class="params">(<span class="string">"--abi-list="</span>)</span></span>; <span class="comment">//可能不只一个abi，比如说对于arm64-v8的CPU一般都会支持armeabi-v7a，armeabi</span></span><br><span class="line">        abiFlag.append(prop);</span><br><span class="line">        args.add(abiFlag);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//剩余参数</span></span><br><span class="line">        <span class="keyword">for</span> (; i &lt; argc; ++i) &#123;</span><br><span class="line">            args.add(String8(argv[i]));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//niceName不空，比如zygote进程。</span></span><br><span class="line">    <span class="keyword">if</span> (!niceName.isEmpty()) &#123;</span><br><span class="line">        <span class="comment">//此处把app_process进程名，改为zygote，见 注② 这就是上述说得改名操作</span></span><br><span class="line">        runtime.setArgv0(niceName.<span class="built_in">string</span>(), <span class="literal">true</span> <span class="comment">/* setProcName */</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (zygote) &#123;</span><br><span class="line">        <span class="comment">//zygote模式启动com.android.internal.os.ZygoteInit此java类 注③</span></span><br><span class="line">        runtime.start(<span class="string">"com.android.internal.os.ZygoteInit"</span>, args, zygote);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (className) &#123;</span><br><span class="line">        <span class="comment">//非zyote启动com.android.internal.os.RuntimeInit类 注④</span></span><br><span class="line">        runtime.start(<span class="string">"com.android.internal.os.RuntimeInit"</span>, args, zygote);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>有上述注释我们可以看到， <code>main</code> 函数只是解析了对应的参数，所有的操作还是交给了 <code>AppRuntime</code> 去操作。我们接着来分析注释中的注</p>
+<blockquote>
+<p>注①： 此处调用AppRuntime的构造函数，目的只是给变量赋值，无特殊操作。</p>
+</blockquote>
+ <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// AppRuntime</span></span><br><span class="line"> <span class="class"><span class="keyword">class</span> <span class="title">AppRuntime</span> :</span> <span class="keyword">public</span> AndroidRuntime</span><br><span class="line"> &#123;</span><br><span class="line"> <span class="keyword">public</span>:</span><br><span class="line">     AppRuntime(<span class="keyword">char</span>* argBlockStart, <span class="keyword">const</span> <span class="keyword">size_t</span> argBlockLength)</span><br><span class="line">         : AndroidRuntime(argBlockStart, argBlockLength)</span><br><span class="line">         , mClass(<span class="literal">NULL</span>)</span><br><span class="line">     &#123;</span><br><span class="line">     &#125;</span><br><span class="line"> ...</span><br><span class="line"> </span><br><span class="line"> <span class="comment">// AndroidRuntime</span></span><br><span class="line"> AndroidRuntime::AndroidRuntime(<span class="keyword">char</span>* argBlockStart, <span class="keyword">const</span> <span class="keyword">size_t</span> argBlockLength) :</span><br><span class="line">         mExitWithoutCleanup(<span class="literal">false</span>),</span><br><span class="line">         mArgBlockStart(argBlockStart),</span><br><span class="line">         mArgBlockLength(argBlockLength)</span><br><span class="line"> &#123;</span><br><span class="line">     SkGraphics::Init(); <span class="comment">//初始化skia，具体意义未知</span></span><br><span class="line">     mOptions.setCapacity(<span class="number">20</span>);</span><br><span class="line">     gCurRuntime = <span class="keyword">this</span>; <span class="comment">//全局变量，供以后使用，详见下文</span></span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注②： 修改进程名称操作</p>
+</blockquote>
+ <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> AndroidRuntime::setArgv0(<span class="keyword">const</span> <span class="keyword">char</span>* argv0, <span class="keyword">bool</span> setProcName) &#123;</span><br><span class="line">    <span class="keyword">if</span> (setProcName) &#123;</span><br><span class="line">        <span class="keyword">int</span> len = <span class="built_in">strlen</span>(argv0);</span><br><span class="line">        <span class="keyword">if</span> (len &lt; <span class="number">15</span>) &#123;</span><br><span class="line">            pthread_setname_np(pthread_self(), argv0);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            pthread_setname_np(pthread_self(), argv0 + len - <span class="number">15</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">memset</span>(mArgBlockStart, <span class="number">0</span>, mArgBlockLength);</span><br><span class="line">    strlcpy(mArgBlockStart, argv0, mArgBlockLength);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注③：启动对应的java虚拟机和加载对应的类</p>
+</blockquote>
+ <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> AndroidRuntime::start(<span class="keyword">const</span> <span class="keyword">char</span>* className, <span class="keyword">const</span> Vector&lt;String8&gt;&amp; options, <span class="keyword">bool</span> zygote)</span><br><span class="line">&#123;</span><br><span class="line">    ...此处忽略一些环境变量的检查设置</span><br><span class="line">    <span class="comment">/* start the virtual machine */</span></span><br><span class="line">    <span class="comment">//此处初始化JniInvocation，加载libart.so, 绑定一些与JavaVm相关的函数</span></span><br><span class="line">    JniInvocation jni_invocation;</span><br><span class="line">    jni_invocation.Init(<span class="literal">NULL</span>);</span><br><span class="line">    </span><br><span class="line">    JNIEnv* env;</span><br><span class="line">    <span class="comment">//startVM 封装参数，调用art中的JNI_CreateJavaVM, 创建jni使用的所有资源, 返回mJavaVM静态全局变量</span></span><br><span class="line">    <span class="comment">//以及当前线程的JniEnv</span></span><br><span class="line">    <span class="keyword">if</span> (startVm(&amp;mJavaVM, &amp;env, zygote) != <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//对于zygote空实现，对应普通的java应用程序而言, 会在此处加载对应的class文件，</span></span><br><span class="line">    <span class="comment">//原因是如果在boot class加载其他类，classloader会认为此类就存在boot class中，不会去找classpath中提供的类</span></span><br><span class="line">    <span class="comment">//最简单解决方案是在加载boot class之前加载对应的类</span></span><br><span class="line">    onVmCreated(env);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//注册android相关接口,这里会设置一个创建线程的回调给Thread.cpp, 以后创建线程都会掉到此处设置的回调</span></span><br><span class="line">    <span class="comment">//见 注④</span></span><br><span class="line">    <span class="keyword">if</span> (startReg(env) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        ALOGE(<span class="string">"Unable to register all android natives\n"</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//创建java中的String数组保存调用时要传入的参数</span></span><br><span class="line">    jclass stringClass;</span><br><span class="line">    jobjectArray strArray;</span><br><span class="line">    jstring classNameStr;</span><br><span class="line"></span><br><span class="line">    stringClass = env-&gt;FindClass(<span class="string">"java/lang/String"</span>);</span><br><span class="line">    strArray = env-&gt;NewObjectArray(options.size() + <span class="number">1</span>, stringClass, <span class="literal">NULL</span>);</span><br><span class="line">    classNameStr = env-&gt;NewStringUTF(className);</span><br><span class="line">    env-&gt;SetObjectArrayElement(strArray, <span class="number">0</span>, classNameStr);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">size_t</span> i = <span class="number">0</span>; i &lt; options.size(); ++i) &#123;</span><br><span class="line">        jstring optionsStr = env-&gt;NewStringUTF(options.itemAt(i).<span class="built_in">string</span>());</span><br><span class="line">        env-&gt;SetObjectArrayElement(strArray, i + <span class="number">1</span>, optionsStr);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//toSlashClassName目的是把类名中的.替换成/, </span></span><br><span class="line">    <span class="comment">//如com.android.internal.os.ZygoteInit修改成com/android/internal/os/ZygoteInit</span></span><br><span class="line">    <span class="keyword">char</span>* slashClassName = toSlashClassName(className != <span class="literal">NULL</span> ? className : <span class="string">""</span>);</span><br><span class="line">    jclass startClass = env-&gt;FindClass(slashClassName);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//加载class后，调用对应的main函数，[Ljava/lang/String;)V为函数签名，返回值void，参数String[]</span></span><br><span class="line">    jmethodID startMeth = env-&gt;GetStaticMethodID(startClass, <span class="string">"main"</span>,<span class="string">"([Ljava/lang/String;)V"</span>);</span><br><span class="line">    env-&gt;CallStaticVoidMethod(startClass, startMeth, strArray);</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">free</span>(slashClassName);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//关掉VM</span></span><br><span class="line">    <span class="keyword">if</span> (mJavaVM-&gt;DetachCurrentThread() != JNI_OK)</span><br><span class="line">        ALOGW(<span class="string">"Warning: unable to detach main thread\n"</span>);</span><br><span class="line">    <span class="keyword">if</span> (mJavaVM-&gt;DestroyJavaVM() != <span class="number">0</span>)</span><br><span class="line">        ALOGW(<span class="string">"Warning: VM did not shut down cleanly\n"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注④ 如果熟悉JNI的话可能会遇到过这种经历，想要在native代码中创建子线程然后访问JNIEnv会直接崩溃，但是直接在java创建子线程，然后调用的对应jni接口的话却不会，从android的线程代码实现中我们也可以看到最终调用的同样是pthread相关的接口，为什么出现不一致的行为呢？</p>
+</blockquote>
+<p>其一，崩溃问题原因是jni的限制，不允许在其他线程中直接访问JNIEnv，必须通过JavaVM中的AttachCurrentThread把线程绑定到当前的VM上。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// JNIEnv* is A JNI interface pointer (JNIEnv*) is passed as an argument for each native function</span></span><br><span class="line"><span class="comment">// mapped to a Java method, allowing for interaction with the JNI environment within the native</span></span><br><span class="line"><span class="comment">// method. This JNI interface pointer can be stored, but remains valid only in the current thread.</span></span><br><span class="line"><span class="comment">// Other threads must first call AttachCurrentThread() to attach themselves to the VM and obtain a</span></span><br><span class="line"><span class="comment">// JNI interface pointer. Once attached, a native thread works like a regular Java thread running</span></span><br><span class="line"><span class="comment">// within a native method. The native thread remains attached to the VM until it calls</span></span><br><span class="line"><span class="comment">// DetachCurrentThread() to detach itself. </span></span><br><span class="line"><span class="comment">// To attach to the current thread and get a JNI interface pointer: </span></span><br><span class="line"></span><br><span class="line"> JNIEnv *env; </span><br><span class="line"> (*g_vm)-&gt;AttachCurrentThread (g_vm, (<span class="keyword">void</span> **) &amp;env, <span class="literal">NULL</span>); </span><br><span class="line"> <span class="comment">//To detach from the current thread: </span></span><br><span class="line"> (*g_vm)-&gt;DetachCurrentThread (g_vm);</span><br></pre></td></tr></table></figure>
+<p>其二，为什么java创建的线程可以直接访问？</p>
+<p>如上代码中的 <code>startReg</code> 接口具体实现如下, 关键之处在于设置创建线程的回调这一调用，我们看最终调用的 <code>javaCreateThreadEtc</code> 接口，这个是从 <code>java</code> 层创建线程默认都会调用到的一处回调。抛开具体的参数不谈，我们可以看到继续调用了 <code>androidCreateRawThreadEtc</code> 方法，这个方法 <code>Thread.cpp</code> 中的接口，创建线程时使用，注意它的第一个参数，是一个函数指针 <code>AndroidRuntime::javaThreadShell</code>，这个就是我们关注的重点，正真起作用的地方,  可以看到，其实最终也是把创建的线程绑定到当前的 <code>VM</code> 中，这就是为什么在 <code>java</code> 线程中可以直接通过调用 <code>jni</code> 方法访问 <code>JNIEnv</code>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> AndroidRuntime::startReg(JNIEnv* env)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//这里会设置一个创建线程的回调给Thread.cpp, 以后创建线程都会掉到此处设置的回调</span></span><br><span class="line">    androidSetCreateThreadFunc((android_create_thread_fn) javaCreateThreadEtc);</span><br><span class="line">    </span><br><span class="line">    env-&gt;PushLocalFrame(<span class="number">200</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//注册android相关接口,</span></span><br><span class="line">    <span class="keyword">if</span> (register_jni_procs(gRegJNI, NELEM(gRegJNI), env) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        env-&gt;PopLocalFrame(NULL);</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    env-&gt;PopLocalFrame(NULL);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> AndroidRuntime::javaCreateThreadEtc(</span><br><span class="line">                                android_thread_func_t entryFunction,</span><br><span class="line">                                <span class="keyword">void</span>* userData,</span><br><span class="line">                                <span class="keyword">const</span> <span class="keyword">char</span>* threadName,</span><br><span class="line">                                int32_t threadPriority,</span><br><span class="line">                                size_t threadStackSize,</span><br><span class="line">                                android_thread_id_t* threadId)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">void</span>** args = (<span class="keyword">void</span>**) malloc(<span class="number">3</span> * sizeof(<span class="keyword">void</span>*)); </span><br><span class="line">    <span class="keyword">int</span> result;</span><br><span class="line">    args[<span class="number">0</span>] = (<span class="keyword">void</span>*) entryFunction;</span><br><span class="line">    args[<span class="number">1</span>] = userData;</span><br><span class="line">    args[<span class="number">2</span>] = (<span class="keyword">void</span>*) strdup(threadName);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//重点关注对象 javaThreadShell</span></span><br><span class="line">    result = androidCreateRawThreadEtc(AndroidRuntime::javaThreadShell, args,</span><br><span class="line">        threadName, threadPriority, threadStackSize, threadId);</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">int</span> AndroidRuntime::javaThreadShell(<span class="keyword">void</span>* args) &#123;</span><br><span class="line">    <span class="keyword">void</span>* start = ((<span class="keyword">void</span>**)args)[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">void</span>* userData = ((<span class="keyword">void</span> **)args)[<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">char</span>* name = (<span class="keyword">char</span>*) ((<span class="keyword">void</span> **)args)[<span class="number">2</span>];        <span class="comment">// we own this storage</span></span><br><span class="line">    free(args);</span><br><span class="line">    JNIEnv* env;</span><br><span class="line">    <span class="keyword">int</span> result;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// vm =&gt; javaAttachThread</span></span><br><span class="line">    <span class="keyword">if</span> (javaAttachThread(name, &amp;env) != JNI_OK)</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//线程android_thread_func_t方法</span></span><br><span class="line">    result = (*(android_thread_func_t)start)(userData);</span><br><span class="line"></span><br><span class="line">    javaDetachThread();</span><br><span class="line">    free(name);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>经过上述分析，我们知道，最终 <code>app_process</code> 会调用的最终的传入的 <code>java</code> 类的 <code>main</code> 函数，此处分为 <code>zygote</code> 和普通我们执行的 <code>jar</code> 包等。我们首先分析一下 <code>zygote</code> 传入的 <code>main</code> 函数所在类<code>com.android.internal.os.ZygoteInit</code></p>
+<h2 id="Zygote进程创建"><a href="#Zygote进程创建" class="headerlink" title="Zygote进程创建"></a>Zygote进程创建</h2><p>ZygoteInit是一个普通的java类。我们从main函数开始</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// frameworks\base\core\java\com\android\internal\os\ZygoteInit.java</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String argv[])</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 创建ZygoteServer，具体详解见 注⑤</span></span><br><span class="line">    ZygoteServer zygoteServer = <span class="keyword">new</span> ZygoteServer();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 标记zygote启动，最终调用到libcore中的实现</span></span><br><span class="line">    ZygoteHooks.startZygoteNoThreadCreation();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Zygote goes into its own process group.</span></span><br><span class="line">    Os.setpgid(<span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">final</span> Runnable caller;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">boolean</span> startSystemServer = <span class="keyword">false</span>;</span><br><span class="line">        String socketName = <span class="string">"zygote"</span>;</span><br><span class="line">        String abiList = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">boolean</span> enableLazyPreload = <span class="keyword">false</span>;</span><br><span class="line">        <span class="comment">//解析之前传入的参数</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; argv.length; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="string">"start-system-server"</span>.equals(argv[i])) &#123;</span><br><span class="line">                startSystemServer = <span class="keyword">true</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="string">"--enable-lazy-preload"</span>.equals(argv[i])) &#123;</span><br><span class="line">                enableLazyPreload = <span class="keyword">true</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (argv[i].startsWith(ABI_LIST_ARG)) &#123;</span><br><span class="line">                abiList = argv[i].substring(ABI_LIST_ARG.length());</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (argv[i].startsWith(SOCKET_NAME_ARG)) &#123;</span><br><span class="line">                socketName = argv[i].substring(SOCKET_NAME_ARG.length());</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Unknown command line argument: "</span> + argv[i]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//注册ZygoteServer，注⑤</span></span><br><span class="line">        zygoteServer.registerServerSocketFromEnv(socketName);</span><br><span class="line">        <span class="comment">// In some configurations, we avoid preloading resources and classes eagerly.</span></span><br><span class="line">        <span class="comment">// In such cases, we will preload things prior to our first fork.</span></span><br><span class="line">        <span class="keyword">if</span> (!enableLazyPreload) &#123;</span><br><span class="line">            preload();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">//设置当前线程优先级</span></span><br><span class="line">            Zygote.resetNicePriority();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Do an initial gc to clean up after startup</span></span><br><span class="line">        gcAndFinalize();</span><br><span class="line"></span><br><span class="line">        Zygote.nativeSecurityInit();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Zygote process unmounts root storage spaces.</span></span><br><span class="line">        Zygote.nativeUnmountStorageOnInit();</span><br><span class="line"></span><br><span class="line">        ZygoteHooks.stopZygoteNoThreadCreation();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//fork创建system_server 注⑥</span></span><br><span class="line">        <span class="keyword">if</span> (startSystemServer) &#123;</span><br><span class="line">            Runnable r = forkSystemServer(abiList, socketName, zygoteServer);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// &#123;@code r == null&#125; in the parent (zygote) process, and &#123;@code r != null&#125; in the</span></span><br><span class="line">            <span class="comment">// child (system_server) process.</span></span><br><span class="line">            <span class="keyword">if</span> (r != <span class="keyword">null</span>) &#123;</span><br><span class="line">                r.run();</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Log.i(TAG, <span class="string">"Accepting command socket connections"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// The select loop returns early in the child process after a fork and</span></span><br><span class="line">        <span class="comment">// loops forever in the zygote.</span></span><br><span class="line">        <span class="comment">//注⑤</span></span><br><span class="line">        caller = zygoteServer.runSelectLoop(abiList);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">        Log.e(TAG, <span class="string">"System zygote died with exception"</span>, ex);</span><br><span class="line">        <span class="keyword">throw</span> ex;</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        zygoteServer.closeServerSocket();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// We're in the child process and have exited the select loop. Proceed to execute the</span></span><br><span class="line">    <span class="comment">// command.</span></span><br><span class="line">    <span class="keyword">if</span> (caller != <span class="keyword">null</span>) &#123;</span><br><span class="line">        caller.run();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">preload</span><span class="params">()</span> </span>&#123;</span><br><span class="line">     beginIcuCachePinning();</span><br><span class="line">     <span class="comment">//通过读/system/etc/preloaded-classes，一个个加载对应的class</span></span><br><span class="line">     preloadClasses();</span><br><span class="line">     <span class="comment">//预加载一些Resource，例如分辨率，locale等</span></span><br><span class="line">     preloadResources();</span><br><span class="line">     <span class="comment">//HAL</span></span><br><span class="line">     nativePreloadAppProcessHALs();</span><br><span class="line">     <span class="comment">//EGL14.eglGetDisplay(EGL14.EGL_DEFAULT_DISPLAY);</span></span><br><span class="line">     preloadOpenGL();</span><br><span class="line">     <span class="comment">//System.loadLibrary("android");</span></span><br><span class="line">     <span class="comment">//System.loadLibrary("compiler_rt");</span></span><br><span class="line">     <span class="comment">//System.loadLibrary("jnigraphics");</span></span><br><span class="line">     preloadSharedLibraries();</span><br><span class="line">     <span class="comment">//字体</span></span><br><span class="line">     preloadTextResources();</span><br><span class="line">     <span class="comment">//webview</span></span><br><span class="line">     WebViewFactory.prepareWebViewInZygote();</span><br><span class="line">     endIcuCachePinning();</span><br><span class="line">     <span class="comment">//KeyStore,加密解密相关</span></span><br><span class="line">     warmUpJcaProviders();</span><br><span class="line">     sPreloadComplete = <span class="keyword">true</span>;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p> 注⑤  ZygoteServer的作用，创建一个socket server，等待客户端发送对应的请求，zygote的客户端对应的是ActivityManageService</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Registers a server socket for zygote command connections</span></span><br><span class="line"><span class="comment"> * 从之前的init.rc中可以看到，zygote传入的socketName即默认的socketName: -socket-name=zygote</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">registerServerSocket</span><span class="params">(String socketName)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (mServerSocket == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">int</span> fileDesc;</span><br><span class="line">        <span class="keyword">final</span> String fullSocketName = ANDROID_SOCKET_PREFIX + socketName; <span class="comment">//"ANDROID_SOCKET_"</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            String env = System.getenv(fullSocketName);</span><br><span class="line">            fileDesc = Integer.parseInt(env);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (RuntimeException ex) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(fullSocketName + <span class="string">" unset or invalid"</span>, ex);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//创建LocalServerSocket监听</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            FileDescriptor fd = <span class="keyword">new</span> FileDescriptor();</span><br><span class="line">            fd.setInt$(fileDesc);</span><br><span class="line">            mServerSocket = <span class="keyword">new</span> LocalServerSocket(fd);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException ex) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(</span><br><span class="line">                    <span class="string">"Error binding to local socket '"</span> + fileDesc + <span class="string">"'"</span>, ex);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">Runnable <span class="title">runSelectLoop</span><span class="params">(String abiList)</span> </span>&#123;</span><br><span class="line">    ArrayList&lt;FileDescriptor&gt; fds = <span class="keyword">new</span> ArrayList&lt;FileDescriptor&gt;();</span><br><span class="line">    ArrayList&lt;ZygoteConnection&gt; peers = <span class="keyword">new</span> ArrayList&lt;ZygoteConnection&gt;();</span><br><span class="line">    </span><br><span class="line">    fds.add(mServerSocket.getFileDescriptor());</span><br><span class="line">    peers.add(<span class="keyword">null</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">        StructPollfd[] pollFds = <span class="keyword">new</span> StructPollfd[fds.size()];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; pollFds.length; ++i) &#123;</span><br><span class="line">            pollFds[i] = <span class="keyword">new</span> StructPollfd();</span><br><span class="line">            pollFds[i].fd = fds.get(i);</span><br><span class="line">            pollFds[i].events = (<span class="keyword">short</span>) POLLIN;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//等待pollFds对应的fd发生改变，意味着有命令来到需要处理</span></span><br><span class="line">            Os.poll(pollFds, -<span class="number">1</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (ErrnoException ex) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"poll failed"</span>, ex);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = pollFds.length - <span class="number">1</span>; i &gt;= <span class="number">0</span>; --i) &#123;</span><br><span class="line">            <span class="comment">//未发生改变，不做操作</span></span><br><span class="line">            <span class="keyword">if</span> ((pollFds[i].revents &amp; POLLIN) == <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (i == <span class="number">0</span>) &#123;</span><br><span class="line">                ZygoteConnection newPeer = acceptCommandPeer(abiList);</span><br><span class="line">                peers.add(newPeer);</span><br><span class="line">                fds.add(newPeer.getFileDesciptor());</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    ZygoteConnection connection = peers.get(i);</span><br><span class="line">                    <span class="keyword">final</span> Runnable command = connection.processOneCommand(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">if</span> (mIsForkChild) &#123;</span><br><span class="line">                        <span class="comment">// We're in the child. We should always have a command to run at this</span></span><br><span class="line">                        <span class="comment">// stage if processOneCommand hasn't called "exec".</span></span><br><span class="line">                        <span class="keyword">if</span> (command == <span class="keyword">null</span>) &#123;</span><br><span class="line">                            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"command == null"</span>);</span><br><span class="line">                        &#125;</span><br><span class="line"></span><br><span class="line">                        <span class="keyword">return</span> command;</span><br><span class="line">                    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                        <span class="comment">// We're in the server - we should never have any commands to run.</span></span><br><span class="line">                        <span class="keyword">if</span> (command != <span class="keyword">null</span>) &#123;</span><br><span class="line">                            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"command != null"</span>);</span><br><span class="line">                        &#125;</span><br><span class="line"></span><br><span class="line">                        <span class="comment">// We don't know whether the remote side of the socket was closed or</span></span><br><span class="line">                        <span class="comment">// not until we attempt to read from it from processOneCommand. This shows up as</span></span><br><span class="line">                        <span class="comment">// a regular POLLIN event in our regular processing loop.</span></span><br><span class="line">                        <span class="keyword">if</span> (connection.isClosedByPeer()) &#123;</span><br><span class="line">                            connection.closeSocket();</span><br><span class="line">                            peers.remove(i);</span><br><span class="line">                            fds.remove(i);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (!mIsForkChild) &#123;</span><br><span class="line">                        <span class="comment">// We're in the server so any exception here is one that has taken place</span></span><br><span class="line">                        <span class="comment">// pre-fork while processing commands or reading / writing from the</span></span><br><span class="line">                        <span class="comment">// control socket. Make a loud noise about any such exceptions so that</span></span><br><span class="line">                        <span class="comment">// we know exactly what failed and why.</span></span><br><span class="line"></span><br><span class="line">                        Slog.e(TAG, <span class="string">"Exception executing zygote command: "</span>, e);</span><br><span class="line"></span><br><span class="line">                        <span class="comment">// Make sure the socket is closed so that the other end knows immediately</span></span><br><span class="line">                        <span class="comment">// that something has gone wrong and doesn't time out waiting for a</span></span><br><span class="line">                        <span class="comment">// response.</span></span><br><span class="line">                        ZygoteConnection conn = peers.remove(i);</span><br><span class="line">                        conn.closeSocket();</span><br><span class="line"></span><br><span class="line">                        fds.remove(i);</span><br><span class="line">                    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                        <span class="comment">// We're in the child so any exception caught here has happened post</span></span><br><span class="line">                        <span class="comment">// fork and before we execute ActivityThread.main (or any other main()</span></span><br><span class="line">                        <span class="comment">// method). Log the details of the exception and bring down the process.</span></span><br><span class="line">                        Log.e(TAG, <span class="string">"Caught post-fork exception in child process."</span>, e);</span><br><span class="line">                        <span class="keyword">throw</span> e;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+  	
+					
+	  </div>     
+	  
+
+	<div class="bottom">
+  <div class="other">
+    <div class="meta">
+      
+      <i class="iconfont icon-category"></i>
+      <a class="category-link" href="/categories/Android%E5%AD%A6%E4%B9%A0/">Android学习</a>
+
+      
+
+      
+      <i class="iconfont icon-tag"></i>
+      <a class="tag-link" href="/tags/Zygote%E8%BF%9B%E7%A8%8B/" rel="tag">Zygote进程</a> <a class="tag-link" href="/tags/app-process/" rel="tag">app_process</a>
+      
+    </div>
+
+    <div class="operate">
+      
+      <span class="text">Share</span>
+      <ul class="share">
+	   			             
+        <li class="iconfont 
+		icon-share-qq 
+		-mob-share-qq 
+		item"></li>		
+   	   			             
+        <li class="iconfont 
+		icon-share-weixin 
+		-mob-share-weixin 
+		item"></li>		
+   	   			             
+        <li class="iconfont 
+		icon-share-weibo 
+		-mob-share-weibo 
+		item"></li>		
+   	   
+</ul>	
+
+<script id="-mob-share" src="https://f1.webshare.mob.com/code/mob-share.js?appkey=21d601593a1de"></script>
+      
+    </div>
+  </div>
+
+
+  
+  <nav class="nav">
+    <div class="link">
+      
+      <a href="/2018/06/15/Rxjava2%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/" class="link-wrap">
+        <strong class="caption">older</strong>
+        
+        <span class="title">
+          Rxjava2 使用以及源码阅读
+        </span>
+      </a>
+      
+    </div>
+    <div class="link">
+      
+      <a href="/2018/10/01/Android%E6%B8%B2%E6%9F%93%E6%9C%BA%E5%88%B6/" class="link-wrap">
+        <strong class="caption">newer</strong>
+        
+        <span class="title">
+          Android渲染机制
+        </span>
+      </a>
+      
+    </div>
+  </nav>
+  
+</div> 
+	
+<div class="comment">
+
+    
+
+    <div id="comment">
+    </div>
+
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+
+    <script src="//unpkg.com/valine@v1.1.8-beta/dist/Valine.min.js"></script>
+
+    <script>
+        new Valine({
+            el: '#comment',
+            notify: false,
+            verify: false,
+            app_id: 'cFM0eCo0CQ9xmBXmHi1eltol-gzGzoHsz',
+            app_key: 'oh9tizsnvV2vNvWgqEvoNtQO',
+            path: window.location.pathname,
+            avatar: 'mm',
+            guest_info: ['nick', 'mail']
+        });
+    </script>
+    
+</div>	
+</article>
+
+          </div> 
+      </div>            
+    
+        <i id="toTop" class="iconfont icon-backtotop"></i>
+
+  
+    <div class="none" id="search">
+    <div class="header">
+        <input type="text" placeholder="Typing Something here." id="search-input" class="input">
+        
+        <i id="search-cancel" class="iconfont icon-cancel"></i>
+    </div>
+
+    <div id="search-result" class="result"></div>
+</div>
+     <div class="mobile-menu">      
+
+      
+      <img class="mobile-menu-icon" src="/images/favicon.png">  
+      
+
+         
+            
+
+            <a class="mobile-menu-link" href="/">Home
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/archives">Archives
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/tags">Tags
+            </a>
+            
+         
+            
+
+            <a class="mobile-menu-link" href="/about">About
+            </a>
+            
+         
+                          
+
+            <a class="mobile-menu-link mobile-menu-search" href="#">Search </a>                 
+            
+         
+      
+</div>
+        
+    
+
+
+
+     
+    
+
+
+<footer class="footer">
+	<div class="inner">
+		<div class="copyright">
+			&copy;
+			
+			2019
+			Lemon
+
+			<br>
+			By <a href="https://hexo.io" target="_blank">Hexo</a> Theme <a href="https://github.com/Lemonreds/hexo-theme-Nayo" target="_blank">Nayo</a>
+		</div>
+	</div>
+</footer>   
+
+    <script src="/nayo.bundle.js"></script>           
+  </body>        
+</html>
