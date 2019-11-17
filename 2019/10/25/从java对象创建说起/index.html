@@ -95,7 +95,7 @@
 			
 			
 				<i class="iconfont icon-words"></i>
-				<span class="words">15909
+				<span class="words">15908
 				</span>
 			
 		</div>
@@ -132,18 +132,17 @@
  <a id="more"></a>
 
 
-
 <h2 id="Java运行时内存区域划分"><a href="#Java运行时内存区域划分" class="headerlink" title="Java运行时内存区域划分"></a>Java运行时内存区域划分</h2><p>如果经常看一些博客或者有过一些面试的经验，可能经常会看到或者听到这样的结论：”Java中通过new关键字创建对象后，对象是放在内存的堆区，对象的引用是放到栈区“。 那么什么是堆？什么是栈呢？</p>
 <p>按照字面意思上来说，栈是常见的数据结构，遵循先进后出的规则，堆则相反。但是java中是怎么堆与栈区的到底分别是指哪一块区域，到底存放的是什么呢？通过阅读《深入理解Java虚拟机》与《Java虚拟机规范(Java SE 8版)》相关书籍，可以得到如下java运行时内存区域分配图</p>
 <div align="center">
-  <img src="/2019/10/25/%E4%BB%8Ejava%E5%AF%B9%E8%B1%A1%E5%88%9B%E5%BB%BA%E8%AF%B4%E8%B5%B7/memory.png" alt="memory" style="zoom:50%;align:right"></div>
+  <img src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/memory.png" alt="memory" style="zoom:50%;align:right"></div>
 
 <p>最明显的内存分为线程共享与线程私有区域，所谓线程共享，是指所有线程都能访问到对应内存区域内容，线程私有则相反，内存只能被当前线程拥有者使用。我们一个个来详细说说这些区域。</p>
 <h4 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h4><p>程序计数器，用来指示当前线程运所执行的字节码指令的地址，不难猜到，此块区域并不需要特别大就已经能够满足需求。由于多线程的<strong>隔离</strong>，必须为每一条线程设置一块程序计数器标示线程运行的位置，等待CPU线程切换继续执行。</p>
 <p>此处可能我们就会想到一个问题，如果当前线程执行的java方法，它应该存放下一次要执行字节码指令的地址，如果当前线程正在通过Jni执行native方法，那么，程序计数器存放的内容是什么呢？Java虚拟机规范规定，此时此内存的内容是undefined。正是因为这些特殊的性质，<strong>此区域JVM没有规定会出现任何形式的OOM</strong></p>
 <h4 id="虚拟机栈"><a href="#虚拟机栈" class="headerlink" title="虚拟机栈"></a>虚拟机栈</h4><p>在线程创建的时候，Java虚拟机会为其创建一个单独的栈空间，规范中规定此区域不需要是连续的，栈常用的两个操作，压栈与弹栈，当线程执行到某个方法调用的时候，会把此方法相关内容，或者叫栈条目，如参数，局部变量，以及异常等入栈，栈条目通过被称为<strong>栈帧</strong>，方法执行结束，把对应栈条目弹出栈。在一个线程中的所有方法调用结束的时候，JVM会清空相应的栈内存，并在终止线程之前回收栈空间。</p>
 <div align="center">
-<img src="/2019/10/25/%E4%BB%8Ejava%E5%AF%B9%E8%B1%A1%E5%88%9B%E5%BB%BA%E8%AF%B4%E8%B5%B7/JVM.jpg" alt="JVM" style="zoom: 67%;">
+<img src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/JVM.jpg" alt="JVM" style="zoom: 67%;">
 </div>
 
 <p>栈帧结构</p>
@@ -156,7 +155,7 @@
 <p>这个虚拟机栈是指上文存放对象引用的栈区么？从上面分析可知，粗略上来说，是的，因为栈帧中LVA存放的就是reference等数据。</p>
 <h4 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h4><p>如虚拟机栈相同，虚拟机栈记录的是java的栈帧，本地方法则是对应的native方法的调用，当然JVM对此实现比较自由，不同的虚拟机实现具体不太一致，甚至有的虚拟机是把本地方法与虚拟机栈合并处理的，与虚拟机栈一样，同样存在OOM与StackOverflow异常</p>
 <div align="center">
-  <img src="/2019/10/25/%E4%BB%8Ejava%E5%AF%B9%E8%B1%A1%E5%88%9B%E5%BB%BA%E8%AF%B4%E8%B5%B7/natives.png" alt="native" style="zoom: 67%;">
+  <img src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/natives.png" alt="native" style="zoom: 67%;">
 </div>
 
 
@@ -186,7 +185,7 @@
 
 <p>编译完成后，我们得到一个class文件，我们通过hex friend工具分析class文件的基本组成部分。我们先分析前120个字节的内容，hex结果如下</p>
 <div align="center">
-  <img src="/2019/10/25/%E4%BB%8Ejava%E5%AF%B9%E8%B1%A1%E5%88%9B%E5%BB%BA%E8%AF%B4%E8%B5%B7/hex.png" alt="hex120" style="zoom: 67%;">
+  <img src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/hex.png" alt="hex120" style="zoom: 67%;">
 </div>
 
 <ul>
@@ -195,31 +194,31 @@
 <li>紧接着的是常量池的相关内容，常量池个数+常量表，常量池的内容通常是实际上常量表个数+1，其中多出来的一个是指不指向常量池的项目·，0x0034翻译成十进制即52，即后面共有51个常量。每一项都拥有一个常量类型标志tag，长度为1个字节，比如说第一个常量类型是 0x0A，0x0A表示什么类型呢？</li>
 </ul>
 <div align="center">
-  <img src="/2019/10/25/%E4%BB%8Ejava%E5%AF%B9%E8%B1%A1%E5%88%9B%E5%BB%BA%E8%AF%B4%E8%B5%B7/constant.png" alt="constant" style="zoom: 67%;">
+  <img src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/constant.png" alt="constant" style="zoom: 67%;">
 </div>
 
 <p>表中u1表示一个字节，u2两个字节。查表可知，0x0A（10进制的10）表示<strong>Constant_methodref_info</strong>，此类型的格式是tag+index(方法的类描述符)+index(方法名称与类型描述符)，我们可以得到<strong>Constant_methodref_info</strong>的对应的类描述符是0x000C，即索引是第12个项目，方法名称和类型指向0x0021，换成10进制33，即对应索引为33的<strong>Constan_NameAndType</strong>，按照此中方式我们不难整理出来，所有的常量的内容。但是一个个人工对太复杂了，java给我们提供了现有的工具<strong>javap</strong>，可以用来解析</p>
 <div align="center">
-  <img src="/images/placeholder.png" alt="javap" style="zoom: 67%;" data-src="./从java对象创建说起/javap.png" class="lazyload">
+  <img src="/images/placeholder.png" alt="javap" style="zoom: 67%;" data-src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/javap.png" class="lazyload">
 </div>
 
 <p>如何便可以知道，0x0A方法是Object的构造函数。当然还有我们定义的一些常量字符串，不难看出，常量池存放的内容是 字面量与符号引用，字面量可以理解为我们java语言中经常接触到的常量，比如说文本字符串，final常量等。符号引用则是编译相关的内容。符号引用包括以下方面的内容 1. 类和接口的全限定名，全限定名是什么意思呢？大概可以理解成我可以通过此限定找到对应满足要求的接口或者类，比如说上图中的#12，我可以通过限定名<strong>java/lang/Object</strong>找到对应的Object类 2. 方法的名称与描述符，举例说明即图中 #11 中关于main方法的描述符<strong>com/jvm/test/Main.main:()V</strong>表示方法为com.jvm.test.Main类中存在一个名为main的方法，参数为空，返回值为V即void，关于描述符的定义，后面会有详细的说明 3. 字段的名称与描述符，后面会有详细说明，如图是hex中常量池的所有内容</p>
 <div align="center">
-  <img src="/images/placeholder.png" alt="constants" style="zoom: 67%;" data-src="./从java对象创建说起/constants.png" class="lazyload">
+  <img src="/images/placeholder.png" alt="constants" style="zoom: 67%;" data-src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/constants.png" class="lazyload">
 </div>
 
 <ul>
 <li>继续，常量池后面的是访问标志，用两个字节表示，访问标志如下, 也是我们常见的能用在定义类，接口，枚举等常见的一些字段。参见下表可知，我们的Main.class是public，对应的标志是ACC_PUBLIC, 因为ACC_SUPER始终为true，所以我们得到的访问标志值是<br>$$<br>0x0020 | 0x0001 = 0x0021<br>$$<br>由常量池中的hex图片可知，访问标志值就是0x0021。</li>
 </ul>
 <div align="center">
-  <img src="/images/placeholder.png" alt="constants" style="zoom: 67%;" data-src="./从java对象创建说起/access_flag.png" class="lazyload">
+  <img src="/images/placeholder.png" alt="constants" style="zoom: 67%;" data-src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/access_flag.png" class="lazyload">
 </div>
 
 <ul>
 <li>访问标志后面接的是 类索引和接口索引，因为接口是可以多实现的，因此这个接口索引是一个数组，通过这些索引，class可以确定其继承关系。如图是Main类的继承关系，0x0007指向常量池中的第7哥索引值，通过上图中javap的输出可知，当前类是<strong>com/jvm/test/Main</strong>, 当前类的父类是 0x000C对应的索引是<strong>java/lang/Object</strong>，0x0000表示当前类有0个接口。</li>
 </ul>
 <div align="center">
-  <img src="/images/placeholder.png" alt="class" style="zoom: 67%;" data-src="./从java对象创建说起/class.png" class="lazyload">
+  <img src="/images/placeholder.png" alt="class" style="zoom: 67%;" data-src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/class.png" class="lazyload">
 </div>
 
 <ul>
@@ -229,11 +228,11 @@
 </blockquote>
 <p>其中，访问标志值通位操作或计算得到而成，具体对应的标志值如图</p>
 <div align="center">
-<img src="/images/placeholder.png" alt="field" style="zoom: 67%;" data-src="./从java对象创建说起/field.png" class="lazyload">
+<img src="/images/placeholder.png" alt="field" style="zoom: 67%;" data-src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/field.png" class="lazyload">
 </div>
 另外，关于描述符此处需要好好说以下，描述符的作用是用来描述字段的类型或者函数的参数列表以及返回值，常见的描述符如下，
 <div align="center">
-<img src="/images/placeholder.png" alt="descriptor" style="zoom: 67%;" data-src="./从java对象创建说起/descriptor.png" class="lazyload">
+<img src="/images/placeholder.png" alt="descriptor" style="zoom: 67%;" data-src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/descriptor.png" class="lazyload">
 </div>
 
 <p>通过此分析，我们可以自己计算这一块的class内容</p>
@@ -246,7 +245,7 @@
 </li>
 <li><p>除了属性我们没有说明外，基本字段已经说完，后面就可以继续说方法表。方法与字段基本一致，也是访问标识 + 名称索引 + 参数索引 + 属性表，不同的是方法的修饰符与变量不同，方法无法使用volatile或者transient修饰，倒是多了native, synchronized, abstract, strictfp等修饰</p>
 <div align="center">
-<img src="/images/placeholder.png" alt="method" style="zoom: 67%;" data-src="./从java对象创建说起/method.png" class="lazyload">
+<img src="/images/placeholder.png" alt="method" style="zoom: 67%;" data-src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/method.png" class="lazyload">
 </div>
 
 
@@ -254,7 +253,7 @@
 </ul>
 <p>比如说Main类中的方法个数为一个构造函数，两个main方法，故共有3个方法</p>
 <div align="center">
-  <img src="/images/placeholder.png" alt="methods" style="zoom: 67%;" data-src="./从java对象创建说起/methods.png" class="lazyload">
+  <img src="/images/placeholder.png" alt="methods" style="zoom: 67%;" data-src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/methods.png" class="lazyload">
 </div>
 目前方法的定义已经说清楚，那么方法内部的实现呢？即code是放在哪里的呢？当然一致都在属性表中，接着我们就来说说这期盼已久的属性表
 
@@ -262,7 +261,7 @@
 <ul>
 <li><p>属性为ConstantValue，字段表中，一般是static定义的常量值，比如说我们Main类中定义了一个叫做<strong>MAIN</strong>的常量，对应的字段表中存在的属性表存放的内容如下图。可以理解成常量MAIN对应的字段是 0x 00 19 00 0D 00 0E 后面的 0x 00 01表示有一个属性表，第一个属性值为 0x 00 0F，查对应常量池可知第一个属性表内容ConstantValue，即常量值，具体的内容放在紧接着的 0x 00 00 00 02字节的数据, 具体内容在常量池中的索引为0x 00 08 即 <strong>Hello world,from constant</strong>。ConstantValue只支持基本的数据类型和字符串并且被final static修饰的常量（不同javac可能实现不完全一致），如果只是被static修饰或者非基本数据类型和常量是放在<clinit>方法中被初始化的。</clinit></p>
 <div align="center">
-  <img src="/images/placeholder.png" alt="field_attr" style="zoom: 67%;" data-src="./从java对象创建说起/field_attr.png" class="lazyload">
+  <img src="/images/placeholder.png" alt="field_attr" style="zoom: 67%;" data-src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/field_attr.png" class="lazyload">
 </div>
 
 <p>另一个变量mAttribute中的属性表是什么内容呢？00 02 00 10 00 11 后面 0x 00 01同样表示一个属性表，0x 00 12在常量池中的索引内容是Signature，对应的长度是0x00 00 00 02字节，内容在常量池的索引是0x 00 13即Ljava/util/List&lt;Ljava/lang/String;&gt;; Signature可用于方法表，类，字段表中。用来记录范型擦除前的类型</p>
@@ -276,16 +275,16 @@
 </li>
 <li><p>Exceptions用于方法表，用于记录方法抛出的异常，不是方法内部的异常，如果我们对Main.java进行改造，在Main方法中抛出异常，得到的class文件中关于Main方法就是这样子的，0x 00 1F在常量池对应的Exceptions（此常量池为修改后便意Main.class重新得到的常量池，非上文），属性长度与0x 00 00 00 06，异常的个数为0x 00 02，对应常量池中的数据 0x 00 20与 0x 00 21即java/lang/ExceptionInInitializerError与java/lang/NumberFormatException</p>
 <div align="center">
-  <img src="/images/placeholder.png" alt="exception" style="zoom: 67%;" data-src="./从java对象创建说起/exception.png" class="lazyload">
+  <img src="/images/placeholder.png" alt="exception" style="zoom: 67%;" data-src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/exception.png" class="lazyload">
 </div>
 </li>
 <li><p>Code属性表，java方法中的代码在编译完成后会放在code属性表中，如下图，atttibute_name_index即当前属性在常量池中的索引，一般固定是Code</p>
 <div align="center">
-  <img src="/images/placeholder.png" alt="code" style="zoom: 67%;" data-src="./从java对象创建说起/code_info.png" class="lazyload">
+  <img src="/images/placeholder.png" alt="code" style="zoom: 67%;" data-src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/code_info.png" class="lazyload">
 </div> 
 
 <div align="center">
-  <img src="/images/placeholder.png" alt="code_attr" style="zoom: 67%;" data-src="./从java对象创建说起/code_attr.png" class="lazyload">
+  <img src="/images/placeholder.png" alt="code_attr" style="zoom: 67%;" data-src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/code_attr.png" class="lazyload">
 </div> 
 
 <p>我们单独拎出来Code的具体内容具体解释，首先是max stack是我们在虚拟机栈中的栈帧的中的OperandStack的最大深度，此处为0x02。本地变量表为0x00，也是栈帧中的变量表大小，以Slot为单位，在栈帧中我们有详细介绍，包括this(非static方法)，参数，局部变量，异常参数(try catch中的参数)等，但是不是所有局部变量的大小的总和，因为一些作用域的问题，此部分可以复用。然后就是code字节码内容</p>
@@ -311,7 +310,7 @@
 <p>通过以上分析我们基本能知道一个class文件的基本结构是怎么样子的，但是人工一个个解析实在太繁琐啦，所以可以直接借助<strong>javap -verbose</strong>查看class相关信息。那么class是怎么被加载进内存的呢？</p>
 <h4 id="Class文件加载"><a href="#Class文件加载" class="headerlink" title="Class文件加载"></a>Class文件加载</h4><p>说道class文件的加载，不得不提经典的三个过程，加载-连接-初始化和双亲委派模型，按照常规来说，加载链接初始化对于同一个class而言应该是串行的，但对于多个class而言则可能不一定，并且不是每一个阶段都是必须的，部分可以通过设置一些运行时参数进行省略。</p>
 <div align="center">
-  <img src="/images/placeholder.png" alt="load" style="zoom: 67%;" data-src="./从java对象创建说起/load.png" class="lazyload">
+  <img src="/images/placeholder.png" alt="load" style="zoom: 67%;" data-src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/load.png" class="lazyload">
 </div> 
 
 
@@ -384,7 +383,7 @@
 </ul>
 <p>这些类加载器模型的基本关系如下，当我们使用自定义的类加载器加载类时，它不会直接去加载，而是请求其父加载器aplication classloader加载，application classloader收到请求后也会直接加载，会交给其父加载器extension classloader，如此直到bootstrap classloder，如果bootstrap classloader无法加载请求的类，则交给子类加载器 extension classloader，如果其无法加载，继续子类加载器，一致如此，直到无法加载就抛出ClassNotFoundException异常</p>
 <div align="center">
-  <img src="/images/placeholder.png" alt="classloader" style="zoom: 67%;" data-src="./从java对象创建说起/classloader.jpeg" class="lazyload">
+  <img src="/images/placeholder.png" alt="classloader" style="zoom: 67%;" data-src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/classloader.jpeg" class="lazyload">
 </div> 
 
 
@@ -404,7 +403,7 @@
 <ul>
 <li><p>运行时数据，包括HashCode，GC分代年龄，锁状态，线程锁等，这部分的数据在32位系统上是32bit，在64位在未开启指针压缩是64bit，这部分数据，官方称之为<strong>MarkWord</strong>， 根据锁状态，具体组成如下，关于锁在说明线程安全的时候会有涉及</p>
 <div align="center">
-  <img src="/images/placeholder.png" alt="markword" style="zoom: 67%;" data-src="./从java对象创建说起/markword.jpeg" class="lazyload">
+  <img src="/images/placeholder.png" alt="markword" style="zoom: 67%;" data-src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/markword.jpeg" class="lazyload">
 </div> 
 </li>
 <li><p>类型指针，虚拟机通过这个指针判断当前对象是哪个类instanceKlass的实现</p>
@@ -415,7 +414,7 @@
 <h6 id="对齐填充"><a href="#对齐填充" class="headerlink" title="对齐填充"></a>对齐填充</h6><p>对齐填充不是必须存在的，也没有特别的含义，它仅仅起着占位符的作用。由于HotSpot VM的自动内存管理系统要求对象起始地址必须是8字节的整数倍，换句话说，就是对象的大小必须是8字节的整数倍。而对象头部分正好是8字节的倍数（1倍或者2倍），因此，当对象实例数据部分没有对齐时，就需要通过对齐填充来补全。</p>
 <p> 下面来分析一下，执行new A()的时候，JVM 做了什么工作。首先，如果这个类没有被加载过，JVM就会进行类的加载，并在JVM内部创建一个instanceKlass对象表示这个类的运行时元数据（相当于Java层的Class对象）。初始化对象的时候（执行invokespecial A），JVM就会创建一个instanceOopDesc对象表示这个对象的实例，然后进行Mark Word的填充，将元数据指针指向Klass对象，并填充实例变量。元数据(instanceKlass) 对象会存在元空间（方法区），而对象实例—— instanceOopDesc 会存在Java堆。Java虚拟机栈中会存有这个对象实例的引用。</p>
 <div align="center">
-  <img src="/images/placeholder.png" alt="object" style="zoom: 67%;" data-src="./从java对象创建说起/object.png" class="lazyload">
+  <img src="/images/placeholder.png" alt="object" style="zoom: 67%;" data-src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/object.png" class="lazyload">
 </div> 
 
 
@@ -425,12 +424,12 @@
 <ul>
 <li><p>句柄访问，使用句柄访问的话，需要在内存中维护一个句柄池，存放具体的对象</p>
 <div align="center">
-  <img src="/images/placeholder.png" alt="handle" style="zoom: 67%;" data-src="./从java对象创建说起/handle.png" class="lazyload">
+  <img src="/images/placeholder.png" alt="handle" style="zoom: 67%;" data-src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/handle.png" class="lazyload">
 </div>  
 </li>
 <li><p>直接指针访问，如果使用直接指针访问，那么Java堆中就必须考虑如何放置访问类型数据的相关信息，reference 中存储的直接就是对象的地址。</p>
 <div align="center">
-  <img src="/images/placeholder.png" alt="pointer" style="zoom: 67%;" data-src="./从java对象创建说起/pointer.png" class="lazyload">
+  <img src="/images/placeholder.png" alt="pointer" style="zoom: 67%;" data-src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/pointer.png" class="lazyload">
 </div>  
 
 </li>
@@ -562,7 +561,7 @@
   
     <div class="none" id="search">
     <div class="header">
-        <input type="text" placeholder="输入你想搜索的" id="search-input" class="input">
+        <input type="text" placeholder="Typing Something here." id="search-input" class="input">
         
         <i id="search-cancel" class="iconfont icon-cancel"></i>
     </div>
@@ -578,31 +577,31 @@
          
             
 
-            <a class="mobile-menu-link" href="/">首頁
+            <a class="mobile-menu-link" href="/">Home
             </a>
             
          
             
 
-            <a class="mobile-menu-link" href="/archives">歸檔
+            <a class="mobile-menu-link" href="/archives">Archives
             </a>
             
          
             
 
-            <a class="mobile-menu-link" href="/tags">標籤
+            <a class="mobile-menu-link" href="/tags">Tags
             </a>
             
          
             
 
-            <a class="mobile-menu-link" href="/about">關於
+            <a class="mobile-menu-link" href="/about">About
             </a>
             
          
                           
 
-            <a class="mobile-menu-link mobile-menu-search" href="#">搜索 </a>                 
+            <a class="mobile-menu-link mobile-menu-search" href="#">Search </a>                 
             
          
       
