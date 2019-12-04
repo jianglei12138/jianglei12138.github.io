@@ -1,134 +1,131 @@
+
 <!DOCTYPE html>
-<html>
-  <head>
-  <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-  
-  
-  <title>  从Java对象创建说起 |   Lemon </title>
+<html lang="" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>从java对象创建说起 - 姜雷12138</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="试想一下，如果我们在代码中直接通过关键字new创建了一个对象，JVM会做那些工作从而保证我们后续的使用不出问题呢？java中内存究竟是怎么分配的呢？为什么java new的对象不需要手动释放？带着这,"> 
+    <meta name="author" content="姜雷12138"> 
+    <link rel="alternative" href="atom.xml" title="姜雷12138" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+    <link rel="stylesheet" href="/css/obsidian.css">
+    <link rel="stylesheet" href="/css/ball-atom.min.css">
+</head>
 
- 
-  
-    <link rel="icon" href="/images/favicon.png">
-  
 
-
-  <link rel="stylesheet" href="/nayo.min.css"> 
-</head>  
-  <body>   
-    
-      <header class="header-wrapper">
-
-  <nav class="inner">
-    <div class="title">
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
     </div>
+    <span id="config-title" style="display:none">姜雷12138</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="https://jianglei12138.github.io">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">从java对象创建说起</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" target="_blank" rel="noopener" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" target="_blank" rel="noopener" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <ul class="menu">
-      
-      
-      <li class="item">
-        <a class="link" id="menu-home" href="/">
-          <i class="iconfont icon-home">
-        </i></a>
-      </li>
-      
-      
-      
-      <li class="item">
-        <a class="link" id="menu-archives" href="/archives">
-          <i class="iconfont icon-archives">
-        </i></a>
-      </li>
-      
-      
-      
-      <li class="item">
-        <a class="link" id="menu-tags" href="/tags">
-          <i class="iconfont icon-tags">
-        </i></a>
-      </li>
-      
-      
-      
-      <li class="item">
-        <a class="link" id="menu-about" href="/about">
-          <i class="iconfont icon-about">
-        </i></a>
-      </li>
-      
-      
-      
-      <li class="item">
-        <a class="link" id="menu-search">
-          <i class="iconfont icon-search">
-        </i></a>
-        
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url(/img/cover.jpg);">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/JVM"><b>「
+                    </b>JVM<b> 」</b></a>
+                
+                October 25, 2019
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2019/10/25/%E4%BB%8Ejava%E5%AF%B9%E8%B1%A1%E5%88%9B%E5%BB%BA%E8%AF%B4%E8%B5%B7/" title="从java对象创建说起" class="">从java对象创建说起</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>Words count</i>
+                    32k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
+                    29 mins.
+                </span>
+                
+                
+                <span id="/2019/10/25/从java对象创建说起/" class="leancloud_visitors" data-flag-title="从java对象创建说起">
+                    <b class="iconfont icon-read"></b> <i>Read count</i>
+                    <i class="leancloud-visitors-count">1000000</i>
+                </span>
+                
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/" rel="tag">内存分配</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E5%AF%B9%E8%B1%A1%E5%88%9B%E5%BB%BA/" rel="tag">对象创建</a></li></ul>
+            
+        </div>
+    </div>
+</div>
 
-        
-      
-    </li></ul>
-  </nav>
-</header>
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
 
-<header class="mobile-header-wrapper">
-  <i id="mobile-toggle" class="iconfont icon-menu mobile-toggle"></i>
-</header>   
-
-      <div class="container">       
-          
-          
-            <div class="container-inner">  
-          
-
-          <article class="post slideDownMin">
-  
-	
-<div class="header">
-		<p class="title">	
-			从java对象创建说起
-		</p>
-		<div class="info">	
-			<time>
-				Oct 25, 2019
-			</time>
-
-			
-			
-				<i class="iconfont icon-words"></i>
-				<span class="words">15908
-				</span>
-			
-		</div>
-</div> 
-	
-
-    <script type="text/x-mathjax-config">
-        var post = document.getElementsByClassName("post")[0];  
-        MathJax.Hub.Config({
-            showProcessingMessages: false,
-            messageStyle: "none",    
-            tex2jax: {
-                inlineMath:  [ ["$", "$"] , ["\\(","\\)"]],
-                displayMath: [ ["$$","$$"] , ["\\[","\\]"]],
-                skipTags: ['script', 'noscript', 'style', 'textarea', 'pre','code','a'],
-            },
-            "HTML-CSS": {            
-                showMathMenu: false
-            }
-        });
-        MathJax.Hub.Queue(["Typeset",MathJax.Hub,post]);
-    </script>
-    <style>.MathJax{outline:0;}</style>
-
-    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.2/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
- 
-
-	  <div class="typo post-content ">
-
-		
-
-			
-					<p>试想一下，如果我们在代码中直接通过关键字new创建了一个对象，JVM会做那些工作从而保证我们后续的使用不出问题呢？java中内存究竟是怎么分配的呢？为什么java new的对象不需要手动释放？带着这些疑问我们一起来研究一下java中对象创建的相关知识。</p>
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <p>试想一下，如果我们在代码中直接通过关键字new创建了一个对象，JVM会做那些工作从而保证我们后续的使用不出问题呢？java中内存究竟是怎么分配的呢？为什么java new的对象不需要手动释放？带着这些疑问我们一起来研究一下java中对象创建的相关知识。</p>
  <a id="more"></a>
 
 
@@ -199,26 +196,26 @@
 
 <p>表中u1表示一个字节，u2两个字节。查表可知，0x0A（10进制的10）表示<strong>Constant_methodref_info</strong>，此类型的格式是tag+index(方法的类描述符)+index(方法名称与类型描述符)，我们可以得到<strong>Constant_methodref_info</strong>的对应的类描述符是0x000C，即索引是第12个项目，方法名称和类型指向0x0021，换成10进制33，即对应索引为33的<strong>Constan_NameAndType</strong>，按照此中方式我们不难整理出来，所有的常量的内容。但是一个个人工对太复杂了，java给我们提供了现有的工具<strong>javap</strong>，可以用来解析</p>
 <div align="center">
-  <img src="/images/placeholder.png" alt="javap" style="zoom: 67%;" data-src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/javap.png" class="lazyload">
+  <img src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/javap.png" alt="javap" style="zoom: 67%;">
 </div>
 
 <p>如何便可以知道，0x0A方法是Object的构造函数。当然还有我们定义的一些常量字符串，不难看出，常量池存放的内容是 字面量与符号引用，字面量可以理解为我们java语言中经常接触到的常量，比如说文本字符串，final常量等。符号引用则是编译相关的内容。符号引用包括以下方面的内容 1. 类和接口的全限定名，全限定名是什么意思呢？大概可以理解成我可以通过此限定找到对应满足要求的接口或者类，比如说上图中的#12，我可以通过限定名<strong>java/lang/Object</strong>找到对应的Object类 2. 方法的名称与描述符，举例说明即图中 #11 中关于main方法的描述符<strong>com/jvm/test/Main.main:()V</strong>表示方法为com.jvm.test.Main类中存在一个名为main的方法，参数为空，返回值为V即void，关于描述符的定义，后面会有详细的说明 3. 字段的名称与描述符，后面会有详细说明，如图是hex中常量池的所有内容</p>
 <div align="center">
-  <img src="/images/placeholder.png" alt="constants" style="zoom: 67%;" data-src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/constants.png" class="lazyload">
+  <img src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/constants.png" alt="constants" style="zoom: 67%;">
 </div>
 
 <ul>
 <li>继续，常量池后面的是访问标志，用两个字节表示，访问标志如下, 也是我们常见的能用在定义类，接口，枚举等常见的一些字段。参见下表可知，我们的Main.class是public，对应的标志是ACC_PUBLIC, 因为ACC_SUPER始终为true，所以我们得到的访问标志值是<br>$$<br>0x0020 | 0x0001 = 0x0021<br>$$<br>由常量池中的hex图片可知，访问标志值就是0x0021。</li>
 </ul>
 <div align="center">
-  <img src="/images/placeholder.png" alt="constants" style="zoom: 67%;" data-src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/access_flag.png" class="lazyload">
+  <img src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/access_flag.png" alt="constants" style="zoom: 67%;">
 </div>
 
 <ul>
 <li>访问标志后面接的是 类索引和接口索引，因为接口是可以多实现的，因此这个接口索引是一个数组，通过这些索引，class可以确定其继承关系。如图是Main类的继承关系，0x0007指向常量池中的第7哥索引值，通过上图中javap的输出可知，当前类是<strong>com/jvm/test/Main</strong>, 当前类的父类是 0x000C对应的索引是<strong>java/lang/Object</strong>，0x0000表示当前类有0个接口。</li>
 </ul>
 <div align="center">
-  <img src="/images/placeholder.png" alt="class" style="zoom: 67%;" data-src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/class.png" class="lazyload">
+  <img src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/class.png" alt="class" style="zoom: 67%;">
 </div>
 
 <ul>
@@ -228,11 +225,11 @@
 </blockquote>
 <p>其中，访问标志值通位操作或计算得到而成，具体对应的标志值如图</p>
 <div align="center">
-<img src="/images/placeholder.png" alt="field" style="zoom: 67%;" data-src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/field.png" class="lazyload">
+<img src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/field.png" alt="field" style="zoom: 67%;">
 </div>
 另外，关于描述符此处需要好好说以下，描述符的作用是用来描述字段的类型或者函数的参数列表以及返回值，常见的描述符如下，
 <div align="center">
-<img src="/images/placeholder.png" alt="descriptor" style="zoom: 67%;" data-src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/descriptor.png" class="lazyload">
+<img src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/descriptor.png" alt="descriptor" style="zoom: 67%;">
 </div>
 
 <p>通过此分析，我们可以自己计算这一块的class内容</p>
@@ -245,7 +242,7 @@
 </li>
 <li><p>除了属性我们没有说明外，基本字段已经说完，后面就可以继续说方法表。方法与字段基本一致，也是访问标识 + 名称索引 + 参数索引 + 属性表，不同的是方法的修饰符与变量不同，方法无法使用volatile或者transient修饰，倒是多了native, synchronized, abstract, strictfp等修饰</p>
 <div align="center">
-<img src="/images/placeholder.png" alt="method" style="zoom: 67%;" data-src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/method.png" class="lazyload">
+<img src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/method.png" alt="method" style="zoom: 67%;">
 </div>
 
 
@@ -253,7 +250,7 @@
 </ul>
 <p>比如说Main类中的方法个数为一个构造函数，两个main方法，故共有3个方法</p>
 <div align="center">
-  <img src="/images/placeholder.png" alt="methods" style="zoom: 67%;" data-src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/methods.png" class="lazyload">
+  <img src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/methods.png" alt="methods" style="zoom: 67%;">
 </div>
 目前方法的定义已经说清楚，那么方法内部的实现呢？即code是放在哪里的呢？当然一致都在属性表中，接着我们就来说说这期盼已久的属性表
 
@@ -261,7 +258,7 @@
 <ul>
 <li><p>属性为ConstantValue，字段表中，一般是static定义的常量值，比如说我们Main类中定义了一个叫做<strong>MAIN</strong>的常量，对应的字段表中存在的属性表存放的内容如下图。可以理解成常量MAIN对应的字段是 0x 00 19 00 0D 00 0E 后面的 0x 00 01表示有一个属性表，第一个属性值为 0x 00 0F，查对应常量池可知第一个属性表内容ConstantValue，即常量值，具体的内容放在紧接着的 0x 00 00 00 02字节的数据, 具体内容在常量池中的索引为0x 00 08 即 <strong>Hello world,from constant</strong>。ConstantValue只支持基本的数据类型和字符串并且被final static修饰的常量（不同javac可能实现不完全一致），如果只是被static修饰或者非基本数据类型和常量是放在<clinit>方法中被初始化的。</clinit></p>
 <div align="center">
-  <img src="/images/placeholder.png" alt="field_attr" style="zoom: 67%;" data-src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/field_attr.png" class="lazyload">
+  <img src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/field_attr.png" alt="field_attr" style="zoom: 67%;">
 </div>
 
 <p>另一个变量mAttribute中的属性表是什么内容呢？00 02 00 10 00 11 后面 0x 00 01同样表示一个属性表，0x 00 12在常量池中的索引内容是Signature，对应的长度是0x00 00 00 02字节，内容在常量池的索引是0x 00 13即Ljava/util/List&lt;Ljava/lang/String;&gt;; Signature可用于方法表，类，字段表中。用来记录范型擦除前的类型</p>
@@ -275,16 +272,16 @@
 </li>
 <li><p>Exceptions用于方法表，用于记录方法抛出的异常，不是方法内部的异常，如果我们对Main.java进行改造，在Main方法中抛出异常，得到的class文件中关于Main方法就是这样子的，0x 00 1F在常量池对应的Exceptions（此常量池为修改后便意Main.class重新得到的常量池，非上文），属性长度与0x 00 00 00 06，异常的个数为0x 00 02，对应常量池中的数据 0x 00 20与 0x 00 21即java/lang/ExceptionInInitializerError与java/lang/NumberFormatException</p>
 <div align="center">
-  <img src="/images/placeholder.png" alt="exception" style="zoom: 67%;" data-src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/exception.png" class="lazyload">
+  <img src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/exception.png" alt="exception" style="zoom: 67%;">
 </div>
 </li>
 <li><p>Code属性表，java方法中的代码在编译完成后会放在code属性表中，如下图，atttibute_name_index即当前属性在常量池中的索引，一般固定是Code</p>
 <div align="center">
-  <img src="/images/placeholder.png" alt="code" style="zoom: 67%;" data-src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/code_info.png" class="lazyload">
+  <img src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/code_info.png" alt="code" style="zoom: 67%;">
 </div> 
 
 <div align="center">
-  <img src="/images/placeholder.png" alt="code_attr" style="zoom: 67%;" data-src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/code_attr.png" class="lazyload">
+  <img src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/code_attr.png" alt="code_attr" style="zoom: 67%;">
 </div> 
 
 <p>我们单独拎出来Code的具体内容具体解释，首先是max stack是我们在虚拟机栈中的栈帧的中的OperandStack的最大深度，此处为0x02。本地变量表为0x00，也是栈帧中的变量表大小，以Slot为单位，在栈帧中我们有详细介绍，包括this(非static方法)，参数，局部变量，异常参数(try catch中的参数)等，但是不是所有局部变量的大小的总和，因为一些作用域的问题，此部分可以复用。然后就是code字节码内容</p>
@@ -310,7 +307,7 @@
 <p>通过以上分析我们基本能知道一个class文件的基本结构是怎么样子的，但是人工一个个解析实在太繁琐啦，所以可以直接借助<strong>javap -verbose</strong>查看class相关信息。那么class是怎么被加载进内存的呢？</p>
 <h4 id="Class文件加载"><a href="#Class文件加载" class="headerlink" title="Class文件加载"></a>Class文件加载</h4><p>说道class文件的加载，不得不提经典的三个过程，加载-连接-初始化和双亲委派模型，按照常规来说，加载链接初始化对于同一个class而言应该是串行的，但对于多个class而言则可能不一定，并且不是每一个阶段都是必须的，部分可以通过设置一些运行时参数进行省略。</p>
 <div align="center">
-  <img src="/images/placeholder.png" alt="load" style="zoom: 67%;" data-src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/load.png" class="lazyload">
+  <img src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/load.png" alt="load" style="zoom: 67%;">
 </div> 
 
 
@@ -383,7 +380,7 @@
 </ul>
 <p>这些类加载器模型的基本关系如下，当我们使用自定义的类加载器加载类时，它不会直接去加载，而是请求其父加载器aplication classloader加载，application classloader收到请求后也会直接加载，会交给其父加载器extension classloader，如此直到bootstrap classloder，如果bootstrap classloader无法加载请求的类，则交给子类加载器 extension classloader，如果其无法加载，继续子类加载器，一致如此，直到无法加载就抛出ClassNotFoundException异常</p>
 <div align="center">
-  <img src="/images/placeholder.png" alt="classloader" style="zoom: 67%;" data-src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/classloader.jpeg" class="lazyload">
+  <img src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/classloader.jpeg" alt="classloader" style="zoom: 67%;">
 </div> 
 
 
@@ -403,7 +400,7 @@
 <ul>
 <li><p>运行时数据，包括HashCode，GC分代年龄，锁状态，线程锁等，这部分的数据在32位系统上是32bit，在64位在未开启指针压缩是64bit，这部分数据，官方称之为<strong>MarkWord</strong>， 根据锁状态，具体组成如下，关于锁在说明线程安全的时候会有涉及</p>
 <div align="center">
-  <img src="/images/placeholder.png" alt="markword" style="zoom: 67%;" data-src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/markword.jpeg" class="lazyload">
+  <img src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/markword.jpeg" alt="markword" style="zoom: 67%;">
 </div> 
 </li>
 <li><p>类型指针，虚拟机通过这个指针判断当前对象是哪个类instanceKlass的实现</p>
@@ -414,7 +411,7 @@
 <h6 id="对齐填充"><a href="#对齐填充" class="headerlink" title="对齐填充"></a>对齐填充</h6><p>对齐填充不是必须存在的，也没有特别的含义，它仅仅起着占位符的作用。由于HotSpot VM的自动内存管理系统要求对象起始地址必须是8字节的整数倍，换句话说，就是对象的大小必须是8字节的整数倍。而对象头部分正好是8字节的倍数（1倍或者2倍），因此，当对象实例数据部分没有对齐时，就需要通过对齐填充来补全。</p>
 <p> 下面来分析一下，执行new A()的时候，JVM 做了什么工作。首先，如果这个类没有被加载过，JVM就会进行类的加载，并在JVM内部创建一个instanceKlass对象表示这个类的运行时元数据（相当于Java层的Class对象）。初始化对象的时候（执行invokespecial A），JVM就会创建一个instanceOopDesc对象表示这个对象的实例，然后进行Mark Word的填充，将元数据指针指向Klass对象，并填充实例变量。元数据(instanceKlass) 对象会存在元空间（方法区），而对象实例—— instanceOopDesc 会存在Java堆。Java虚拟机栈中会存有这个对象实例的引用。</p>
 <div align="center">
-  <img src="/images/placeholder.png" alt="object" style="zoom: 67%;" data-src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/object.png" class="lazyload">
+  <img src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/object.png" alt="object" style="zoom: 67%;">
 </div> 
 
 
@@ -424,12 +421,12 @@
 <ul>
 <li><p>句柄访问，使用句柄访问的话，需要在内存中维护一个句柄池，存放具体的对象</p>
 <div align="center">
-  <img src="/images/placeholder.png" alt="handle" style="zoom: 67%;" data-src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/handle.png" class="lazyload">
+  <img src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/handle.png" alt="handle" style="zoom: 67%;">
 </div>  
 </li>
 <li><p>直接指针访问，如果使用直接指针访问，那么Java堆中就必须考虑如何放置访问类型数据的相关信息，reference 中存储的直接就是对象的地址。</p>
 <div align="center">
-  <img src="/images/placeholder.png" alt="pointer" style="zoom: 67%;" data-src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/pointer.png" class="lazyload">
+  <img src="https://jianglei12138.github.io/2019/10/25/从java对象创建说起/pointer.png" alt="pointer" style="zoom: 67%;">
 </div>  
 
 </li>
@@ -458,185 +455,305 @@
 <li>Java 基本类型的包装类的大部分都实现了常量池技术，即Byte, Short, Integer, Long, Character, Boolean这5种包装类默认创建了数值[-128，127]的相应类型的缓存数据，但是超出此范围仍然会去创建新的对象，对应包装类的valueOf方法在[-128，127]间同样是从常量池中取得。</li>
 <li>两种浮点数类型的包装类 Float,Double 并没有实现常量池技术。</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">Integer i1 = <span class="number">33</span>;</span><br><span class="line">Integer i2 = <span class="number">33</span>;</span><br><span class="line">System.out.println(i1 == i2); <span class="comment">// 输出true</span></span><br><span class="line"></span><br><span class="line">Integer i1 = <span class="number">33</span>;</span><br><span class="line">Integer i2 = <span class="keyword">new</span> Integer(<span class="number">33</span>);</span><br><span class="line">System.out.println(i1 == i2); <span class="comment">// false</span></span><br><span class="line"></span><br><span class="line">Integer i1 = <span class="number">33</span>;</span><br><span class="line">Integer i2 = Interger.valueOf(<span class="number">33</span>);</span><br><span class="line">System.out.println(i1 == i2); <span class="comment">// 输出true</span></span><br><span class="line"></span><br><span class="line">Integer i11 = <span class="number">333</span>;</span><br><span class="line">Integer i22 = <span class="number">333</span>;</span><br><span class="line">System.out.println(i11 == i22); <span class="comment">// 输出false</span></span><br><span class="line"></span><br><span class="line">Double i3 = <span class="number">1.2</span>;</span><br><span class="line">Double i4 = <span class="number">1.2</span>;</span><br><span class="line">System.out.println(i3 == i4);<span class="comment">// 输出false</span></span><br></pre></td></tr></table></figure>  	
-					
-	  </div>     
-	  
-
-	<div class="bottom">
-  <div class="other">
-    <div class="meta">
-      
-      <i class="iconfont icon-category"></i>
-      <a class="category-link" href="/categories/JVM/">JVM</a>
-
-      
-
-      
-      <i class="iconfont icon-tag"></i>
-      <a class="tag-link" href="/tags/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/" rel="tag">内存分配</a> <a class="tag-link" href="/tags/%E5%AF%B9%E8%B1%A1%E5%88%9B%E5%BB%BA/" rel="tag">对象创建</a>
-      
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">Integer i1 = <span class="number">33</span>;</span><br><span class="line">Integer i2 = <span class="number">33</span>;</span><br><span class="line">System.out.println(i1 == i2); <span class="comment">// 输出true</span></span><br><span class="line"></span><br><span class="line">Integer i1 = <span class="number">33</span>;</span><br><span class="line">Integer i2 = <span class="keyword">new</span> Integer(<span class="number">33</span>);</span><br><span class="line">System.out.println(i1 == i2); <span class="comment">// false</span></span><br><span class="line"></span><br><span class="line">Integer i1 = <span class="number">33</span>;</span><br><span class="line">Integer i2 = Interger.valueOf(<span class="number">33</span>);</span><br><span class="line">System.out.println(i1 == i2); <span class="comment">// 输出true</span></span><br><span class="line"></span><br><span class="line">Integer i11 = <span class="number">333</span>;</span><br><span class="line">Integer i22 = <span class="number">333</span>;</span><br><span class="line">System.out.println(i11 == i22); <span class="comment">// 输出false</span></span><br><span class="line"></span><br><span class="line">Double i3 = <span class="number">1.2</span>;</span><br><span class="line">Double i4 = <span class="number">1.2</span>;</span><br><span class="line">System.out.println(i3 == i4);<span class="comment">// 输出false</span></span><br></pre></td></tr></table></figure>
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/chengdu.mp3'></li>
+                
+                    
+            </ul>
+            
+            
+            
+            <div id="vcomments"></div>
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="https://res.cloudinary.com/tridiamond/image/upload/v1573019751/TriDiamond_logo_ui_xeublz.jpg" height=300 width=300></img>
+                    <p>姜雷12138</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        <dd><a href="https://github.com/TriDiamond" target="_blank"><span
+                                    class=" iconfont icon-github"></span></a></dd>
+                        <dd><a href="https://twitter.com/TriDiamond6" target="_blank"><span
+                                    class=" iconfont icon-twitter"></span></a></dd>
+                        <dd><a href="https://stackoverflow.com/users/7602324/tridiamond?tab=profile" target="_blank"><span
+                                    class=" iconfont icon-stack-overflow"></span></a></dd>
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">10 <p>Articles</p></a></li>
+                    <li><a href="/categories">3 <p>Categories</p></a></li>
+                    <li><a href="/tags">25 <p>Tags</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>Contents</h4>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Java运行时内存区域划分"><span class="toc-number">1.</span> <span class="toc-text">Java运行时内存区域划分</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java对象创建"><span class="toc-number">2.</span> <span class="toc-text">Java对象创建</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#常量池相关补充"><span class="toc-number">2.1.</span> <span class="toc-text">常量池相关补充</span></a></li></ol></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
     </div>
+</div>
 
-    <div class="operate">
-      
-      <span class="text">Share</span>
-      <ul class="share">
-	   			             
-        <li class="iconfont 
-		icon-share-qq 
-		-mob-share-qq 
-		item"></li>		
-   	   			             
-        <li class="iconfont 
-		icon-share-weixin 
-		-mob-share-weixin 
-		item"></li>		
-   	   			             
-        <li class="iconfont 
-		icon-share-weibo 
-		-mob-share-weibo 
-		item"></li>		
-   	   
-</ul>	
-
-<script id="-mob-share" src="https://f1.webshare.mob.com/code/mob-share.js?appkey=21d601593a1de"></script>
-      
     </div>
-  </div>
-
-
-  
-  <nav class="nav">
-    <div class="link">
-      
-      <a href="/2019/02/20/Glide%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" class="link-wrap">
-        <strong class="caption">older</strong>
-        
-        <span class="title">
-          Glide 源码分析
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2019
+        <span class="gradient-text">
+            姜雷12138
+        </span>.
+        Powered by <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a>
+        Theme
+        <span class="gradient-text">
+            <a href="https://github.com/TriDiamond/hexo-theme-obsidian" title="Obsidian" target="_blank" rel="noopener">Obsidian</a>
         </span>
-      </a>
-      
-    </div>
-    <div class="link">
-      
-      <a href="/2019/11/24/Object%E5%AF%B9%E8%B1%A1%E9%82%A3%E4%BA%9B%E4%BA%8B%E5%84%BF/" class="link-wrap">
-        <strong class="caption">newer</strong>
-        
-        <span class="title">
-          Object对象那些事儿
-        </span>
-      </a>
-      
-    </div>
-  </nav>
-  
-</div> 
-	
-<div class="comment">
+        <small><a href="https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/CHANGELOG.md" title="v1.4.3" target="_blank" rel="noopener">v1.4.3</a></small>
+    </p>
+</footer>
 
-    
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
 
-    <div id="comment">
-    </div>
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
 
-    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
 
-    <script src="//unpkg.com/valine@v1.1.8-beta/dist/Valine.min.js"></script>
 
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+    <script src="/js/busuanzi.min.js"></script>
     <script>
-        new Valine({
-            el: '#comment',
-            notify: false,
-            verify: false,
-            app_id: 'cFM0eCo0CQ9xmBXmHi1eltol-gzGzoHsz',
-            app_key: 'oh9tizsnvV2vNvWgqEvoNtQO',
-            path: window.location.pathname,
-            avatar: 'mm',
-            guest_info: ['nick', 'mail']
+        $(document).ready(function () {
+            if ($('span[id^="busuanzi_"]').length) {
+                initialBusuanzi();
+            }
         });
     </script>
-    
-</div>	
-</article>
 
-          </div> 
-      </div>            
-    
-        <i id="toTop" class="iconfont icon-backtotop"></i>
 
-  
-    <div class="none" id="search">
-    <div class="header">
-        <input type="text" placeholder="Typing Something here." id="search-input" class="input">
-        
-        <i id="search-cancel" class="iconfont icon-cancel"></i>
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
     </div>
-
-    <div id="search-result" class="result"></div>
 </div>
-     <div class="mobile-menu">      
-
-      
-      <img class="mobile-menu-icon lazyload" src="/images/placeholder.png" data-src="/images/favicon.png">  
-      
-
-         
-            
-
-            <a class="mobile-menu-link" href="/">Home
-            </a>
-            
-         
-            
-
-            <a class="mobile-menu-link" href="/archives">Archives
-            </a>
-            
-         
-            
-
-            <a class="mobile-menu-link" href="/tags">Tags
-            </a>
-            
-         
-            
-
-            <a class="mobile-menu-link" href="/about">About
-            </a>
-            
-         
-                          
-
-            <a class="mobile-menu-link mobile-menu-search" href="#">Search </a>                 
-            
-         
-      
-</div>
-        
-    
 
 
 
-     
-    
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="//www.googletagmanager.com/gtag/js?id=UA-149874671-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-149874671-1');
+    </script>
 
 
-<footer class="footer">
-	<div class="inner">
-		<div class="copyright">
-			&copy;
-			
-			2019
-			Lemon
 
-			<br>
-			By <a href="https://hexo.io" target="_blank">Hexo</a> Theme <a href="https://github.com/Lemonreds/hexo-theme-Nayo" target="_blank">Nayo</a>
-		</div>
-	</div>
-</footer>   
 
-    <script src="/nayo.bundle.js"></script>           
-  </body>        
+
+<script>
+    function initialTyped () {
+        var typedTextEl = $('.typed-text');
+        if (typedTextEl && typedTextEl.length > 0) {
+            var typed = new Typed('.typed-text', {
+                strings: ["Think like an artist, develop like an artisan", "艺术家思维去思考问题，工匠创造精神去开发"],
+                typeSpeed: 90,
+                loop: true,
+                loopCount: Infinity,
+                backSpeed: 20,
+            });
+        }
+    }
+
+    if ($('.article-header') && $('.article-header').length) {
+        $(document).ready(function () {
+            initialTyped();
+        });
+    }
+</script>
+
+
+    <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+    <script>
+
+        var valine = new Valine();
+
+        function initValine(path) {
+            if (!path) path = window.location.pathname;
+            let language = '';
+            if (!language) {
+                language = 'en';
+            } else {
+                language = language.toLowerCase();
+            }
+            valine.init({
+                el: '#vcomments',
+                appId: 'QHCOIEBlyjBUMAjaE5ilzafk-gzGzoHsz',
+                appKey: 'ggeGwz8ypB9uiAIYSRH5T0PF',
+                notify: 'false',
+                verify: 'false',
+                avatar: 'mp',
+                placeholder: 'Leave your throughs behind~',
+                visitor: 'true',
+                path: path,
+                lang: language
+            });
+        }
+
+        $(document).ready(function () {
+            initValine();
+        });
+    </script>
+
+
+
 </html>

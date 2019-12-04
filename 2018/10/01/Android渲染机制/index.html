@@ -1,134 +1,131 @@
+
 <!DOCTYPE html>
-<html>
-  <head>
-  <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-  
-  
-  <title>  Android渲染机制 |   Lemon </title>
+<html lang="" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Android渲染机制 - 姜雷12138</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="TriDiamond Obsidian,"> 
+    <meta name="description" content="关于Android中的视图，我一直有些疑问，Android中Activity是怎么加载视图的？View是怎么绘制的? 普通View与SurfaceView的到底有什么异同，如何去优化View的显示等,"> 
+    <meta name="author" content="姜雷12138"> 
+    <link rel="alternative" href="atom.xml" title="姜雷12138" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    <link href="https://fonts.loli.net/css?family=Roboto+Mono|Rubik&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_1429596_nzgqgvnmkjb.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/codemirror/5.48.4/theme/dracula.css">
+    <link rel="stylesheet" href="/css/obsidian.css">
+    <link rel="stylesheet" href="/css/ball-atom.min.css">
+</head>
 
- 
-  
-    <link rel="icon" href="/images/favicon.png">
-  
 
-
-  <link rel="stylesheet" href="/nayo.min.css"> 
-</head>  
-  <body>   
-    
-      <header class="header-wrapper">
-
-  <nav class="inner">
-    <div class="title">
+<body class="loading">
+    <div class="loader">
+        <div class="la-ball-atom la-2x">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
     </div>
+    <span id="config-title" style="display:none">姜雷12138</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div class="scrollbar gradient-bg-rev"></div>
+<div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <div class="navigation animated fadeIn fast delay-1s">
+        <img id="home-icon" class="icon-home" src="/img/favicon.png" alt="" data-url="https://jianglei12138.github.io">
+        <div id="play-icon" title="Play/Pause" class="iconfont icon-play"></div>
+        <h3 class="subtitle">Android渲染机制</h3>
+        <div class="social">
+            <!--        <div class="like-icon">-->
+            <!--            <a href="javascript:;" target="_blank" rel="noopener" class="likeThis active"><span class="icon-like"></span><span class="count">76</span></a>-->
+            <!--        </div>-->
+            <div>
+                <div class="share">
+                    
+                        <a href="javascript:;" target="_blank" rel="noopener" class="iconfont icon-share1"></a>
+                        <div class="share-component-cc" data-disabled="facebook,douban,linkedin,diandian,tencent,google"></div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <ul class="menu">
-      
-      
-      <li class="item">
-        <a class="link" id="menu-home" href="/">
-          <i class="iconfont icon-home">
-        </i></a>
-      </li>
-      
-      
-      
-      <li class="item">
-        <a class="link" id="menu-archives" href="/archives">
-          <i class="iconfont icon-archives">
-        </i></a>
-      </li>
-      
-      
-      
-      <li class="item">
-        <a class="link" id="menu-tags" href="/tags">
-          <i class="iconfont icon-tags">
-        </i></a>
-      </li>
-      
-      
-      
-      <li class="item">
-        <a class="link" id="menu-about" href="/about">
-          <i class="iconfont icon-about">
-        </i></a>
-      </li>
-      
-      
-      
-      <li class="item">
-        <a class="link" id="menu-search">
-          <i class="iconfont icon-search">
-        </i></a>
-        
+    <div class="section">
+        <div class=article-header-wrapper>
+    <div class="article-header">
+        <div class="article-cover animated fadeIn" style="
+            animation-delay: 600ms;
+            animation-duration: 1.2s;
+            background-image: 
+                radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.65), #100e17),
+                url(/img/cover.jpg);">
+        </div>
+        <div class="else">
+            <p class="animated fadeInDown">
+                
+                <a href="/categories/Android学习"><b>「
+                    </b>ANDROID学习<b> 」</b></a>
+                
+                October 01, 2018
+            </p>
+            <h3 class="post-title animated fadeInDown"><a href="/2018/10/01/Android%E6%B8%B2%E6%9F%93%E6%9C%BA%E5%88%B6/" title="Android渲染机制" class="">Android渲染机制</a>
+            </h3>
+            
+            <p class="post-count animated fadeInDown">
+                
+                <span>
+                    <b class="iconfont icon-text2"></b> <i>Words count</i>
+                    246k
+                </span>
+                
+                
+                <span>
+                    <b class="iconfont icon-timer__s"></b> <i>Reading time</i>
+                    3:43
+                </span>
+                
+                
+                <span id="/2018/10/01/Android渲染机制/" class="leancloud_visitors" data-flag-title="Android渲染机制">
+                    <b class="iconfont icon-read"></b> <i>Read count</i>
+                    <i class="leancloud-visitors-count">1000000</i>
+                </span>
+                
+                
+            </p>
+            
+            
+            <ul class="animated fadeInDown post-tags-list" itemprop="keywords"><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/Activity%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" rel="tag">Activity启动流程</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/View%E7%9A%84%E7%8E%B0%E5%AE%9E%E6%B5%81%E7%A8%8B/" rel="tag">View的现实流程</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F/" rel="tag">硬件加速</a></li><li class="animated fadeInDown post-tags-list-item"><a class="animated fadeInDown post-tags-list-link" href="/tags/%E8%BD%AF%E4%BB%B6%E7%BB%98%E5%88%B6/" rel="tag">软件绘制</a></li></ul>
+            
+        </div>
+    </div>
+</div>
 
-        
-      
-    </li></ul>
-  </nav>
-</header>
+<div class="screen-gradient-after">
+    <div class="screen-gradient-content">
+        <div class="screen-gradient-content-inside">
+            <div class="bold-underline-links screen-gradient-sponsor">
+                <p>
+                    <span class="animated fadeIn delay-1s"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
 
-<header class="mobile-header-wrapper">
-  <i id="mobile-toggle" class="iconfont icon-menu mobile-toggle"></i>
-</header>   
-
-      <div class="container">       
-          
-          
-            <div class="container-inner">  
-          
-
-          <article class="post slideDownMin">
-  
-	
-<div class="header">
-		<p class="title">	
-			Android渲染机制
-		</p>
-		<div class="info">	
-			<time>
-				Oct 01, 2018
-			</time>
-
-			
-			
-				<i class="iconfont icon-words"></i>
-				<span class="words">69393
-				</span>
-			
-		</div>
-</div> 
-	
-
-    <script type="text/x-mathjax-config">
-        var post = document.getElementsByClassName("post")[0];  
-        MathJax.Hub.Config({
-            showProcessingMessages: false,
-            messageStyle: "none",    
-            tex2jax: {
-                inlineMath:  [ ["$", "$"] , ["\\(","\\)"]],
-                displayMath: [ ["$$","$$"] , ["\\[","\\]"]],
-                skipTags: ['script', 'noscript', 'style', 'textarea', 'pre','code','a'],
-            },
-            "HTML-CSS": {            
-                showMathMenu: false
-            }
-        });
-        MathJax.Hub.Queue(["Typeset",MathJax.Hub,post]);
-    </script>
-    <style>.MathJax{outline:0;}</style>
-
-    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.2/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
- 
-
-	  <div class="typo post-content ">
-
-		
-
-			
-					<p>关于Android中的视图，我一直有些疑问，Android中Activity是怎么加载视图的？View是怎么绘制的? 普通View与SurfaceView的到底有什么异同，如何去优化View的显示等，现在就让我们从Activity创建说起，一探Android渲染机制。</p>
+<div class="article">
+    <div class='main'>
+        <div class="content markdown animated fadeIn">
+            <p>关于Android中的视图，我一直有些疑问，Android中Activity是怎么加载视图的？View是怎么绘制的? 普通View与SurfaceView的到底有什么异同，如何去优化View的显示等，现在就让我们从Activity创建说起，一探Android渲染机制。</p>
  <a id="more"></a>
 
 <h1 id="Android渲染机制"><a href="#Android渲染机制" class="headerlink" title="Android渲染机制"></a>Android渲染机制</h1><p>关于Android中的视图，我一直有些疑问，Android中Activity是怎么加载视图的？View是怎么绘制的? 普通View与SurfaceView的到底有什么异同，如何去优化View的显示等，现在就让我们从Activity创建说起，一探Android渲染机制。</p>
@@ -281,8 +278,8 @@
 <li>SurfaceFlinger的基本功能</li>
 </ol>
 <h3 id="Choreographer是什么？"><a href="#Choreographer是什么？" class="headerlink" title="Choreographer是什么？"></a>Choreographer是什么？</h3><p>Android系统加入Choreographer这个类的目的来处理输入(Input)、动画(Animation)、绘制(Draw)三个操作。Choreographer接收显示系统底层传上来的垂直同步信号(VSync信号)，在下一个帧渲染时控制执行这些操作。</p>
-<p> <strong>理想状态下的choreographer</strong><br><img src="/images/placeholder.png" alt="理想状态下的choreographer" data-src="Android%E6%B8%B2%E6%9F%93%E6%9C%BA%E5%88%B6/choreographer.png" class="lazyload"></p>
-<p> <strong>丢帧状态下的choreographer</strong><br><img src="/images/placeholder.png" alt="丢帧状态下的choreographer" data-src="Android%E6%B8%B2%E6%9F%93%E6%9C%BA%E5%88%B6/choreographer_jank.png" class="lazyload"></p>
+<p> <strong>理想状态下的choreographer</strong><br><img src="/2018/10/01/Android%E6%B8%B2%E6%9F%93%E6%9C%BA%E5%88%B6/choreographer.png" alt="理想状态下的choreographer"></p>
+<p> <strong>丢帧状态下的choreographer</strong><br><img src="/2018/10/01/Android%E6%B8%B2%E6%9F%93%E6%9C%BA%E5%88%B6/choreographer_jank.png" alt="丢帧状态下的choreographer"></p>
 <p>Choreographer的基本原理如此，下面看下怎么实现的。Choreographer使用ThreadLocal保存Choreographer实例，保证每个Thread只存在一个Choreographer。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> ThreadLocal&lt;Choreographer&gt; sThreadInstance =</span><br><span class="line">            <span class="keyword">new</span> ThreadLocal&lt;Choreographer&gt;() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> Choreographer <span class="title">initialValue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            Looper looper = Looper.myLooper();</span><br><span class="line">            <span class="keyword">if</span> (looper == <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"The current thread must have a looper!"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> Choreographer(looper, VSYNC_SOURCE_APP);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Callback type: Input callback.  Runs first.</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> CALLBACK_INPUT = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Callback type: Animation callback.  Runs before traversals.</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> CALLBACK_ANIMATION = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Callback type: Traversal callback.  Handles layout and draw.  </span></span><br><span class="line"><span class="comment">// Runs after all other asynchronous messages have been handled.</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> CALLBACK_TRAVERSAL = <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Callback type: Commit callback.  Handles post-draw operations for the frame.</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> CALLBACK_COMMIT = <span class="number">3</span>;</span><br><span class="line"></span><br><span class="line">FrameInfo mFrameInfo = <span class="keyword">new</span> FrameInfo();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 构造函数</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="title">Choreographer</span><span class="params">(Looper looper, <span class="keyword">int</span> vsyncSource)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 一个线程对应一个Looper，每个线程对应一个Choreographer</span></span><br><span class="line">    mLooper = looper;</span><br><span class="line">    mHandler = <span class="keyword">new</span> FrameHandler(looper);</span><br><span class="line">    mDisplayEventReceiver = USE_VSYNC</span><br><span class="line">            ? <span class="keyword">new</span> FrameDisplayEventReceiver(looper, vsyncSource)</span><br><span class="line">            : <span class="keyword">null</span>;</span><br><span class="line">    mLastFrameTimeNanos = Long.MIN_VALUE;</span><br><span class="line"></span><br><span class="line">    mFrameIntervalNanos = (<span class="keyword">long</span>)(<span class="number">1000000000</span> / getRefreshRate());</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 根据不同type初始化不同CallbackQueue，共4中如上</span></span><br><span class="line">    mCallbackQueues = <span class="keyword">new</span> CallbackQueue[CALLBACK_LAST + <span class="number">1</span>];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= CALLBACK_LAST; i++) &#123;</span><br><span class="line">        mCallbackQueues[i] = <span class="keyword">new</span> CallbackQueue();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -300,7 +297,7 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">postCallbackDelayedInternal</span><span class="params">(<span class="keyword">int</span> callbackType,</span></span></span><br><span class="line"><span class="function"><span class="params">        Object action, Object token, <span class="keyword">long</span> delayMillis)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">synchronized</span> (mLock) &#123;</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">long</span> now = SystemClock.uptimeMillis();</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">long</span> dueTime = now + delayMillis;</span><br><span class="line">        mCallbackQueues[callbackType].addCallbackLocked(dueTime, action, token);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// delayMillis为0， 直接调用scheduleFrameLocked等待下一次Vsync到来</span></span><br><span class="line">        <span class="keyword">if</span> (dueTime &lt;= now) &#123;</span><br><span class="line">            scheduleFrameLocked(now);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            Message msg = mHandler.obtainMessage(MSG_DO_SCHEDULE_CALLBACK, action);</span><br><span class="line">            msg.arg1 = callbackType;</span><br><span class="line">            msg.setAsynchronous(<span class="keyword">true</span>);</span><br><span class="line">            mHandler.sendMessageAtTime(msg, dueTime);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>其中postCallback的具体流程如下。</p>
-<p><img src="/images/placeholder.png" alt="choreographer机制" data-src="Android%E6%B8%B2%E6%9F%93%E6%9C%BA%E5%88%B6/choreographer_process.png" class="lazyload"></p>
+<p><img src="/2018/10/01/Android%E6%B8%B2%E6%9F%93%E6%9C%BA%E5%88%B6/choreographer_process.png" alt="choreographer机制"></p>
 <p>doFrame中做了些什么呢？</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">doFrame</span><span class="params">(<span class="keyword">long</span> frameTimeNanos, <span class="keyword">int</span> frame)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        AnimationUtils.lockAnimationClock(frameTimeNanos / TimeUtils.NANOS_PER_MS);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 从不同的Queue中取出对应的Runnable执行，会取空队列</span></span><br><span class="line">        mFrameInfo.markInputHandlingStart();</span><br><span class="line">        doCallbacks(Choreographer.CALLBACK_INPUT, frameTimeNanos);</span><br><span class="line"></span><br><span class="line">        mFrameInfo.markAnimationsStart();</span><br><span class="line">        doCallbacks(Choreographer.CALLBACK_ANIMATION, frameTimeNanos);</span><br><span class="line"></span><br><span class="line">        mFrameInfo.markPerformTraversalsStart();</span><br><span class="line">        doCallbacks(Choreographer.CALLBACK_TRAVERSAL, frameTimeNanos);</span><br><span class="line"></span><br><span class="line">        doCallbacks(Choreographer.CALLBACK_COMMIT, frameTimeNanos);</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        AnimationUtils.unlockAnimationClock();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -384,7 +381,7 @@
 
 <p>在说下面的准备绘制渐变框之前，需要单独的提一下不表示所有的控件都需要绘制这个所谓的渐变框的，因此第2步和第5部步是可以省略的。</p>
 <h4 id="准备绘制渐变框"><a href="#准备绘制渐变框" class="headerlink" title="准备绘制渐变框"></a>准备绘制渐变框</h4><p>所谓的渐变，其实就是我们常见的诸如ListView等控件在拖动到顶部或者底部后弹出来的渐变效果，如下图。渐变框可以通过android:fadingEdge设置渐变的方向，android:fadingEdgeLength来设置渐变框的长度</p>
-<p><img src="/images/placeholder.png" alt="渐变效果" data-src="Android%E6%B8%B2%E6%9F%93%E6%9C%BA%E5%88%B6/fade.jpeg" class="lazyload"></p>
+<p><img src="/2018/10/01/Android%E6%B8%B2%E6%9F%93%E6%9C%BA%E5%88%B6/fade.jpeg" alt="渐变效果"></p>
 <p>此步骤只是设置了通过计算当前需要绘制的渐变框位置与区域，然后保存layer</p>
 <h4 id="绘制内容"><a href="#绘制内容" class="headerlink" title="绘制内容"></a>绘制内容</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 直接调用onDraw方法绘制其内容，View中此方法为空实现，一般自定义View重写此方法</span></span><br><span class="line"><span class="keyword">if</span> (!dirtyOpaque) onDraw(canvas);</span><br></pre></td></tr></table></figure>
 
@@ -406,12 +403,12 @@
 <li>使用变换过的Canvas进行最终绘制，调用dispatchDraw()或者draw(Canvas)两个方法</li>
 <li>恢复Canvas的状态到一切开始之前，使得父控件的dispatchDraw()便可以将这个Canvas交给下一个子控件的draw(ViewGroup, Canvas, long)方法</li>
 </ol>
-<p><img src="/images/placeholder.png" alt="控件树绘制的完整流程" data-src="Android%E6%B8%B2%E6%9F%93%E6%9C%BA%E5%88%B6/draw.png" class="lazyload"></p>
+<p><img src="/2018/10/01/Android%E6%B8%B2%E6%9F%93%E6%9C%BA%E5%88%B6/draw.png" alt="控件树绘制的完整流程"></p>
 <h4 id="绘制渐变框"><a href="#绘制渐变框" class="headerlink" title="绘制渐变框"></a>绘制渐变框</h4><p>如第2步所示，不细讲</p>
 <h4 id="绘制装饰"><a href="#绘制装饰" class="headerlink" title="绘制装饰"></a>绘制装饰</h4><p>此操作用来绘制一些滚动条，ViewOverlay等，ViewOverlay它是位于View视图层顶部的一个附加层。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">if</span> (mOverlay != <span class="keyword">null</span> &amp;&amp; !mOverlay.isEmpty()) &#123;</span><br><span class="line">    mOverlay.getOverlayView().dispatchDraw(canvas);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">onDrawForeground(canvas);</span><br></pre></td></tr></table></figure>
 
-<p>简单的对软件绘制流程的总结<br><img src="/images/placeholder.png" alt="软件绘制" data-src="Android%E6%B8%B2%E6%9F%93%E6%9C%BA%E5%88%B6/sw_process.png" class="lazyload"></p>
+<p>简单的对软件绘制流程的总结<br><img src="/2018/10/01/Android%E6%B8%B2%E6%9F%93%E6%9C%BA%E5%88%B6/sw_process.png" alt="软件绘制"></p>
 <p><strong>本节知识点</strong></p>
 <ol>
 <li><strong>View#isOpaque()</strong> 提高绘制效率</li>
@@ -442,9 +439,9 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">android_view_DisplayListCanvas_drawRenderNode</span><span class="params">(jlong canvasPtr, jlong renderNodePtr)</span> </span>&#123;</span><br><span class="line">    Canvas* canvas = reinterpret_cast&lt;Canvas*&gt;(canvasPtr);</span><br><span class="line">    RenderNode* renderNode = reinterpret_cast&lt;RenderNode*&gt;(renderNodePtr);</span><br><span class="line">    canvas-&gt;drawRenderNode(renderNode);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> RecordingCanvas::drawRenderNode(RenderNode* renderNode) &#123;</span><br><span class="line">    auto&amp;&amp; stagingProps = renderNode-&gt;stagingProperties();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 把添加renderNode封装成一个RenderNodeOp，添加到Canvas中</span></span><br><span class="line">    RenderNodeOp* op = alloc().create_trivial&lt;RenderNodeOp&gt;(</span><br><span class="line">            Rect(stagingProps.getWidth(), stagingProps.getHeight()),</span><br><span class="line">            *(mState.currentSnapshot()-&gt;transform), getRecordedClip(), renderNode);</span><br><span class="line">    <span class="keyword">int</span> opIndex = addOp(op);</span><br><span class="line">    <span class="keyword">if</span> (CC_LIKELY(opIndex &gt;= <span class="number">0</span>)) &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 更新mDisplayList</span></span><br><span class="line">        <span class="keyword">int</span> childIndex = mDisplayList-&gt;addChild(op);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// update the chunk's child indices</span></span><br><span class="line">        DisplayList::Chunk&amp; chunk = mDisplayList-&gt;chunks.back();</span><br><span class="line">        chunk.endChildIndex = childIndex + <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (renderNode-&gt;stagingProperties().isProjectionReceiver()) &#123;</span><br><span class="line">            <span class="comment">// use staging property, since recording on UI thread</span></span><br><span class="line">            mDisplayList-&gt;projectionReceiveIndex = opIndex;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>上文说过DisplayListCanvas其实不参与真正的绘制，只是记录绘制的操作Op。对应我们在onDraw方法中自己的一些操作，drawBitmap，drawColor之类，DisplayListCanvas也会封装成对应的Op</p>
-<p><img src="/images/placeholder.png" alt="Op" data-src="Android%E6%B8%B2%E6%9F%93%E6%9C%BA%E5%88%B6/op.png" class="lazyload"></p>
+<p><img src="/2018/10/01/Android%E6%B8%B2%E6%9F%93%E6%9C%BA%E5%88%B6/op.png" alt="Op"></p>
 <p>这样我们就不难得出这样的结论，每一个View中都包含一个RenderNode，此Node对应Native中的RenderNode，而ViewRootImpl则对应RootRenderNode，每一个RenderNode包含DisplayList，DisplayList又有多个Op组成。</p>
-<p><img src="/images/placeholder.png" alt="硬件加速绘制流程" data-src="Android%E6%B8%B2%E6%9F%93%E6%9C%BA%E5%88%B6/hw_draw.jpg" class="lazyload"></p>
+<p><img src="/2018/10/01/Android%E6%B8%B2%E6%9F%93%E6%9C%BA%E5%88%B6/hw_draw.jpg" alt="硬件加速绘制流程"></p>
 <p>按照软件绘制的套路，我们先后续的操作 <strong>mRootNode.end(canvas)</strong></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">end</span><span class="params">(DisplayListCanvas canvas)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">long</span> displayList = canvas.finishRecording();</span><br><span class="line">    nSetDisplayList(mNativeRenderNode, displayList);</span><br><span class="line">    canvas.recycle();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -474,186 +471,306 @@
 <li>调用swapBuffers将前面已经绘制好的图形缓冲区提交给Surface Flinger合成和显示。</li>
 </ol>
 <p>对比软件绘制递归调用流程</p>
-<p><img src="/images/placeholder.png" alt="对比" data-src="Android%E6%B8%B2%E6%9F%93%E6%9C%BA%E5%88%B6/sw_hw_difference.png" class="lazyload"></p>
-  	
-					
-	  </div>     
-	  
+<p><img src="/2018/10/01/Android%E6%B8%B2%E6%9F%93%E6%9C%BA%E5%88%B6/sw_hw_difference.png" alt="对比"></p>
 
-	<div class="bottom">
-  <div class="other">
-    <div class="meta">
-      
-      <i class="iconfont icon-category"></i>
-      <a class="category-link" href="/categories/Android%E5%AD%A6%E4%B9%A0/">Android学习</a>
-
-      
-
-      
-      <i class="iconfont icon-tag"></i>
-      <a class="tag-link" href="/tags/Activity%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" rel="tag">Activity启动流程</a> <a class="tag-link" href="/tags/View%E7%9A%84%E7%8E%B0%E5%AE%9E%E6%B5%81%E7%A8%8B/" rel="tag">View的现实流程</a> <a class="tag-link" href="/tags/%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F/" rel="tag">硬件加速</a> <a class="tag-link" href="/tags/%E8%BD%AF%E4%BB%B6%E7%BB%98%E5%88%B6/" rel="tag">软件绘制</a>
-      
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls"
+                data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+            <ul id="audio-list" style="display:none">
+                
+                
+                <li title='0' data-url='/statics/chengdu.mp3'></li>
+                
+                    
+            </ul>
+            
+            
+            
+            <div id="vcomments"></div>
+            
+        </div>
+        <div class="sidebar">
+            <div class="box animated fadeInRight">
+                <div class="subbox">
+                    <img src="https://res.cloudinary.com/tridiamond/image/upload/v1573019751/TriDiamond_logo_ui_xeublz.jpg" height=300 width=300></img>
+                    <p>姜雷12138</p>
+                    <span>Think like an artist, develop like an artisan</span>
+                    <dl>
+                        <dd><a href="https://github.com/TriDiamond" target="_blank"><span
+                                    class=" iconfont icon-github"></span></a></dd>
+                        <dd><a href="https://twitter.com/TriDiamond6" target="_blank"><span
+                                    class=" iconfont icon-twitter"></span></a></dd>
+                        <dd><a href="https://stackoverflow.com/users/7602324/tridiamond?tab=profile" target="_blank"><span
+                                    class=" iconfont icon-stack-overflow"></span></a></dd>
+                    </dl>
+                </div>
+                <ul>
+                    <li><a href="/">10 <p>Articles</p></a></li>
+                    <li><a href="/categories">3 <p>Categories</p></a></li>
+                    <li><a href="/tags">25 <p>Tags</p></a></li>
+                </ul>
+            </div>
+            
+            
+            
+            <div class="box sticky animated fadeInRight faster">
+                <div id="toc" class="subbox">
+                    <h4>Contents</h4>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Android渲染机制"><span class="toc-number">1.</span> <span class="toc-text">Android渲染机制</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#从Activity-setContentView说起"><span class="toc-number">1.1.</span> <span class="toc-text">从Activity#setContentView说起</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DecorView是什么？"><span class="toc-number">1.2.</span> <span class="toc-text">DecorView是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#View是什么时候显示的？"><span class="toc-number">1.3.</span> <span class="toc-text">View是什么时候显示的？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#View是如何显示出来的？"><span class="toc-number">1.4.</span> <span class="toc-text">View是如何显示出来的？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ViewRootImpl是什么？"><span class="toc-number">1.5.</span> <span class="toc-text">ViewRootImpl是什么？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Surface是什么？"><span class="toc-number">1.5.1.</span> <span class="toc-text">Surface是什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Choreographer是什么？"><span class="toc-number">1.5.2.</span> <span class="toc-text">Choreographer是什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ViewRootImpl-setView实现"><span class="toc-number">1.5.3.</span> <span class="toc-text">ViewRootImpl#setView实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ViewRootImpl-performTraversals流程"><span class="toc-number">1.5.4.</span> <span class="toc-text">ViewRootImpl#performTraversals流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#软件绘制"><span class="toc-number">1.5.5.</span> <span class="toc-text">软件绘制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#硬件加速绘制"><span class="toc-number">1.5.6.</span> <span class="toc-text">硬件加速绘制</span></a></li></ol></li></ol></li></ol>
+                </div>
+            </div>
+            
+            
+        </div>
     </div>
+</div>
 
-    <div class="operate">
-      
-      <span class="text">Share</span>
-      <ul class="share">
-	   			             
-        <li class="iconfont 
-		icon-share-qq 
-		-mob-share-qq 
-		item"></li>		
-   	   			             
-        <li class="iconfont 
-		icon-share-weixin 
-		-mob-share-weixin 
-		item"></li>		
-   	   			             
-        <li class="iconfont 
-		icon-share-weibo 
-		-mob-share-weibo 
-		item"></li>		
-   	   
-</ul>	
-
-<script id="-mob-share" src="https://f1.webshare.mob.com/code/mob-share.js?appkey=21d601593a1de"></script>
-      
     </div>
-  </div>
-
-
-  
-  <nav class="nav">
-    <div class="link">
-      
-      <a href="/2018/06/26/%E4%BB%8E%E8%BF%9B%E7%A8%8B%E8%B5%B7%E6%BA%90%E8%AF%B4%E8%B5%B7/" class="link-wrap">
-        <strong class="caption">older</strong>
-        
-        <span class="title">
-          从进程起源说起
+</div>
+    <div id="back-to-top" class="animated fadeIn faster">
+        <div class="flow"></div>
+        <span class="percentage animated fadeIn faster">0%</span>
+        <span class="iconfont icon-top02 animated fadeIn faster"></span>
+    </div>
+</body>
+<footer>
+    <p class="copyright" id="copyright">
+        &copy; 2019
+        <span class="gradient-text">
+            姜雷12138
+        </span>.
+        Powered by <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a>
+        Theme
+        <span class="gradient-text">
+            <a href="https://github.com/TriDiamond/hexo-theme-obsidian" title="Obsidian" target="_blank" rel="noopener">Obsidian</a>
         </span>
-      </a>
-      
-    </div>
-    <div class="link">
-      
-      <a href="/2019/02/20/Glide%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" class="link-wrap">
-        <strong class="caption">newer</strong>
-        
-        <span class="title">
-          Glide 源码分析
-        </span>
-      </a>
-      
-    </div>
-  </nav>
-  
-</div> 
-	
-<div class="comment">
+        <small><a href="https://github.com/TriDiamond/hexo-theme-obsidian/blob/master/CHANGELOG.md" title="v1.4.3" target="_blank" rel="noopener">v1.4.3</a></small>
+    </p>
+</footer>
 
-    
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script>
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+      preferredFont: "TeX",
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: {
+        automatic: true
+      },
+      EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      processEscapes: true,
+      ignoreClass: "tex2jax_ignore|dno",
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      noUndefined: {
+        attributes: {
+          mathcolor: "red",
+          mathbackground: "#FFEEEE",
+          mathsize: "90%"
+        }
+      },
+      Macros: {
+        href: "{}"
+      }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script>
+  function initialMathJax() {
+    MathJax.Hub.Queue(function () {
+      var all = MathJax.Hub.getAllJax(),
+        i;
+      // console.log(all);
+      for (i = 0; i < all.length; i += 1) {
+        console.log(all[i].SourceElement().parentNode)
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  }
 
-    <div id="comment">
-    </div>
+  function reprocessMathJax() {
+    if (typeof MathJax !== 'undefined') {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+  }
+</script>
 
-    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
 
-    <script src="//unpkg.com/valine@v1.1.8-beta/dist/Valine.min.js"></script>
 
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/obsidian.js"></script>
+<script src="/js/jquery.truncate.js"></script>
+<script src="/js/search.js"></script>
+<script src="//cdn.bootcss.com/typed.js/2.0.10/typed.min.js"></script>
+<script src="//cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+<script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/css/css.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/xml/xml.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/htmlmixed/htmlmixed.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/clike/clike.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/php/php.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/shell/shell.min.js"></script>
+
+    <script src="//cdn.bootcss.com/codemirror/5.48.4/mode/python/python.min.js"></script>
+
+
+
+    <script src="/js/busuanzi.min.js"></script>
     <script>
-        new Valine({
-            el: '#comment',
-            notify: false,
-            verify: false,
-            app_id: 'cFM0eCo0CQ9xmBXmHi1eltol-gzGzoHsz',
-            app_key: 'oh9tizsnvV2vNvWgqEvoNtQO',
-            path: window.location.pathname,
-            avatar: 'mm',
-            guest_info: ['nick', 'mail']
+        $(document).ready(function () {
+            if ($('span[id^="busuanzi_"]').length) {
+                initialBusuanzi();
+            }
         });
     </script>
-    
-</div>	
-</article>
 
-          </div> 
-      </div>            
-    
-        <i id="toTop" class="iconfont icon-backtotop"></i>
 
-  
-    <div class="none" id="search">
-    <div class="header">
-        <input type="text" placeholder="Typing Something here." id="search-input" class="input">
-        
-        <i id="search-cancel" class="iconfont icon-cancel"></i>
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="//cdn.bootcss.com/photoswipe/4.1.3/default-skin/default-skin.min.css">
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="//cdn.bootcss.com/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
     </div>
-
-    <div id="search-result" class="result"></div>
 </div>
-     <div class="mobile-menu">      
-
-      
-      <img class="mobile-menu-icon lazyload" src="/images/placeholder.png" data-src="/images/favicon.png">  
-      
-
-         
-            
-
-            <a class="mobile-menu-link" href="/">Home
-            </a>
-            
-         
-            
-
-            <a class="mobile-menu-link" href="/archives">Archives
-            </a>
-            
-         
-            
-
-            <a class="mobile-menu-link" href="/tags">Tags
-            </a>
-            
-         
-            
-
-            <a class="mobile-menu-link" href="/about">About
-            </a>
-            
-         
-                          
-
-            <a class="mobile-menu-link mobile-menu-search" href="#">Search </a>                 
-            
-         
-      
-</div>
-        
-    
 
 
 
-     
-    
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="//www.googletagmanager.com/gtag/js?id=UA-149874671-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-149874671-1');
+    </script>
 
 
-<footer class="footer">
-	<div class="inner">
-		<div class="copyright">
-			&copy;
-			
-			2019
-			Lemon
 
-			<br>
-			By <a href="https://hexo.io" target="_blank">Hexo</a> Theme <a href="https://github.com/Lemonreds/hexo-theme-Nayo" target="_blank">Nayo</a>
-		</div>
-	</div>
-</footer>   
 
-    <script src="/nayo.bundle.js"></script>           
-  </body>        
+
+<script>
+    function initialTyped () {
+        var typedTextEl = $('.typed-text');
+        if (typedTextEl && typedTextEl.length > 0) {
+            var typed = new Typed('.typed-text', {
+                strings: ["Think like an artist, develop like an artisan", "艺术家思维去思考问题，工匠创造精神去开发"],
+                typeSpeed: 90,
+                loop: true,
+                loopCount: Infinity,
+                backSpeed: 20,
+            });
+        }
+    }
+
+    if ($('.article-header') && $('.article-header').length) {
+        $(document).ready(function () {
+            initialTyped();
+        });
+    }
+</script>
+
+
+    <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+    <script>
+
+        var valine = new Valine();
+
+        function initValine(path) {
+            if (!path) path = window.location.pathname;
+            let language = '';
+            if (!language) {
+                language = 'en';
+            } else {
+                language = language.toLowerCase();
+            }
+            valine.init({
+                el: '#vcomments',
+                appId: 'QHCOIEBlyjBUMAjaE5ilzafk-gzGzoHsz',
+                appKey: 'ggeGwz8ypB9uiAIYSRH5T0PF',
+                notify: 'false',
+                verify: 'false',
+                avatar: 'mp',
+                placeholder: 'Leave your throughs behind~',
+                visitor: 'true',
+                path: path,
+                lang: language
+            });
+        }
+
+        $(document).ready(function () {
+            initValine();
+        });
+    </script>
+
+
+
 </html>
